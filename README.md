@@ -23,3 +23,7 @@ Group Members:
 4. Stephen Falcone
    
    Gatorlink ID - sfalcone
+
+5. Christian Argueta
+
+   Gatorlink ID - cargueta
