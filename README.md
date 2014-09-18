@@ -2,7 +2,7 @@ CEN3031-Project
 ===============
 
 
-Project - not yet decided
+Project - Insect Tracking
 
 
 
