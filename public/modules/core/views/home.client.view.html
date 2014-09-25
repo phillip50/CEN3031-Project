@@ -9,7 +9,9 @@
 		</div>
 		<google-map center="map.center" zoom="map.zoom"></google-map>
 		<table class = "table table-condensed">
-			<td class = "row"><th class = col-md-5>Bug 1</th><th class = col-md-5>Bug 1</th><th class = col-md-5>Bug 1</th></td>
+			<td class = "row">
+				<th ng-repeat="phone in phones" class = col-md-5>{{phone.name}}</th>
+			</td>
 		</table>
 	</div>
 
