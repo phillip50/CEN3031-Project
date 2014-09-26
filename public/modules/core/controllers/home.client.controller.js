@@ -1,5 +1,5 @@
 'use strict';
-
+/* FINDME */
 
 angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 	function($scope, Authentication) {
@@ -12,13 +12,17 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			},
 			zoom: 8
 		};
-				$scope.phones = [
-		    {'name': 'Nexus S',
-		     'snippet': 'Fast just got faster with Nexus S.'},
-		    {'name': 'Motorola XOOM™ with Wi-Fi',
-		     'snippet': 'The Next, Next Generation tablet.'},
-		    {'name': 'MOTOROLA XOOM™',
-		     'snippet': 'The Next, Next Generation tablet.'}
+		$scope.sample_bugs = [
+		    {'name': 'Butterfry',
+		     'pic': 'bug1.png'},
+		    {'name': 'Ledyba',
+		     'pic': 'bug2.jpg'},
+		    {'name': 'Caterpie',
+		     'pic': 'bug3.png'},
+		    {'name': 'Weedle',
+		     'pic': 'bug4.jpg'},
+		    {'name': 'Galvantula',
+		     'pic': 'bug5.png'}
 	  	];
 	}
 ]);

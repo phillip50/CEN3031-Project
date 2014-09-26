@@ -1,3 +1,4 @@
+<!-- FINDME -->
 <section data-ng-controller="HomeController">
 	<div class="jumbotron">
 		<div class="page-header text-uppercase text-center">
@@ -10,7 +11,9 @@
 		<google-map center="map.center" zoom="map.zoom"></google-map>
 		<table class = "table table-condensed">
 			<td class = "row">
-				<th ng-repeat="phone in phones" class = col-md-5>{{phone.name}}</th>
+				<th ng-repeat="sample in sample_bugs" class = "col">
+					<img style="height: 200px; width=100%;" class = "img-thumbnail img-rounded" ng-src="/images/{{sample.pic}}"/>
+				</th>
 			</td>
 		</table>
 	</div>
