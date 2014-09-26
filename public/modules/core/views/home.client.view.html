@@ -1,42 +1,26 @@
 <!-- FINDME -->
 <section data-ng-controller="HomeController">
-	<div class="jumbotron">
-		<div class="page-header text-uppercase text-center" style="float:left; margin: 30px; text-align: justify;">
-			<h1 class="lead">
-				<span>
-					<bold>The <br>Insect<br> Collection</bold>
-				</span>
-			</h1>
-			
-			<button class="btn btn-default" style="width: 100%; margin: 5px;"> Log-In </button>
-			<button class="btn btn-default" style="width: 100%; margin: 5px;"> Sign-Up </button>
-		</div>
-		<google-map center="map.center" zoom="map.zoom" draggable="true" options="options" style="width=25%;height=25%; margin-left=100px; padding: 100px;">
-			<marker ng-repeat="loc in marker.coords" coords="marker.coords" options="marker.options" idkey="marker.id"  >
-        	</marker>
-		</google-map>
-		<table class = "table table-condensed">
-			<td class = "row">
-				<th ng-repeat="sample in sample_bugs" class = "col">
-					<button class="button" style="border:none; height=200px;" ng-mouseenter="hovers = !hovers;" ng-mouseleave="hovers = !hovers;" ng-init="hovers = false;">
-						<img style="height: 200px; width=100%;" class = "img-thumbnail img-rounded hover-animation" ng-src="/images/{{sample.pic}}"/></img>
-						<p style="margin-top: -150px; height: 140px; width=inherit;"  data-ng-show="hovers" class = "col">
-						
-							<strong>{{sample.name}}</strong>
-							<br>
-							Caught By: {{sample.caughtBy}}
-							<br>
-							Location: {{sample.location}}
+	<div class="jumbotron clearfix">
+		<div class="text-uppercase col-md-6">
+			<h1 class="lead">The <br>Insect<br> Collection</h1>
 
-						</p>
-					</button>
-					<center>
-						
-					</center>
-				</th>
-			</td>
-		</table>
+			<button class="btn btn-primary btn-lg btn-block">Log In</button>
+			<button class="btn btn-default btn-lg btn-block">Sign Up</button>
+		</div>
+		<google-map class="col-md-6" center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
+			<!--<marker ng-repeat="loc in marker.coords" coords="marker.coords" options="marker.options" idkey="marker.id"></marker>-->
+            <markers models="randomMarkers" coords="'self'" options="'options'" events="markersEvents"></markers>
+		</google-map>
 	</div>
 
-
+	<div class="row">
+        <div ng-repeat="sample in sample_bugs" class="col-md-2 text-center">
+            <img class="img-circle" style="max-width: 100%; height: 125px;" ng-src="/images/{{sample.pic}}">
+            <div>
+                <h4>{{sample.name}}</h4>
+                <p>Caught By {{sample.caughtBy}}</p>
+                <p>Location {{sample.location}}</p>
+            </div>
+		</div>
+    </div>
 </section>
