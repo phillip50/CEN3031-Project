@@ -7,10 +7,19 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		$scope.authentication = Authentication;
 		$scope.map = {
 			center: {
-				latitude: 45,
-				longitude: -73
+				latitude: 40.1451,
+				longitude: -99.6680
 			},
 			zoom: 8
+		};
+		$scope.marker = {
+            id:0,
+            coords: {
+                latitude: 40.1451,
+                longitude: -99.6680
+            },
+            options: { draggable: true },
+            
 		};
 		$scope.sample_bugs = [
 		    {'name': 'Butterfry',

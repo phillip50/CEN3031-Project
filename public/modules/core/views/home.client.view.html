@@ -1,14 +1,20 @@
 <!-- FINDME -->
 <section data-ng-controller="HomeController">
 	<div class="jumbotron">
-		<div class="page-header text-uppercase text-center">
+		<div class="page-header text-uppercase text-center" style="float:left; margin: 30px; text-align: justify;">
 			<h1 class="lead">
 				<span>
-					The Insect Collection
+					<bold>The <br>Insect<br> Collection</bold>
 				</span>
 			</h1>
+			
+			<button class="btn btn-default" style="width: 100%; margin: 5px;"> Log-In </button>
+			<button class="btn btn-default" style="width: 100%; margin: 5px;"> Sign-Up </button>
 		</div>
-		<google-map center="map.center" zoom="map.zoom"></google-map>
+		<google-map center="map.center" zoom="map.zoom" draggable="true" options="options" style="width=25%;height=25%; margin-left=100px; padding: 100px;">
+			<marker ng-repeat="loc in marker.coords" coords="marker.coords" options="marker.options" idkey="marker.id"  >
+        	</marker>
+		</google-map>
 		<table class = "table table-condensed">
 			<td class = "row">
 				<th ng-repeat="sample in sample_bugs" class = "col">
