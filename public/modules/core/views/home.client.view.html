@@ -12,7 +12,12 @@
 		<table class = "table table-condensed">
 			<td class = "row">
 				<th ng-repeat="sample in sample_bugs" class = "col">
-					<img style="height: 200px; width=100%;" class = "img-thumbnail img-rounded" ng-src="/images/{{sample.pic}}"/>
+					<button class="button" style="border:none;"><img style="height: 200px; width=100%;" class = "img-thumbnail img-rounded hover-animation" ng-src="/images/{{sample.pic}}"/></img></button>
+					<center>
+						<p class = "col">
+						{{sample.name}}
+						</p>
+					</center>
 				</th>
 			</td>
 		</table>
