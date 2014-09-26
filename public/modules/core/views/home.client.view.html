@@ -1,15 +1,22 @@
 <!-- FINDME -->
 <section data-ng-controller="HomeController">
 	<div class="jumbotron clearfix">
-		<div class="text-uppercase col-md-6">
-			<h1 class="lead">The <br>Insect<br> Collection</h1>
-
-			<button class="btn btn-primary btn-lg btn-block">Log In</button>
-			<button class="btn btn-default btn-lg btn-block">Sign Up</button>
+		<div class="col-md-6">
+			<h1 class="text-uppercase">The <br>Insect<br> Collection</h1>
+			<a class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
+			<a class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
 		</div>
+
 		<google-map class="col-md-6" center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
-			<!--<marker ng-repeat="loc in marker.coords" coords="marker.coords" options="marker.options" idkey="marker.id"></marker>-->
-            <markers models="randomMarkers" coords="'self'" options="'options'" events="markersEvents"></markers>
+            <markers models="randomMarkers" coords="'self'" options="'options'" events="markersEvents">
+                <windows show="show">
+                    <div ng-non-bindable>
+                        <strong>{{title}}</strong><br>
+                        Caught By {{caughtBy}}<br>
+                        Location {{location}}
+                    </div>
+                </windows>
+            </markers>
 		</google-map>
 	</div>
 
