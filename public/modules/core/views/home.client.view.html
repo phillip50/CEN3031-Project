@@ -12,11 +12,20 @@
 		<table class = "table table-condensed">
 			<td class = "row">
 				<th ng-repeat="sample in sample_bugs" class = "col">
-					<button class="button" style="border:none;"><img style="height: 200px; width=100%;" class = "img-thumbnail img-rounded hover-animation" ng-src="/images/{{sample.pic}}"/></img></button>
-					<center>
-						<p class = "col">
-						{{sample.name}}
+					<button class="button" style="border:none; height=200px;" ng-mouseenter="hovers = !hovers;" ng-mouseleave="hovers = !hovers;" ng-init="hovers = false;">
+						<img style="height: 200px; width=100%;" class = "img-thumbnail img-rounded hover-animation" ng-src="/images/{{sample.pic}}"/></img>
+						<p style="margin-top: -150px; height: 140px; width=inherit;"  data-ng-show="hovers" class = "col">
+						
+							<strong>{{sample.name}}</strong>
+							<br>
+							Caught By: {{sample.caughtBy}}
+							<br>
+							Location: {{sample.location}}
+
 						</p>
+					</button>
+					<center>
+						
 					</center>
 				</th>
 			</td>
