@@ -37,12 +37,12 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 				if (model.$id){
 					model = model.coords;//use scope portion then
 				}
-				console.log("Model: event:" + eventName + " " + JSON.stringify(model));
+				console.log('Model: event:' + eventName + ' ' + JSON.stringify(model));
 			}
 		};
 
 		var createRandomMarker = function (i, bounds, bug, idKey) {
-            if (idKey == null) idKey = "id";
+            if (idKey === null) idKey = 'id';
 			var ret = {
 				options: {
 					draggable: false,
