@@ -45,14 +45,29 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			});
 		};
 
+		// List Insects Pages
 		$scope.find = function() {
 			$scope.insects = Insects.query();
 		};
 
+		// View Insect Page
 		$scope.findOne = function() {
 			$scope.insect = Insects.get({
 				insectId: $stateParams.insectId
 			});
+
+			$scope.sampleInsect = {
+				id: 0,
+				articleId: '5425cdf5806e219804c442cf',
+				name: 'Butterfry',
+				pic: 'bug1.png',
+				caughtBy : 'Ash',
+				location : 'Pallet Town',
+				coords: {
+					latitude: 29.631146633445802,
+					longitude: -82.34787039550469
+				}
+			};
 		};
 
 

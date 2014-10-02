@@ -3,8 +3,13 @@
 	<div class="jumbotron clearfix">
 		<div class="col-md-6">
 			<h1 class="text-uppercase">The <br>Insect<br> Collection</h1>
-			<a class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
-			<a class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
+            <div data-ng-hide="authentication.user">
+                <a class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
+                <a class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
+            </div>
+            <p data-ng-show="authentication.user">
+                Hi <strong data-ng-bind="authentication.user.displayName"></strong>!
+            </p>
 		</div>
 
 		<google-map class="col-md-6" center="map.center" zoom="map.zoom" draggable="true" options="options" bounds="map.bounds">
@@ -24,7 +29,7 @@
         <div ng-repeat="sample in sample_bugs" class="col-md-2 text-center">
             <img class="img-circle" style="max-width: 100%; height: 125px;" ng-src="/images/{{sample.pic}}">
             <div>
-                <h4>{{sample.name}}</h4>
+                <h4><a data-ng-href="#!/articles/{{sample.articleId}}">{{sample.name}}</a></h4>
                 <p>Caught By {{sample.caughtBy}}</p>
                 <p>Location {{sample.location}}</p>
             </div>

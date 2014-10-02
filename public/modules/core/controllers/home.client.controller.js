@@ -17,20 +17,6 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 				streetViewControl: false
 			}
 		};
-		/*$scope.marker = {
-			id: 0,
-			icon:
-			coords: {
-				latitude: 29.6398801,
-				longitude: -82.3551082
-			},
-			options: {draggable: true},
-			events: {
-				dragend: function (marker, eventName, args) {
-					console.log('marker dragend: lat ' + marker.getPosition().lat() + ', lng ' + marker.getPosition().lng());
-				}
-			}
-		};*/
 
 		$scope.markersEvents = {
 			dragend: function (gMarker, eventName, model) {
@@ -41,9 +27,14 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			}
 		};
 
-		var createRandomMarker = function (i, bounds, bug, idKey) {
-            if (idKey === null) idKey = 'id';
+      	var createRandomMarker = function (i, bounds, bug, idKey) {
+            var lat_min = bounds.southwest.latitude,
+                lat_range = bounds.northeast.latitude - lat_min,
+                lng_min = bounds.southwest.longitude,
+                lng_range = bounds.northeast.longitude - lng_min;
+            // Note, the label* properties are only used if isLabel='true' in the directive.
 			var ret = {
+				id: i,
 				options: {
 					draggable: false,
 					labelAnchor: '10 39',
@@ -60,28 +51,23 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			ret.onClick = function() {
 				ret.show = !ret.show;
 			};
-            ret[idKey] = i;
-            return ret;
+			return ret;
         };
-
-		$scope.randomMarkers = [];
+        $scope.randomMarkers = [];
 
 		// Get the bounds from the map once it's loaded
-		$scope.$watch(function() { return $scope.map.bounds; }, function(nv, ov) {
-			// Only need to regenerate once
-			// Create 25 markes with label, 25 without.
-			if (!ov.southwest && nv.southwest) {
-				var markers = [];
-				for (var i = 0; i < $scope.sample_bugs.length; i++) {
-					markers.push(createRandomMarker(i, $scope.map.bounds, $scope.sample_bugs[i]));
-				}
-				$scope.randomMarkers = markers;
+		$scope.$watch(function() { return $scope.map.bounds; }, function() {
+			var markers = [];
+			for (var i = 0; i < $scope.sample_bugs.length; i++) {
+				markers.push(createRandomMarker(i, $scope.map.bounds, $scope.sample_bugs[i]));
 			}
+			$scope.randomMarkers = markers;
 		}, true);
 
 		// Test data
 		$scope.sample_bugs = [{
 			id: 0,
+			articleId: '5425cdf5806e219804c442cf',
 			name: 'Butterfry',
 			pic: 'bug1.png',
 			caughtBy : 'Ash',
@@ -92,6 +78,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			}
 		}, {
 			id: 1,
+			articleId: '5425cdf5806e219804c442cf',
 			name: 'Ledyba',
 			pic: 'bug2.jpg',
 			caughtBy : 'Bugsy',
@@ -102,6 +89,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			}
 		}, {
 			id: 2,
+			articleId: '5425cdf5806e219804c442cf',
 			name: 'Caterpie',
 			pic: 'bug3.png',
 			caughtBy : 'Brock',
@@ -112,6 +100,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			}
 		}, {
 			id: 3,
+			articleId: '5425cdf5806e219804c442cf',
 			name: 'Weedle',
 			pic: 'bug4.jpg',
 			caughtBy : 'Misty',
@@ -122,6 +111,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			}
 		}, {
 			id: 4,
+			articleId: '5425cdf5806e219804c442cf',
 			name: 'Galvantula',
 			pic: 'bug5.png',
 			caughtBy : 'Jessie',
@@ -132,6 +122,7 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 			}
 		}, {
 			id: 5,
+			articleId: '5425cdf5806e219804c442cf',
 			name: 'Galvantula',
 			pic: 'bug5.png',
 			caughtBy : 'Jessie',
