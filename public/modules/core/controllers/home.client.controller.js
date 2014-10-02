@@ -123,13 +123,13 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		}, {
 			id: 5,
 			articleId: '5425cdf5806e219804c442cf',
-			name: 'Galvantula',
-			pic: 'bug5.png',
-			caughtBy : 'Jessie',
+			name: 'Combee',
+			pic: 'combee.png',
+			caughtBy : 'James',
 			location : 'Nowhere',
 			coords: {
-				latitude: 29.6328801,
-				longitude: -82.3511082
+				latitude: 29.643162438647163,
+				longitude: -82.36231797783205
 			}
 		}];
 	}
