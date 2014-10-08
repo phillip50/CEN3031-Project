@@ -19,6 +19,12 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			});
 		};
 
+		$scope.form = function() {
+			$scope.next = function() {
+				console.log('next');
+			};
+		};
+
 		$scope.remove = function(insect) {
 			if (insect) {
 				insect.$remove();
@@ -122,36 +128,25 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			};
 		};
 
-
 		// Datepicker
-		$scope.today = function() {
-			$scope.dt = new Date();
-  		};
-		$scope.today();
-
- 		$scope.clear = function () {
-			$scope.dt = null;
- 		};
-
-		// Disable weekend selection
-		$scope.disabled = function(date, mode) {
-			return; //( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+		$scope.datePicker = {
+			options: {
+				formatYear: 'yyyy',
+				startingDay: 0
+			},
+			format: 'MMMM d, yyyy',
+			minDate: null,
+			maxDate: new Date(),
+			clear: function() {
+				$scope.dt = null;
+			},
+			open: function($event) {
+				$event.preventDefault();
+				$event.stopPropagation();
+				$scope.datePicker.opened = true;
+			}
 		};
-
-		$scope.open = function($event) {
-		    $event.preventDefault();
-		   	$event.stopPropagation();
-		    $scope.opened = true;
-		};
-
-		$scope.dateOptions = {
-		   	formatYear: 'yyyy',
-		    startingDay: 0
-		};
-
-		$scope.format = 'MMMM dd, yyyy';
-		$scope.minDate = null;
-		$scope.maxDate = $scope.dt;
+		$scope.dt = new Date();
 
 		// map
 		$scope.map = {
@@ -166,6 +161,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 				streetViewControl: false
 			}
 		};
+
+		$scope.coords = 'cats';
+
 		$scope.marker = {
             id:0,
             coords: {
@@ -175,9 +173,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
             options: { draggable: true },
             events: {
                 dragend: function (marker, eventName, args) {
-                    console.log({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
-					document.getElementsByName('locationCoordinates').value = JSON.stringify({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
-                }
+                    console.log($scope.coords = marker.getPosition().lat() + ' ' + marker.getPosition().lng());// = 'loc set';// marker.getPosition().lat() + ' ' + marker.getPosition().lng();
+					console.log({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
+				}
             }
         };
 	}

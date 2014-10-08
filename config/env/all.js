@@ -2,9 +2,9 @@
 
 module.exports = {
 	app: {
-		title: 'Bugs',
-		description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-		keywords: 'MongoDB, Express, AngularJS, Node.js'
+		title: 'The Insect Collection',
+		description: 'Full-scale insect tracking built with MongoDB, Express, AngularJS, and Node.js',
+		keywords: 'Insects, Florida'
 	},
 	port: process.env.PORT || 3000,
 	templateEngine: 'swig',
