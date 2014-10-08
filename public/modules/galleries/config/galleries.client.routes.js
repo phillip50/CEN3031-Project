@@ -1,7 +1,7 @@
 'use strict';
 
 // Setting up route
-angular.module('insects').config(['$stateProvider',
+angular.module('galleries').config(['$stateProvider',
 	function($stateProvider) {
 		// Insects state routing
 		$stateProvider.
@@ -10,7 +10,7 @@ angular.module('insects').config(['$stateProvider',
 			templateUrl: 'modules/galleries/views/list-galleries.client.view.html'
 		}).
 		state('createGalleries', {
-			url: '/insects/create',
+			url: '/galleries/create',
 			templateUrl: 'modules/galleries/views/create-galleries.client.view.html'
 		}).
 		state('viewGalleries', {

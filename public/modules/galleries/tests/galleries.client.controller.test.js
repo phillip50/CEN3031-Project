@@ -2,9 +2,9 @@
 
 (function() {
 	// Insects Controller Spec
-	describe('InsectsController', function() {
+	describe('GalleriesController', function() {
 		// Initialize global variables
-		var InsectsController,
+		var GalleriesController,
 			scope,
 			$httpBackend,
 			$stateParams,
@@ -45,62 +45,62 @@
 			$location = _$location_;
 
 			// Initialize the Insects controller.
-			InsectsController = $controller('InsectsController', {
+			GalleriesController = $controller('GalleriesController', {
 				$scope: scope
 			});
 		}));
 
 		it('$scope.find() should create an array with at least one insect object fetched from XHR', inject(function(Insects) {
 			// Create sample insect using the Insects service
-			var sampleInsect = new Insects({
+			var sampleGallery = new Galleries({
 				title: 'An Insect about MEAN',
 				content: 'MEAN rocks!'
 			});
 
 			// Create a sample insects array that includes the new insect
-			var sampleInsects = [sampleInsect];
+			var sampleGalleries = [sampleGallery];
 
 			// Set GET response
-			$httpBackend.expectGET('insects').respond(sampleInsects);
+			$httpBackend.expectGET('galleries').respond(sampleGalleries);
 
 			// Run controller functionality
 			scope.find();
 			$httpBackend.flush();
 
 			// Test scope value
-			expect(scope.insects).toEqualData(sampleInsects);
+			expect(scope.galleries).toEqualData(sampleGalleries);
 		}));
 
 		it('$scope.findOne() should create an array with one insect object fetched from XHR using a insectId URL parameter', inject(function(Insects) {
 			// Define a sample insect object
-			var sampleInsect = new Insects({
+			var sampleGallery = new Galleries({
 				title: 'An Insect about MEAN',
 				content: 'MEAN rocks!'
 			});
 
 			// Set the URL parameter
-			$stateParams.insectId = '525a8422f6d0f87f0e407a33';
+			$stateParams.galleryId = '525a8422f6d0f87f0e407a33';
 
 			// Set GET response
-			$httpBackend.expectGET(/insects\/([0-9a-fA-F]{24})$/).respond(sampleInsect);
+			$httpBackend.expectGET(/gallerys\/([0-9a-fA-F]{24})$/).respond(sampleGallery);
 
 			// Run controller functionality
 			scope.findOne();
 			$httpBackend.flush();
 
 			// Test scope value
-			expect(scope.insect).toEqualData(sampleInsect);
+			expect(scope.gallery).toEqualData(sampleGallery);
 		}));
 
 		it('$scope.create() with valid form data should send a POST request with the form input values and then locate to new object URL', inject(function(Insects) {
 			// Create a sample insect object
-			var sampleInsectPostData = new Insects({
+			var sampleGalleryPostData = new Galleries({
 				title: 'An Insect about MEAN',
 				content: 'MEAN rocks!'
 			});
 
 			// Create a sample insect response
-			var sampleInsectResponse = new Insects({
+			var sampleGalleryResponse = new Galleries({
 				_id: '525cf20451979dea2c000001',
 				title: 'An Insect about MEAN',
 				content: 'MEAN rocks!'
@@ -111,7 +111,7 @@
 			scope.content = 'MEAN rocks!';
 
 			// Set POST response
-			$httpBackend.expectPOST('insects', sampleInsectPostData).respond(sampleInsectResponse);
+			$httpBackend.expectPOST('insects', sampleGalleryPostData).respond(sampleGalleryResponse);
 
 			// Run controller functionality
 			scope.create();
@@ -122,49 +122,49 @@
 			expect(scope.content).toEqual('');
 
 			// Test URL redirection after the insect was created
-			expect($location.path()).toBe('/insects/' + sampleInsectResponse._id);
+			expect($location.path()).toBe('/galleries/' + sampleGalleryResponse._id);
 		}));
 
-		it('$scope.update() should update a valid insect', inject(function(Insects) {
+		it('$scope.update() should update a valid gallery', inject(function(Galleries) {
 			// Define a sample insect put data
-			var sampleInsectPutData = new Insects({
+			var sampleGalleryPutData = new Galleries({
 				_id: '525cf20451979dea2c000001',
 				title: 'An Insect about MEAN',
 				content: 'MEAN Rocks!'
 			});
 
 			// Mock insect in scope
-			scope.insect = sampleInsectPutData;
+			scope.gallery = sampleGalleryPutData;
 
 			// Set PUT response
-			$httpBackend.expectPUT(/insects\/([0-9a-fA-F]{24})$/).respond();
+			$httpBackend.expectPUT(/galleries\/([0-9a-fA-F]{24})$/).respond();
 
 			// Run controller functionality
 			scope.update();
 			$httpBackend.flush();
 
 			// Test URL location to new object
-			expect($location.path()).toBe('/insects/' + sampleInsectPutData._id);
+			expect($location.path()).toBe('/galleries/' + sampleGalleryPutData._id);
 		}));
 
-		it('$scope.remove() should send a DELETE request with a valid insectId and remove the insect from the scope', inject(function(Insects) {
+		it('$scope.remove() should send a DELETE request with a valid galleryId and remove the gallery from the scope', inject(function(Insects) {
 			// Create new insect object
-			var sampleInsect = new Insects({
+			var sampleGallery = new Galleries({
 				_id: '525a8422f6d0f87f0e407a33'
 			});
 
 			// Create new insects array and include the insect
-			scope.insects = [sampleInsect];
+			scope.galleries = [sampleGallery];
 
 			// Set expected DELETE response
-			$httpBackend.expectDELETE(/insects\/([0-9a-fA-F]{24})$/).respond(204);
+			$httpBackend.expectDELETE(/galleries\/([0-9a-fA-F]{24})$/).respond(204);
 
 			// Run controller functionality
-			scope.remove(sampleInsect);
+			scope.remove(sampleGallery);
 			$httpBackend.flush();
 
 			// Test array after successful delete
-			expect(scope.insects.length).toBe(0);
+			expect(scope.galleries.length).toBe(0);
 		}));
 	});
 }());
