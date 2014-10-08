@@ -9,62 +9,62 @@ var mongoose = require('mongoose'),
 	_ = require('lodash');
 
 /**
- * Create a Insect
+ * Create a insect
  */
 exports.create = function(req, res) {
-	var Insect = new Insect(req.body);
-	Insect.user = req.user;
+	var insect = new Insect(req.body);
+	insect.user = req.user;
 
-	Insect.save(function(err) {
+	insect.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(Insect);
+			res.jsonp(insect);
 		}
 	});
 };
 
 /**
- * Show the current Insect
+ * Show the current insect
  */
 exports.read = function(req, res) {
-	res.jsonp(req.Insect);
+	res.jsonp(req.insect);
 };
 
 /**
- * Update a Insect
+ * Update a insect
  */
 exports.update = function(req, res) {
-	var Insect = req.Insect;
+	var insect = req.insect;
 
-	Insect = _.extend(Insect, req.body);
+	insect = _.extend(insect, req.body);
 
-	Insect.save(function(err) {
+	insect.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(Insect);
+			res.jsonp(insect);
 		}
 	});
 };
 
 /**
- * Delete an Insect
+ * Delete an insect
  */
 exports.delete = function(req, res) {
-	var Insect = req.Insect;
+	var insect = req.insect;
 
-	Insect.remove(function(err) {
+	insect.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(Insect);
+			res.jsonp(insect);
 		}
 	});
 };
@@ -73,13 +73,13 @@ exports.delete = function(req, res) {
  * List of Insects
  */
 exports.list = function(req, res) {
-	Insect.find().sort('-created').populate('user', 'displayName').exec(function(err, Insects) {
+	Insect.find().sort('-created').populate('user', 'displayName').exec(function(err, insects) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(Insects);
+			res.jsonp(insects);
 		}
 	});
 };
@@ -87,11 +87,11 @@ exports.list = function(req, res) {
 /**
  * Insect middleware
  */
-exports.InsectByID = function(req, res, next, id) {
-	Insect.findById(id).populate('user', 'displayName').exec(function(err, Insect) {
+exports.insectByID = function(req, res, next, id) {
+	Insect.findById(id).populate('user', 'displayName').exec(function(err, insect) {
 		if (err) return next(err);
-		if (!Insect) return next(new Error('Failed to load Insect ' + id));
-		req.Insect = Insect;
+		if (!insect) return next(new Error('Failed to load insect ' + id));
+		req.insect = insect;
 		next();
 	});
 };
@@ -100,7 +100,7 @@ exports.InsectByID = function(req, res, next, id) {
  * Insect authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.Insect.user.id !== req.user.id) {
+	if (req.insect.user.id !== req.user.id) {
 		return res.status(403).send({
 			message: 'User is not authorized'
 		});

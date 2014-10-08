@@ -14,20 +14,55 @@ var InsectSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	title: {
+	name: {
 		type: String,
 		default: '',
 		trim: true,
-		required: 'Title cannot be blank'
+		required: 'Name cannot be blank'
 	},
-	content: {
+	scientificName: {
+		type: String,
+		default: '',
+		trim: true,
+		required: 'Scientific name cannot be blank'
+	},
+	description: {
 		type: String,
 		default: '',
 		trim: true
 	},
+	dateFound: {
+		type: Date,
+		default: Date.now,
+		required: 'Date found cannot be blank'
+	},
+	location: {
+		title: {
+			type: String,
+			default: '',
+			trim: true,
+			required: 'Location cannot be blank'
+		},
+		coordinates: {
+			latitude: {
+				type: Number,
+				default: '',
+				required: 'Latitude cannot be blank'
+			},
+			longitude: {
+				type: Number,
+				default: '',
+				required: 'Longitude cannot be blank'
+			}
+		}
+	},
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
+	},
+	comments: {
+		type: Schema.ObjectId,
+		ref: 'Comment'
 	}
 });
 

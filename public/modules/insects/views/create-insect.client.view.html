@@ -1,4 +1,4 @@
-<section data-ng-controller="InsectsController" data-ng-init="form()">
+<section data-ng-controller="InsectsController">
 	<div class="page-header">
 		<h1>New Insect</h1>
 	</div>
@@ -14,9 +14,9 @@
 							<input id="photoUpload" type="file" class="form-control" accept="image/*" required>
 						</div>
 						<div class="form-group">
-							<label for="dateTaken">Date Taken</label>
+							<label for="dateFound">Date Found</label>
 							<div class="input-group">
-								<input id="dateTaken" type="text" class="form-control" datepicker-popup="{{datePicker.format}}" data-ng-model="dt" data-is-open="datePicker.opened" data-min-date="datePicker.minDate" data-max-date="datePicker.maxDate" data-datepicker-options="datePicker.options"  data-ng-required="true" data-close-text="Close">
+								<input id="dateFound" type="text" class="form-control" datepicker-popup="{{datePicker.format}}" data-ng-model="dt" data-is-open="datePicker.opened" data-min-date="datePicker.minDate" data-max-date="datePicker.maxDate" data-datepicker-options="datePicker.options"  data-ng-required="true" data-close-text="Close">
 								<span class="input-group-btn">
 									<button type="button" class="btn btn-default" data-ng-click="datePicker.open($event)">
 										<i class="glyphicon glyphicon-calendar"></i>
@@ -24,10 +24,15 @@
 								</span>
 							</div>
 						</div>
+						<div class="form-group">
+							<label for="locationTitle">Location</label>
+							<input id="locationTitle" type="text" data-ng-model="locationTitle" class="form-control" placeholder="Place" required>
+						</div>
 					</div>
 					<div class="form-group col-md-6">
-						<label class="control-label" for="coords">Place found</label>
-						<input id="coords" type="text" class="form-control" data-ng-model="coords" required disabled="disabled">
+						<label class="control-label">Place found</label>
+						<input type="text" class="form-control" data-ng-model="latitude" required disabled="disabled">
+						<input type="text" class="form-control" data-ng-model="longitude" required disabled="disabled">
 						<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
 							<marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></marker>
 						</google-map>
@@ -44,7 +49,7 @@
 						<div class="form-group">
 							<label class="control-label" for="scientificName">Scientific Name</label>
 							<div class="controls">
-								<input name="title" type="text" data-ng-model="scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
+								<input type="text" data-ng-model="scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
 							</div>
 						</div>
 					</div>
@@ -52,14 +57,14 @@
 						<div class="form-group">
 							<label class="control-label" for="description">Description</label>
 							<div class="controls">
-								<textarea name="description" data-ng-model="description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+								<textarea data-ng-model="description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
 							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class="text-right">
-					<a class="btn btn-default">Cancel</a>
+					<a class="btn btn-default" data-ng-click="form.cancel()">Cancel</a>
 					<a class="btn btn-primary" data-ng-click="reviewForm = true">Next</a>
 				</div>
 				<div data-ng-show="error" class="text-danger">
@@ -83,7 +88,7 @@
 					<dd>{{dt | date:'mediumDate'}}</dd>
 
 					<dt>Location</dt>
-					<dd>{{coords}}</dd>
+					<dd>{{locationTitle}}</dd>
 
 					<dt>Description</dt>
 					<dd>{{description}}</dd>

@@ -6,23 +6,42 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 
 		$scope.create = function() {
 			var insect = new Insects({
-				title: this.title,
-				content: this.content
+				name: this.insectTitle,
+				scientificName: this.scientificName,
+				description: this.description,
+				dateFound: this.dt,
+				location: {
+					title: this.locationTitle,
+					coordinates: {
+						latitude: this.latitude,
+						longitude: this.longitude
+					}
+				}
 			});
 			insect.$save(function(response) {
 				$location.path('insects/' + response._id);
 
-				$scope.title = '';
-				$scope.content = '';
+				$scope.insectTitle = '';
+				$scope.scientificName = '';
+				$scope.description = '';
+				$scope.dt = '';
+				$scope.locationTitle = '';
+				$scope.latitude = '';
+				$scope.longitude = '';
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
 		};
 
-		$scope.form = function() {
-			$scope.next = function() {
-				console.log('next');
-			};
+		$scope.form = {
+			coordinates: {
+				latitude: 0,
+				longitude: 0
+			},
+			cancel: function() {
+				console.log('cancel');
+				$location.path('insects');
+			}
 		};
 
 		$scope.remove = function(insect) {
@@ -59,10 +78,10 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 		// View Insect Page
 		$scope.findOne = function() {
 			$scope.insect = Insects.get({
-				insectId: $stateParams.insectId
+				insectId: $stateParams.insectsId // issue with insect(s) here, investigate later
 			});
 
-			$scope.sampleInsect = {
+			/*$scope.sampleInsect = {
 				_id: 0,
 				name: 'Butterfree',
 				scientificName: 'Rhopalocera Liberum',
@@ -100,7 +119,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 					created: '2014-10-02T18:46:39.936Z',
 					message: 'Wow, it\'s so small! I think Butterfree is better overall. It learns a couple of useful status-hindering attacks and learns a few Psychic-type attacks like Psybeam and Confusion. Butterfree has a better move pool the Beedrill. However Beedrill has overall better stats then Butterfree.'
 				}]
-			};
+			};*/
 
 			// map
 			$scope.sampleMap = {
@@ -117,14 +136,11 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			};
 			$scope.sampleMarker = {
 				id: 0,
-				coords: $scope.sampleInsect.coords,
-				options: {draggable: false},
-				events: {
-					dragend: function (marker, eventName, args) {
-						console.log({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
-						document.getElementsByName('locationCoordinates').value = JSON.stringify({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
-					}
-				}
+				coords: {
+					latitude: 29.631146633445802,
+					longitude: -82.34787039550469
+				},
+				options: {draggable: false}
 			};
 		};
 
@@ -162,8 +178,6 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			}
 		};
 
-		$scope.coords = 'cats';
-
 		$scope.marker = {
             id:0,
             coords: {
@@ -173,7 +187,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
             options: { draggable: true },
             events: {
                 dragend: function (marker, eventName, args) {
-                    console.log($scope.coords = marker.getPosition().lat() + ' ' + marker.getPosition().lng());// = 'loc set';// marker.getPosition().lat() + ' ' + marker.getPosition().lng();
+                    $scope.latitude = marker.getPosition().lat();
+					$scope.longitude = marker.getPosition().lng();
 					console.log({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
 				}
             }
