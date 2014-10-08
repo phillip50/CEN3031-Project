@@ -1,7 +1,7 @@
 'use strict';
 
 // Configuring the Insects module
-angular.module('insects').run(['Menus',
+angular.module('galleries').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
 		Menus.addMenuItem('topbar', 'Galleries', 'galleries', 'dropdown', '/galleries(/create)?');
