@@ -2,14 +2,7 @@
 	<!--<div class="page-header">
 		<h1 data-ng-bind="insect.title"></h1>
 	</div>
-	<div class="pull-right" data-ng-show="authentication.user._id == insect.user._id">
-		<a class="btn btn-primary" href="/#!/insects/{{insect._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-	</div>
+
 	<small>
 		<em class="text-muted">
 			Posted on
@@ -22,8 +15,21 @@
 
     <!-- Sample -->
 
-    <div class="page-header">
-		<h1>{{insect.name}} <small>{{insect.scientificName}}</small></h1>
+    <div class="page-header clearfix">
+		<h1>
+            {{insect.name}} <small>{{insect.scientificName}}</small>
+
+            <span class="pull-right" data-ng-show="authentication.user._id == insect.user._id">
+                <a class="btn btn-primary" href="/#!/insects/{{insect._id}}/edit">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+                <a class="btn btn-primary" data-ng-click="comfirmRemove();">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
+            </span>
+        </h1>
+
+
 	</div>
 
     <div class="row">
@@ -88,4 +94,17 @@
             </div>
         </div>
     </div>
+
+    <script type="text/ng-template" id="confirmRemove.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Delete {{insect.name}}</h3>
+        </div>
+        <div class="modal-body">
+            Are you sure you want to delete {{insect.name}}? It'll also will be removed from any galleries it is apart of.
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+            <button class="btn btn-warning" data-ng-click="ok()">Remove</button>
+        </div>
+    </script>
 </section>

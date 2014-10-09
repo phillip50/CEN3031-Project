@@ -1,8 +1,8 @@
 <section data-ng-controller="InsectsController" data-ng-init="find()">
 	<div class="page-header">
-		<h1>Gallery</h1>
+		<h1>List of Insects</h1>
 	</div>
-	<div class="list-group">
+	<!--<div class="list-group">
 		<a data-ng-repeat="insect in insects" data-ng-href="#!/insects/{{insect._id}}" class="list-group-item clearfix">
 			<img style="max-width: 100px; height: 100px;" class="pull-left" ng-src="https://placeimg.com/100/100/animals">
 			<h4 class="list-group-item-heading" data-ng-bind="insect.name"></h4>
@@ -14,8 +14,36 @@
 				<span data-ng-bind="insect.user.displayName"></span>
 			</small>
 		</a>
-	</div>
+	</div>-->
 	<div class="alert alert-warning text-center" data-ng-if="insects.$resolved && !insects.length">
 		No insects yet, why don't you <a href="/#!/insects/newCreate">create one</a>?
+	</div>
+
+	<div class="row">
+		<div data-ng-repeat="insect in insects" class="col-sm-6 col-md-4">
+			<div class="thumbnail">
+				<img style="width: 100%; max-height: 300px;" class="pull-left" ng-src="https://placeimg.com/300/300/animals">
+				<div class="caption clearfix">
+					<h3 data-ng-bind="insect.name"></h3>
+					<p>
+						{{insect.description}}
+						<em data-ng-show="!insect.description" class="text-muted">No description.</em>
+					</p>
+					<p class="text-right"><a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary" role="button">View</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row text-center">
+		<ul class="pagination pagination-lg" data-ng-if="insects.length">
+			<li class="disabled"><a href="#">&laquo;</a></li>
+			<li class="active"><a href="#">1</a></li>
+			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
+			<li><a href="#">4</a></li>
+			<li><a href="#">5</a></li>
+			<li><a href="#">&raquo;</a></li>
+		</ul>
 	</div>
 </section>

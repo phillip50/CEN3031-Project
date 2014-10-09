@@ -28,20 +28,7 @@
 							<label for="locationTitle">Location</label>
 							<input id="locationTitle" type="text" data-ng-model="locationTitle" class="form-control" placeholder="Place" required>
 						</div>
-					</div>
-					<div class="form-group col-md-6">
-						<label class="control-label">Place found</label>
-						<input type="text" class="form-control" data-ng-model="latitude" required disabled="disabled">
-						<input type="text" class="form-control" data-ng-model="longitude" required disabled="disabled">
-						<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
-							<marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></marker>
-						</google-map>
-					</div>
-				</div>
-
-				<h2>Info</h2>
-				<div class="row">
-					<div class="col-md-6">
+						<h2>Info</h2>
 						<div class="form-group">
 							<label for="name">Name</label>
 							<input id="name" type="text" data-ng-model="insectTitle" class="form-control" placeholder="Name" required>
@@ -52,8 +39,6 @@
 								<input type="text" data-ng-model="scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
 							</div>
 						</div>
-					</div>
-					<div class="col-md-6">
 						<div class="form-group">
 							<label class="control-label" for="description">Description</label>
 							<div class="controls">
@@ -61,11 +46,19 @@
 							</div>
 						</div>
 					</div>
+					<div class="form-group col-md-6">
+						<label class="control-label">Place found</label>
+						<input type="text" class="form-control hidden" data-ng-model="latitude" data-ng-required="true">
+						<input type="text" class="form-control hidden" data-ng-model="longitude" data-ng-required="true">
+						<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
+							<marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></marker>
+						</google-map>
+					</div>
 				</div>
 
 				<div class="text-right">
 					<a class="btn btn-default" data-ng-click="form.cancel()">Cancel</a>
-					<a class="btn btn-primary" data-ng-click="reviewForm = true">Next</a>
+					<a class="btn btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-click="reviewForm = true">Next</a>
 				</div>
 				<div data-ng-show="error" class="text-danger">
 					<strong data-ng-bind="error"></strong>

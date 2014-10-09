@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Insects',
-	function($scope, $stateParams, $location, Authentication, Insects) {
+angular.module('insects').controller('InsectsController', ['$scope', '$stateParams', '$location', '$modal', 'Authentication', 'Insects',
+	function($scope, $stateParams, $location, $modal, Authentication, Insects) {
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
@@ -10,6 +10,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 				scientificName: this.scientificName,
 				description: this.description,
 				dateFound: this.dt,
+				commentsEnabled: this.commentsEnabled,
 				location: {
 					title: this.locationTitle,
 					coordinates: {
@@ -21,10 +22,12 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			insect.$save(function(response) {
 				$location.path('insects/' + response._id);
 
+				// clear form if they make new insect
 				$scope.insectTitle = '';
 				$scope.scientificName = '';
 				$scope.description = '';
 				$scope.dt = '';
+				$scope.commentsEnabled = '';
 				$scope.locationTitle = '';
 				$scope.latitude = '';
 				$scope.longitude = '';
@@ -39,8 +42,11 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 				longitude: 0
 			},
 			cancel: function() {
-				console.log('cancel');
 				$location.path('insects');
+			},
+			isValid: false,
+			next: function() {
+				if ($scope.form.isValid) console.log('yay');
 			}
 		};
 
@@ -141,6 +147,37 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 					longitude: -82.34787039550469
 				},
 				options: {draggable: false}
+			};
+
+			// For confirm to delete
+			$scope.comfirmRemove = function() {
+				console.log($scope.insect);
+
+				var modalInstance = $modal.open({
+					templateUrl: 'confirmRemove.html',
+					controller: 'InsectsController',
+					resolve: {
+						insect: function() {
+							return $scope.insect;
+						},
+        				remove: function() {
+							return $scope.remove;
+    					}
+					}
+				});
+
+				modalInstance.result.then(function() {
+					$log.info('Modal dismissed at: ' + new Date());
+				});
+			};
+
+			$scope.findOne.ok = function() {
+				$modalInstance.close();
+				$scope.remove();
+			};
+
+			$scope.findOne.cancel = function() {
+				$modalInstance.dismiss('cancel');
 			};
 		};
 
