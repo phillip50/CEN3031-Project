@@ -37,16 +37,17 @@
 					<input type="text" id="classCode" name="classCode" class="form-control" data-ng-model="credentials.classCode" placeholder="Ex: ENY3005">
 				</div>
 		</div>	
-		<div class="col-md-1 text-center form-group" style="margin:25px;">
-				<button type="submit" class="btn btn-large btn-primary"><h1 style="padding:25px;"><strong>Sign up!</strong>
-				</h1></button>
-				<a class="btn btn-large btn-primary" style="margin-top: 25px;"><h1 style="padding:25px;"><strong>Sign in</strong>
-				</h1></a>
+		<div class="col-md-3 text-center form-group" style="margin:25px;">
+				<img class= "img img-rounded" src="images/signup.png" style="padding:25px;">
+				<button type="submit" class="btn btn-large btn-primary"><h3 style="padding:5px;"><strong>Sign up!</strong>
+				</h3></button>
+				<a href="/#!/signin" class="show-signup btn btn-large btn-primary" style="margin-left:5px;"><h3 style="padding:5px;"><strong>Sign in</strong>
+				</h3></a>
+				<div data-ng-show="error" class="text-center text-danger" style = "float: right;">
+				<strong data-ng-bind="error"></strong>
+		</div>
+		</div>
 
-		</div>
-		<div data-ng-show="error" class="text-center text-danger" style = "float: right;">
-			<strong data-ng-bind="error"></strong>
-		</div>
 		</fieldset>
 	</form>
 
