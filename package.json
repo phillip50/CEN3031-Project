@@ -12,6 +12,7 @@
 		"postinstall": "bower install --config.interactive=false"
 	},
 	"dependencies": {
+		"blueimp-file-upload-expressjs": "^0.2.12",
 		"express": "~4.7.2",
 		"express-session": "~1.7.2",
 		"body-parser": "~1.5.2",

@@ -8,22 +8,49 @@ var mongoose = require('mongoose'),
 	Insect = mongoose.model('Insect'),
 	_ = require('lodash');
 
+
+//option for images storage
+var options = {
+    tmpDir:  __dirname + '/../public/uploaded/tmp',
+    uploadDir: __dirname + '/../uploads',
+    uploadUrl:  '/uploaded/files/',
+    storage : {
+        type : 'local'
+    }
+};
+
+var fs = require('fs');
+var uploader = require('blueimp-file-upload-expressjs')(options);
+
+
 /**
  * Create a insect
  */
 exports.create = function(req, res) {
+  uploader.post(req, res, function (obj) {
 	var insect = new Insect(req.body);
 	insect.user = req.user;
-
+	//console.log(obj);
+	var x = fs.readFileSync('app\\uploads\\' +  obj.files[0].name);
+   	insect.img.contentType = obj.files[0].type;
+	var prefix = 'data:' + obj.files[0].type + ';base64,';
+	var buf = x.toString('base64');
+	var data = prefix + buf;
+	console.log(data);
+	insect.img.data = data;
+	
 	insect.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
+		
 			res.jsonp(insect);
 		}
 	});
+  });
+
 };
 
 /**

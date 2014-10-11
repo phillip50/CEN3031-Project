@@ -86,6 +86,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$statePara
 			$scope.insect = Insects.get({
 				insectId: $stateParams.insectsId // issue with insect(s) here, investigate later
 			});
+			
+			console.log($scope.insect);
 
 			/*$scope.sampleInsect = {
 				_id: 0,

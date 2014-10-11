@@ -17,8 +17,9 @@
 
     <div class="page-header clearfix">
 		<h1>
+           <img src={{insect.img.data}}>
             {{insect.name}} <small>{{insect.scientificName}}</small>
-
+            <img scr={{insect.img.encode}}>
             <span class="pull-right" data-ng-show="authentication.user._id == insect.user._id">
                 <a class="btn btn-primary" href="/#!/insects/{{insect._id}}/edit">
                     <i class="glyphicon glyphicon-edit"></i>
