@@ -9,35 +9,57 @@ var mongoose = require('mongoose'),
 	_ = require('lodash');
 
 
-//option for images storage
-var options = {
-    tmpDir:  __dirname + '/../public/uploaded/tmp',
-    uploadDir: __dirname + '/../uploads',
-    uploadUrl:  '/uploaded/files/',
-    storage : {
-        type : 'local'
-    }
-};
-
 var fs = require('fs');
-var uploader = require('blueimp-file-upload-expressjs')(options);
+var uuid = require('uuid'),
+    multiparty = require('multiparty');
+
 
 
 /**
  * Create a insect
  */
 exports.create = function(req, res) {
-  uploader.post(req, res, function (obj) {
-	var insect = new Insect(req.body);
-	insect.user = req.user;
-	//console.log(obj);
-	var x = fs.readFileSync('app\\uploads\\' +  obj.files[0].name);
-   	insect.img.contentType = obj.files[0].type;
-	var prefix = 'data:' + obj.files[0].type + ';base64,';
-	var buf = x.toString('base64');
-	var data = prefix + buf;
-	console.log(data);
-	insect.img.data = data;
+	 var insect = new Insect();
+	 //var insect = new Insect(req.body);
+	 insect.user = req.user;
+
+  	 var form = new multiparty.Form();
+  	 console.log(req.user);
+  	 form.parse(req, function(err, fields, files) {
+        var file = files.file[0];
+        var contentType = file.headers['content-type'];
+        var tmpPath = file.path;
+
+
+     
+
+        var filePath = fs.readFileSync(file.path);
+ 		insect.img.contentType = contentType;
+        var prefix = 'data:' + contentType + ';base64,';
+        var buf = filePath.toString('base64');
+        var data = prefix + buf;
+        insect.img.data = data;
+       
+        var extIndex = tmpPath.lastIndexOf('.');
+        var extension = (extIndex < 0) ? '' : tmpPath.substr(extIndex);
+        // uuid is for generating unique filenames. 
+        var fileName = uuid.v4() + extension;
+        var destPath = __dirname+ fileName;
+
+        // Server side file type checker.
+      /*  if (contentType !== 'image/png' && contentType !== 'image/jpeg') {
+            fs.unlink(tmpPath);
+            return res.status(400).send('Unsupported file type.');
+        }
+
+        fs.rename(tmpPath, destPath, function(err) {
+            if (err) {
+                return res.status(400).send('Image is not saved:');
+            }
+            return res.json(destPath);
+        });
+		*/
+    });
 	
 	insect.save(function(err) {
 		if (err) {
@@ -49,7 +71,6 @@ exports.create = function(req, res) {
 			res.jsonp(insect);
 		}
 	});
-  });
 
 };
 

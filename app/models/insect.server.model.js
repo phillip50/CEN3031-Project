@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 var InsectSchema = new Schema({
 	img:{
 		data: String,
-		contentType: String,
+		contentType: String
 	},
 	created: {
 		type: Date,

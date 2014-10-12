@@ -1,8 +1,39 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$scope', '$stateParams', '$location', '$modal', 'Authentication', 'Insects',
-	function($scope, $stateParams, $location, $modal, Authentication, Insects) {
+angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,'$http' ,'$stateParams', '$location', '$modal', 'Authentication', 'Insects',
+	function($scope, $upload, $http,$stateParams, $location, $modal, Authentication, Insects) {
 		$scope.authentication = Authentication;
+
+		  $scope.onFileSelect = function($files){
+	        var file = $files[0];
+	        var insect = new Insects({
+				name: this.insectTitle,
+				scientificName: this.scientificName,
+				description: this.description,
+				dateFound: this.dt,
+				commentsEnabled: this.commentsEnabled,
+				location: {
+					title: this.locationTitle,
+					coordinates: {
+						latitude: this.latitude,
+						longitude: this.longitude
+					}
+				}
+			});
+            $scope.upload = $upload.upload({
+                url: '/insects',
+                method: 'POST',
+                file: file,
+                data: insect
+   			 })/*.success(function(data, status, headers, config) {
+                $scope.uploadInProgress = false;
+                $scope.uploadedImage = JSON.parse(data);      
+            }).error(function(err) {
+                $scope.uploadInProgress = false;
+                console.log('Error uploading file: ' + err.message || err);
+            });
+       		*/
+    	};
 
 		$scope.create = function() {
 			var insect = new Insects({
