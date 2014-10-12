@@ -23,9 +23,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
             $scope.upload = $upload.upload({
                 url: '/insects',
                 method: 'POST',
-                file: file,
-                data: insect
-   			 })/*.success(function(data, status, headers, config) {
+                data: insect,
+                file: file
+   			 });/*.success(function(data, status, headers, config) {
                 $scope.uploadInProgress = false;
                 $scope.uploadedImage = JSON.parse(data);      
             }).error(function(err) {
@@ -118,7 +118,6 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
 				insectId: $stateParams.insectsId // issue with insect(s) here, investigate later
 			});
 			
-			console.log($scope.insect);
 
 			/*$scope.sampleInsect = {
 				_id: 0,

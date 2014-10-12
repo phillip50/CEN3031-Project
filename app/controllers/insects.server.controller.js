@@ -22,10 +22,16 @@ exports.create = function(req, res) {
 	 var insect = new Insect();
 	 //var insect = new Insect(req.body);
 	 insect.user = req.user;
+	 insect.img.contentType = '';
+	 insect.img.data = '';
 
   	 var form = new multiparty.Form();
-  	 console.log(req.user);
   	 form.parse(req, function(err, fields, files) {
+  	 	insect.name = fields.name;
+  	 	insect.scientificName = fields.scientificName;
+  	 	insect.description = fields.description;
+  	 	insect.dateFound = fields.dateFound;
+
         var file = files.file[0];
         var contentType = file.headers['content-type'];
         var tmpPath = file.path;
@@ -46,6 +52,17 @@ exports.create = function(req, res) {
         var fileName = uuid.v4() + extension;
         var destPath = __dirname+ fileName;
 
+
+		insect.save(function(err) {
+			if (err) {
+				return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+			} else {
+				res.jsonp(insect);
+			}
+		});
+
         // Server side file type checker.
       /*  if (contentType !== 'image/png' && contentType !== 'image/jpeg') {
             fs.unlink(tmpPath);
@@ -60,17 +77,7 @@ exports.create = function(req, res) {
         });
 		*/
     });
-	
-	insect.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-		
-			res.jsonp(insect);
-		}
-	});
+
 
 };
 
