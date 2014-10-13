@@ -9,11 +9,9 @@ var mongoose = require('mongoose'),
 	_ = require('lodash');
 
 
-var fs = require('fs');
-var uuid = require('uuid'),
+var fs = require('fs'),
+//	uuid = require('uuid'),
     multiparty = require('multiparty');
-
-
 
 /**
  * Create a insect
@@ -25,40 +23,41 @@ exports.create = function(req, res) {
   	 var form = new multiparty.Form();
   	 form.parse(req, function(err, fields, files) {
   	 	insect.name = fields.name[0];
-  	    insect.scientificName = fields.scientificName[0];
+  	 	insect.scientificName = fields.scientificName[0];
   	 	insect.description = fields.description[0];
-  	 	insect.location.title = fields.location.title;
-  	 	//insect.location = fields.location[0];
-  		//insect.dateFound = fields.dateFound[0];
-	
+		insect.dateFound = JSON.parse(fields.dateFound[0]);
+		insect.commentsEnabled = fields.commentsEnabled[0],
+  	 	insect.location = JSON.parse(fields.location[0]);
+
+		/*_.forEach(fields, function(data, key) {
+			if (typeof insect[key] !== 'undefined') console.log(data + ' ' + key);
+		});*/
+
         var file = files.file[0];
         var contentType = file.headers['content-type'];
         var tmpPath = file.path;
 
-
-     
-
         var filePath = fs.readFileSync(file.path);
- 		insect.img.contentType = contentType;
+ 		insect.image.contentType = contentType;
         var prefix = 'data:' + contentType + ';base64,';
         var buf = filePath.toString('base64');
         var data = prefix + buf;
-        insect.img.data = data;
-       
+        insect.image.data = data;
+
        /* var extIndex = tmpPath.lastIndexOf('.');
         var extension = (extIndex < 0) ? '' : tmpPath.substr(extIndex);
-        // uuid is for generating unique filenames. 
+        // uuid is for generating unique filenames.
         var fileName = uuid.v4() + extension;
         var destPath = __dirname+ fileName;
         */
 
-
 		insect.save(function(err) {
 			if (err) {
 				return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-			} else {
+					message: errorHandler.getErrorMessage(err)
+				});
+			}
+			else {
 				res.jsonp(insect);
 			}
 		});

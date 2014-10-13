@@ -1,85 +1,59 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,'$http' ,'$stateParams', '$location', '$modal', 'Authentication', 'Insects',
-	function($scope, $upload, $http,$stateParams, $location, $modal, Authentication, Insects) {
+angular.module('insects').controller('InsectsController', ['$scope', '$upload', '$http', '$stateParams', '$location', '$modal', 'Authentication', 'Insects',
+	function($scope, $upload, $http, $stateParams, $location, $modal, Authentication, Insects) {
 		$scope.authentication = Authentication;
-
-		  $scope.onFileSelect = function($files){
-	        var file = $files[0];
-	        var insect = new Insects({
-				name: this.insectTitle,
-				scientificName: this.scientificName,
-				description: this.description,
-				dateFound: this.dt,
-				commentsEnabled: this.commentsEnabled,
-				location: {
-					title: this.locationTitle,
-					coordinates: {
-						latitude: this.latitude,
-						longitude: this.longitude
-					}
-				}
-				
-			});
-            $scope.upload = $upload.upload({
-                url: '/insects',
-                method: 'POST',
-                data: insect,
-                file: file
-   			 });/*.success(function(data, status, headers, config) {
-                $scope.uploadInProgress = false;
-                $scope.uploadedImage = JSON.parse(data);      
-            }).error(function(err) {
-                $scope.uploadInProgress = false;
-                console.log('Error uploading file: ' + err.message || err);
-            });
-       		*/
-    	};
 
 		$scope.create = function() {
 			var insect = new Insects({
-				name: this.insectTitle,
-				scientificName: this.scientificName,
-				description: this.description,
-				dateFound: this.dt,
-				commentsEnabled: this.commentsEnabled,
-				location: {
-					title: this.locationTitle,
-					coordinates: {
-						latitude: this.latitude,
-						longitude: this.longitude
-					}
-				}
+				name: this.form.name,
+				scientificName: this.form.scientificName,
+				description: this.form.description,
+				dateFound: this.form.dateFound,
+				commentsEnabled: this.form.commentsEnabled,
+				location: this.form.location
 			});
-			insect.$save(function(response) {
+
+			$upload.upload({
+				url: '/insects',
+				method: 'POST',
+				file: this.image,
+				data: insect
+			}).success(function(response, status, headers, config) {
 				$location.path('insects/' + response._id);
 
 				// clear form if they make new insect
-				$scope.insectTitle = '';
-				$scope.scientificName = '';
-				$scope.description = '';
-				$scope.dt = '';
-				$scope.commentsEnabled = '';
-				$scope.locationTitle = '';
-				$scope.latitude = '';
-				$scope.longitude = '';
-			}, function(errorResponse) {
+				$scope.form.name = '';
+				$scope.form.scientificName = '';
+				$scope.form.description = '';
+				$scope.form.dateCreated = new Date();
+				$scope.form.commentsEnabled = true;
+				$scope.form.location.title = '';
+				$scope.form.location.coordinates.latitude = '';
+				$scope.form.location.coordinates.longitude = '';
+				$scope.form.isValid = false;
+				$scope.form.reviewForm = false;
+				$scope.form.coordsSet = false;
+			}).error(function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
 		};
 
 		$scope.form = {
-			coordinates: {
-				latitude: 0,
-				longitude: 0
+			location: {
+				coordinates: {
+					latitude: '',
+					longitude: ''
+				}
 			},
+			commentsEnabled: true,
+			dateFound: new Date(),
 			cancel: function() {
 				$location.path('insects');
 			},
 			isValid: false,
-			next: function() {
-				if ($scope.form.isValid) console.log('yay');
-			}
+			reviewForm: false,
+			coordsSet: false
 		};
 
 		$scope.remove = function(insect) {
@@ -118,7 +92,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
 			$scope.insect = Insects.get({
 				insectId: $stateParams.insectsId // issue with insect(s) here, investigate later
 			});
-			
+
 
 			/*$scope.sampleInsect = {
 				_id: 0,
@@ -182,10 +156,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
 				options: {draggable: false}
 			};
 
-			// For confirm to delete
+			/* For confirm to delete
 			$scope.comfirmRemove = function() {
-				console.log($scope.insect);
-
 				var modalInstance = $modal.open({
 					templateUrl: 'confirmRemove.html',
 					controller: 'InsectsController',
@@ -204,14 +176,15 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
 				});
 			};
 
-			$scope.findOne.ok = function() {
+			$scope.ok = function() {
+				 console.log('close');
 				$modalInstance.close();
 				$scope.remove();
 			};
 
-			$scope.findOne.cancel = function() {
+			$scope.cancel = function() {
 				$modalInstance.dismiss('cancel');
-			};
+			};*/
 		};
 
 		// Datepicker
@@ -232,7 +205,6 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
 				$scope.datePicker.opened = true;
 			}
 		};
-		$scope.dt = new Date();
 
 		// map
 		$scope.map = {
@@ -257,8 +229,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
             options: { draggable: true },
             events: {
                 dragend: function (marker, eventName, args) {
-                    $scope.latitude = marker.getPosition().lat();
-					$scope.longitude = marker.getPosition().lng();
+                    $scope.form.location.coordinates.latitude = marker.getPosition().lat();
+					$scope.form.location.coordinates.longitude = marker.getPosition().lng();
+					$scope.form.coordsSet = true;
 					console.log({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
 				}
             }

@@ -1,42 +1,22 @@
 <section data-ng-controller="InsectsController" data-ng-init="findOne()">
-	<!--<div class="page-header">
-		<h1 data-ng-bind="insect.title"></h1>
-	</div>
-
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="insect.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="insect.user.displayName"></span>
-		</em>
-	</small>
-	<p class="lead" data-ng-bind="insect.content"></p>-->
-
-    <!-- Sample -->
-
     <div class="page-header clearfix">
 		<h1>
             {{insect.name}} <small>{{insect.scientificName}}</small>
-            <img scr={{insect.img.encode}}>
             <span class="pull-right" data-ng-show="authentication.user._id == insect.user._id">
                 <a class="btn btn-primary" href="/#!/insects/{{insect._id}}/edit">
                     <i class="glyphicon glyphicon-edit"></i>
                 </a>
-                <a class="btn btn-primary" data-ng-click="comfirmRemove();">
+                <a class="btn btn-primary" data-ng-click="remove();">
                     <i class="glyphicon glyphicon-trash"></i>
                 </a>
             </span>
         </h1>
-
-
 	</div>
 
     <div class="row">
         <div class="col-md-8">
             <div class="well well-sm text-center">
-                <!--<img style="max-width: 100%; height: 380px;" ng-src="/images/{{insect.pic}}">-->
-				<img style="max-width: 100%; height: 380px;" ng-src={{insect.img.data}}>
+				<img style="max-width: 100%; height: 380px;" ng-src="{{insect.image.data}}">
             </div>
 
             <h3 class="vspace">Info</h3>
@@ -54,32 +34,41 @@
                 <dd>{{insect.description}}</dd>
             </dl>
 
-            <h3 class="vspace">Comments</h3>
-            <ul class="media-list" data-ng-show="insect.comments">
-                <li class="media" ng-repeat="comment in insect.comments">
-                    <a class="pull-left" data-ng-href="#!/profile/{{comment.user._id}}">
-                        <img class="media-object" src={{insect.img.data}} style="width: 64px; height: 64px;">
-                    </a>
-                    <div class="media-body">
-                        <h4 class="media-heading">
-                            <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
-                            <small class="pull-right" data-ng-bind="comment.created | date:'mediumDate'"></small>
-                        </h4>
-                        <p data-ng-bind="comment.message"></p>
-                    </div>
-                </li>
-            </ul>
-            <p data-ng-hide="insect.comments">There are no comments for this insect. <span data-ng-show="authentication.user">Why don't you add one?</span></p>
+            <div data-ng-show="insect.commentsEnabled">
+                <h3 class="vspace">Comments</h3>
+                <ul class="media-list" data-ng-show="insect.comments">
+                    <li class="media" ng-repeat="comment in insect.comments">
+                        <a class="pull-left" data-ng-href="#!/profile/{{comment.user._id}}">
+                            <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" style="width: 64px; height: 64px;">
+                        </a>
+                        <div class="media-body">
+                            <h4 class="media-heading">
+                                <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
+                                <small class="pull-right" data-ng-bind="comment.created | date:'mediumDate'"></small>
+                            </h4>
+                            <p data-ng-bind="comment.message"></p>
+                        </div>
+                    </li>
+                </ul>
+                <p data-ng-hide="insect.comments">There are no comments for this insect. <span data-ng-show="authentication.user">Why don't you add one?</span></p>
 
-            <div data-ng-show="authentication.user">
-                <h3>Add a new Comment</h3>
-                <form name="insectComment" class="form-horizontal" data-ng-submit="update(insectForm.$valid)" novalidate>
-                    <fieldset>
-                        <label style="font-weight: normal;" class="control-label" for="comment">Commenting as <strong>{{authentication.user.displayName}}</strong></label>
-                        <textarea name="comment" id="content" class="form-control" cols="30" rows="10" placeholder="Write a comment." required></textarea>
-                        <input type="submit" value="Submit" class="btn btn-default">
-                    </fieldset>
-                </form>
+                <div data-ng-show="authentication.user">
+                    <h3>Add a new Comment</h3>
+                    <form name="insectComment" class="form-horizontal" data-ng-submit="update(insectForm.$valid)" novalidate>
+                        <fieldset>
+                            <label style="font-weight: normal;" class="control-label" for="comment">Commenting as <strong>{{authentication.user.displayName}}</strong></label>
+                            <textarea name="comment" id="content" class="form-control" cols="30" rows="10" placeholder="Write a comment." required></textarea>
+                            <input type="submit" value="Submit" class="btn btn-default">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+
+            <div data-ng-show="!insect.commentsEnabled && authentication.user._id == insect.user._id">
+                <h3 class="vspace">Comments</h3>
+                <div class="alert alert-info" role="alert">
+                    <strong>Heads Up!</strong> You have disabled commenting for this insect.
+                </div>
             </div>
         </div>
 
@@ -88,10 +77,7 @@
 				<marker coords="sampleMarker.coords" options="sampleMarker.options" events="sampleMarker.events" idkey="sampleMarker.id"></marker>
 			</google-map>
 
-            <h3 class="vspace">Insects Nearby</h3>
-            <div class="alert alert-info" role="alert">
-                <strong>Imagine</strong> a list of bugs here but I'm way too tired.
-            </div>
+            <!--<h3 class="vspace">Insects Nearby</h3>-->
         </div>
     </div>
 

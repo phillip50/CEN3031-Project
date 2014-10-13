@@ -4,19 +4,19 @@
 	</div>
 
 	<div class="col-md-12">
-		<form name="insectForm" novalidate>
+		<form name="insectForm" data-ng-submit="create()" novalidate>
 			<fieldset data-ng-hide="reviewForm">
 				<h2>Photo</h2>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="photoUpload">Photo</label>
-							<input id="file" type="file"  ng-file-select="onFileSelect($files)" class="form-control" required>
+							<input id="photoUpload" type="file" data-valid-file data-ng-model="form.photoUpload" class="form-control" accept="image/*" data-ng-required="true" data-ng-file-select="image = $files[0]">
 						</div>
 						<div class="form-group">
 							<label for="dateFound">Date Found</label>
 							<div class="input-group">
-								<input id="dateFound" type="text" class="form-control" datepicker-popup="{{datePicker.format}}" data-ng-model="dt" data-is-open="datePicker.opened" data-min-date="datePicker.minDate" data-max-date="datePicker.maxDate" data-datepicker-options="datePicker.options"  data-ng-required="true" data-close-text="Close">
+								<input id="dateFound" type="text" class="form-control" data-datepicker-popup="{{datePicker.format}}" data-ng-model="form.dateFound" data-is-open="datePicker.opened" data-min-date="datePicker.minDate" data-max-date="datePicker.maxDate" data-datepicker-options="datePicker.options"  data-ng-required="true" data-close-text="Close">
 								<span class="input-group-btn">
 									<button type="button" class="btn btn-default" data-ng-click="datePicker.open($event)">
 										<i class="glyphicon glyphicon-calendar"></i>
@@ -26,30 +26,38 @@
 						</div>
 						<div class="form-group">
 							<label for="locationTitle">Location</label>
-							<input id="locationTitle" type="text" data-ng-model="locationTitle" class="form-control" placeholder="Place" required>
+							<input id="locationTitle" type="text" data-ng-model="form.location.title" class="form-control" placeholder="Place" required>
 						</div>
 						<h2>Info</h2>
 						<div class="form-group">
 							<label for="name">Name</label>
-							<input id="name" type="text" data-ng-model="insectTitle" class="form-control" placeholder="Name" required>
+							<input id="name" type="text" data-ng-model="form.name" class="form-control" placeholder="Name" required>
 						</div>
 						<div class="form-group">
 							<label class="control-label" for="scientificName">Scientific Name</label>
 							<div class="controls">
-								<input type="text" data-ng-model="scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
+								<input type="text" data-ng-model="form.scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
 							</div>
 						</div>
 						<div class="form-group">
 							<label class="control-label" for="description">Description</label>
 							<div class="controls">
-								<textarea data-ng-model="description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+								<textarea data-ng-model="form.description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
 							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="commentsEnabled">
+								<input data-ng-model="form.commentsEnabled" id="commentsEnabled" type="checkbox" checked> Enable comments
+							</label>
 						</div>
 					</div>
 					<div class="form-group col-md-6">
-						<label class="control-label">Place found</label>
-						<input type="text" class="form-control hidden" data-ng-model="latitude" data-ng-required="true">
-						<input type="text" class="form-control hidden" data-ng-model="longitude" data-ng-required="true">
+						<label class="control-label">
+							Place found
+							<span data-ng-show="form.coordsSet" class="glyphicon glyphicon-ok" style="color: #3c763d;"></span>
+						</label>
+						<input type="text" class="form-control hidden" data-ng-model="form.location.coordinates.latitude" data-ng-required="true">
+						<input type="text" class="form-control hidden" data-ng-model="form.location.coordinates.longitude" data-ng-required="true">
 						<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
 							<marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></marker>
 						</google-map>
@@ -69,33 +77,34 @@
 				<h2>Review your data</h2>
 				<dl class="dl-horizontal">
 					<dt>Name</dt>
-					<dd>{{insectTitle}}</dd>
+					<dd>{{form.name}}</dd>
 
 					<dt>Scientific Name</dt>
-					<dd>{{scientificName}}</dd>
+					<dd>{{form.scientificName}}</dd>
 
 					<dt>Caught By</dt>
 					<dd>{{authentication.user.displayName}}</dd>
 
 					<dt>Date Found</dt>
-					<dd>{{dt | date:'mediumDate'}}</dd>
+					<dd>{{form.dateFound | date:'mediumDate'}}</dd>
 
 					<dt>Location</dt>
-					<dd>{{locationTitle}}</dd>
+					<dd>{{form.location.title}}</dd>
+
+					<dt>Coordinates</dt>
+					<dd>{{form.location.coordinates.latitude}}, {{form.location.coordinates.longitude}}</dd>
 
 					<dt>Description</dt>
-					<dd>{{description}}</dd>
+					<dd>{{form.description}}</dd>
+
+					<dt>Comments Enabled</dt>
+					<dd>{{(form.commentsEnabled)? "Yes":"No"}}</dd>
 				</dl>
 				<div class="text-right">
 					<a class="btn btn-default" data-ng-click="reviewForm = false">Back</a>
 					<button class="btn btn-primary" data-loading-text="Creating">Submit</button>
 				</div>
 			</fieldset>
-			<div class="form-group">
-					<input type="submit" class="btn btn-default">
-			</div>
-			
 		</form>
-		
 	</div>
 </section>
