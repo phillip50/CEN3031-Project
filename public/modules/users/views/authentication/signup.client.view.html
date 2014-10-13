@@ -1,7 +1,7 @@
 <!-- FINDME -->
 <section class="row" data-ng-controller="AuthenticationController">
-		<form name="userForm" data-ng-submit="signup()" class="signin form-horizontal" novalidate autocomplete="off">
-			<fieldset>
+	<form name="userForm" data-ng-submit="signup()" class="signin form-horizontal" novalidate autocomplete="off">
+		<fieldset>
 			<div class= "col-md-3 col-sm-offset-1 well" style="padding:35px; margin-top:25px;">
 				<h3 class="text-center"><strong>Bug Catcher Info</strong></h3>
 				<div class="form-group">
@@ -36,17 +36,21 @@
 					<label for="classCode">Class Number</label>
 					<input type="text" id="classCode" name="classCode" class="form-control" data-ng-model="credentials.classCode" placeholder="Ex: ENY3005">
 				</div>
-		</div>	
-		<div class="col-md-3 text-center form-group" style="margin:25px;">
-				<img class= "img img-rounded" src="images/signup.png" style="padding:25px;">
-				<button type="submit" class="btn btn-large btn-primary"><h3 style="padding:5px;"><strong>Sign up!</strong>
-				</h3></button>
-				<a href="/#!/signin" class="show-signup btn btn-large btn-primary" style="margin-left:5px;"><h3 style="padding:5px;"><strong>Sign in</strong>
-				</h3></a>
-				<div data-ng-show="error" class="text-center text-danger" style = "float: right;">
-				<strong data-ng-bind="error"></strong>
-		</div>
-		</div>
+				<div class="form-group">
+					<label for="classCode">Student Number</label>
+					<input type="text" id="ufid" name="ufid" class="form-control" data-ng-model="credentials.ufid" placeholder="Ex: XXXX-XXXX">
+				</div>
+			</div>	
+			<div class="col-md-3 text-center form-group" style="margin:25px;">
+					<img class= "img img-rounded" src="images/signup.png" style="padding:25px;">
+					<button type="submit" class="btn btn-large btn-primary"><h3 style="padding:5px;"><strong>Sign up!</strong>
+					</h3></button>
+					<a href="/#!/signin" class="show-signup btn btn-large btn-primary" style="margin-left:5px;"><h3 style="padding:5px;"><strong>Sign in</strong>
+					</h3></a>
+					<div data-ng-show="error" class="text-center text-danger" style = "float: right;">
+						<strong data-ng-bind="error"></strong>
+					</div>
+			</div>
 
 		</fieldset>
 	</form>

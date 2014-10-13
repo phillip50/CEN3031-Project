@@ -2,6 +2,7 @@
 
 /**
  * Module dependencies.
+ * FINDME
  */
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema,
@@ -52,6 +53,24 @@ var UserSchema = new Schema({
 		type: String,
 		unique: 'testing error message',
 		required: 'Please fill in a username',
+		trim: true
+	},
+	ufid: {
+		type: String,
+		unique: 'testing error message',
+		required: 'Please fill in a ufid',
+		trim: true
+	},
+	classCode: {
+		type: String,
+		unique: 'testing error message',
+		required: 'Please fill in a classCode',
+		trim: true
+	},
+	school: {
+		type: String,
+		unique: 'testing error message',
+		required: 'Please fill in a school',
 		trim: true
 	},
 	password: {

@@ -138,7 +138,8 @@ exports.saveOAuthUserProfile = function(req, providerUserProfile, done) {
 							providerData: providerUserProfile.providerData,
 							classCode: providerUserProfile.classCode,
 							ufid: providerUserProfile.ufid,
-							school: providerUserProfile.school
+							school: providerUserProfile.school,
+							userDescription: providerUserProfile.userDescription
 
 						});
 
