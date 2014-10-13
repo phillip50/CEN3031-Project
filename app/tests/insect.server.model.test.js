@@ -24,12 +24,15 @@ describe('Insect Model Unit Tests:', function() {
 			displayName: 'Full Name',
 			email: 'test@test.com',
 			username: 'username',
-			password: 'password'
+			password: 'password',
+			ufid: '11110000',
+			classCode: '123',
+			school:'University of Florida'
 		});
 
 		user.save(function() {
 			insect = new Insect({
-				img:{
+				image:{
 					data: 'DAFAFRWSADASD',
 					contentType: 'image/png'
 				},
@@ -61,7 +64,7 @@ describe('Insect Model Unit Tests:', function() {
 		});
 
 	it('should have an image', function(done) {
-			insect.img.data = '';
+			insect.image.data = '';
 
 			return insect.save(function(err) {
 				should.exist(err);
