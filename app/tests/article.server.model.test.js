@@ -24,7 +24,10 @@ describe('Article Model Unit Tests:', function() {
 			displayName: 'Full Name',
 			email: 'test@test.com',
 			username: 'username',
-			password: 'password'
+			password: 'password',
+			school: 'school',
+			classCode: 'classCode'
+
 		});
 
 		user.save(function() {
