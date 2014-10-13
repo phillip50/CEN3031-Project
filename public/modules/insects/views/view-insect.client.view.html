@@ -17,7 +17,6 @@
 
     <div class="page-header clearfix">
 		<h1>
-           <img src={{insect.img.data}}>
             {{insect.name}} <small>{{insect.scientificName}}</small>
             <img scr={{insect.img.encode}}>
             <span class="pull-right" data-ng-show="authentication.user._id == insect.user._id">
@@ -37,7 +36,7 @@
         <div class="col-md-8">
             <div class="well well-sm text-center">
                 <!--<img style="max-width: 100%; height: 380px;" ng-src="/images/{{insect.pic}}">-->
-				<img style="max-width: 100%; height: 380px;" ng-src="https://placeimg.com/380/300/animals">
+				<img style="max-width: 100%; height: 380px;" ng-src={{insect.img.data}}>
             </div>
 
             <h3 class="vspace">Info</h3>
@@ -59,7 +58,7 @@
             <ul class="media-list" data-ng-show="insect.comments">
                 <li class="media" ng-repeat="comment in insect.comments">
                     <a class="pull-left" data-ng-href="#!/profile/{{comment.user._id}}">
-                        <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" style="width: 64px; height: 64px;">
+                        <img class="media-object" src={{insect.img.data}} style="width: 64px; height: 64px;">
                     </a>
                     <div class="media-body">
                         <h4 class="media-heading">

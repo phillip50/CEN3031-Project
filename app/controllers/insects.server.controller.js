@@ -24,11 +24,8 @@ exports.create = function(req, res) {
 
   	 var form = new multiparty.Form();
   	 form.parse(req, function(err, fields, files) {
-  	 	console.log(fields);
-  	 	console.log(fields.location[0]);
-  	 	console.log(fields.location.coordinates);
   	 	insect.name = fields.name[0];
-  	 	insect.scientificName = fields.scientificName[0];
+  	    insect.scientificName = fields.scientificName[0];
   	 	insect.description = fields.description[0];
   	 	insect.location.title = fields.location.title;
   	 	//insect.location = fields.location[0];

@@ -11,7 +11,7 @@ var should = require('should'),
 /**
  * Globals
  */
-var user, Insect;
+var user, insect;
 
 /**
  * Unit tests
@@ -28,9 +28,23 @@ describe('Insect Model Unit Tests:', function() {
 		});
 
 		user.save(function() {
-			Insect = new Insect({
-				title: 'Insect Title',
-				content: 'Insect Content',
+			insect = new Insect({
+				img:{
+					data: 'DAFAFRWSADASD',
+					contentType: 'image/png'
+				},
+				name: 'Insect Title',
+				scientificName: 'Insect Content',
+				description: 'Insect description',
+				dateFound: '10/12/14',
+				location: {
+					title: 'Title',
+					coordinates: {
+						latitude: 10,
+						longitude: 10,
+					}
+				},
+				
 				user: user
 			});
 
@@ -40,21 +54,39 @@ describe('Insect Model Unit Tests:', function() {
 
 	describe('Method Save', function() {
 		it('should be able to save without problems', function(done) {
-			return Insect.save(function(err) {
+			return insect.save(function(err) {
 				should.not.exist(err);
 				done();
 			});
 		});
 
-		it('should be able to show an error when try to save without title', function(done) {
-			Insect.title = '';
+	it('should have an image', function(done) {
+			insect.img.data = '';
 
-			return Insect.save(function(err) {
+			return insect.save(function(err) {
 				should.exist(err);
 				done();
 			});
 		});
+
+
+	it('should have a name', function(done) {
+			insect.name = '';
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
 	});
+
+	
+
+
+
+	
+	
 
 	afterEach(function(done) {
 		Insect.remove().exec();

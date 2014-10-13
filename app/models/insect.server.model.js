@@ -11,7 +11,10 @@ var mongoose = require('mongoose'),
  */
 var InsectSchema = new Schema({
 	img:{
-		data: String,
+		data:{
+		type: String,
+		required:'Image is required'
+		},
 		contentType: String
 	},
 	created: {
@@ -21,8 +24,8 @@ var InsectSchema = new Schema({
 	name: {
 		type: String,
 		default: '',
-		trim: true
-		//required: 'Name cannot be blank'
+		trim: true,
+		required: 'Name cannot be blank'
 	},
 	scientificName: {
 		type: String,
@@ -37,25 +40,25 @@ var InsectSchema = new Schema({
 	},
 	dateFound: {
 		type: Date,
-		default: Date.now
+		default: Date.now,
 		//required: 'Date found cannot be blank'
 	},
 	location: {
 		title: {
 			type: String,
 			default: '',
-			trim: true
+			trim: true,
 			//required: 'Location cannot be blank'
 		},
 		coordinates: {
 			latitude: {
 				type: Number,
-				default: ''
+				default: null
 				//required: 'Latitude cannot be blank'
 			},
 			longitude: {
 				type: Number,
-				default: ''
+				default: null
 				//required: 'Longitude cannot be blank'
 			}
 		}
@@ -63,11 +66,11 @@ var InsectSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
-	},
-	comments: {
+	}
+	/*comments: {
 		type: Schema.ObjectId,
 		ref: 'Comment'
-	}
+	}*/
 });
 
 mongoose.model('Insect', InsectSchema);

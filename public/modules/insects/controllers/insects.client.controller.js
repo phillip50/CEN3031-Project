@@ -19,6 +19,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload' ,
 						longitude: this.longitude
 					}
 				}
+				
 			});
             $scope.upload = $upload.upload({
                 url: '/insects',
