@@ -82,6 +82,53 @@ describe('Insect Model Unit Tests:', function() {
 			});
 		});
 
+	it('should have a scientificName', function(done) {
+			insect.scientificName = '';
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+	it('should have a date', function(done) {
+			insect.dateFound = '';
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+
+	it('should have a location', function(done) {
+			insect.location.title = '';
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+	it('should have a latitude', function(done) {
+			insect.location.coordinates.latitude = null;
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+	it('should have a longitude', function(done) {
+			insect.location.coordinates.longitude = null;
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+
 	});
 
 	
