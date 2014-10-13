@@ -1,6 +1,6 @@
 {
-  "name": "bugs",
-  "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js",
+  "name": "theInsectCollection",
+  "description": "Full-scale insect tracking built with the MEAN stack.",
   "version": "0.0.1",
   "engines": {
     "node": "0.10.x",

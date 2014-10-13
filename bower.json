@@ -1,7 +1,7 @@
 {
-  "name": "bugs",
+  "name": "theInsectCollection",
   "version": "0.0.1",
-  "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js",
+  "description": "Full-scale insect tracking built with the MEAN stack.",
   "dependencies": {
     "bootstrap": "~3",
     "angular": "~1.2",

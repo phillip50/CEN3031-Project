@@ -11,7 +11,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="photoUpload">Photo</label>
-							<input id="photoUpload" type="file" data-valid-file data-ng-model="form.photoUpload" class="form-control" accept="image/*" data-ng-required="true" data-ng-file-select="image = $files[0]">
+							<input id="photoUpload" type="file" data-valid-file data-ng-model="form.photoUpload" class="form-control" accept="image/*" data-ng-required="true" data-ng-file-select="form.image = $files[0]; form.photoPreview();">
 						</div>
 						<div class="form-group">
 							<label for="dateFound">Date Found</label>
@@ -75,6 +75,9 @@
 
 			<fieldset data-ng-show="reviewForm">
 				<h2>Review your data</h2>
+
+				<img ng-src="{{form.photoPreviewUrl}}" alt="Photo Preview">
+
 				<dl class="dl-horizontal">
 					<dt>Name</dt>
 					<dd>{{form.name}}</dd>

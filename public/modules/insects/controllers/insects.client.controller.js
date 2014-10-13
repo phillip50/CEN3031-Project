@@ -17,7 +17,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 			$upload.upload({
 				url: '/insects',
 				method: 'POST',
-				file: this.image,
+				file: this.form.image,
 				data: insect
 			}).success(function(response, status, headers, config) {
 				$location.path('insects/' + response._id);
@@ -31,6 +31,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 				$scope.form.location.title = '';
 				$scope.form.location.coordinates.latitude = '';
 				$scope.form.location.coordinates.longitude = '';
+				$scope.form.image = '';
 				$scope.form.isValid = false;
 				$scope.form.reviewForm = false;
 				$scope.form.coordsSet = false;
@@ -48,12 +49,54 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 			},
 			commentsEnabled: true,
 			dateFound: new Date(),
+			isValid: false,
+			reviewForm: false,
+			coordsSet: false,
 			cancel: function() {
 				$location.path('insects');
 			},
-			isValid: false,
-			reviewForm: false,
-			coordsSet: false
+			photoPreview: function() {
+				if ($scope.form.photoUpload.files && $scope.form.photoUpload.files[0]) {
+					var reader = new FileReader();
+
+					reader.onload = function(e) {
+                		$scope.form.photoPreviewUrl = e.target.result;
+            		}
+
+            		reader.readAsDataURL($scope.form.photoUpload.files[0]);
+				}
+			}
+		};
+
+		// map
+		$scope.map = {
+			center: {
+				latitude: 29.6398801,
+				longitude: -82.3551082
+			},
+			zoom: 14,
+			bounds: {},
+			options: {
+				scrollwheel: true,
+				streetViewControl: false
+			}
+		};
+
+		$scope.marker = {
+			id:0,
+			coords: {
+				latitude: 29.6398801,
+				longitude: -82.3551082
+			},
+			options: { draggable: true },
+			events: {
+				dragend: function (marker, eventName, args) {
+					$scope.form.location.coordinates.latitude = marker.getPosition().lat();
+					$scope.form.location.coordinates.longitude = marker.getPosition().lng();
+					$scope.form.coordsSet = true;
+					$scope.$apply();
+				}
+			}
 		};
 
 		$scope.remove = function(insect) {
@@ -93,24 +136,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 				insectId: $stateParams.insectsId // issue with insect(s) here, investigate later
 			});
 
-
-			/*$scope.sampleInsect = {
-				_id: 0,
-				name: 'Butterfree',
-				scientificName: 'Rhopalocera Liberum',
-				description: 'It loves the honey of flowers and can locate flower patches that have even tiny amounts of pollen.',
-				pic: 'bug1.png',
-				caughtBy : { // user object
-					_id: 'AshID',
-					displayName: 'Ash'
-				},
-				date: '2014-09-29T18:46:39.936Z',
-				location: 'Pallet Town',
-				coords: {
-					latitude: 29.631146633445802,
-					longitude: -82.34787039550469
-				},
-				comments: [{
+			/*comments: [{
 					user: {
 						_id: 1,
 						displayName: 'Student 1'
@@ -131,8 +157,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 					},
 					created: '2014-10-02T18:46:39.936Z',
 					message: 'Wow, it\'s so small! I think Butterfree is better overall. It learns a couple of useful status-hindering attacks and learns a few Psychic-type attacks like Psybeam and Confusion. Butterfree has a better move pool the Beedrill. However Beedrill has overall better stats then Butterfree.'
-				}]
-			};*/
+				}]*/
 
 			// map
 			$scope.sampleMap = {
@@ -205,36 +230,5 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 				$scope.datePicker.opened = true;
 			}
 		};
-
-		// map
-		$scope.map = {
-			center: {
-				latitude: 29.6398801,
-				longitude: -82.3551082
-			},
-			zoom: 14,
-			bounds: {},
-			options: {
-				scrollwheel: true,
-				streetViewControl: false
-			}
-		};
-
-		$scope.marker = {
-            id:0,
-            coords: {
-				latitude: 29.6398801,
-				longitude: -82.3551082
-            },
-            options: { draggable: true },
-            events: {
-                dragend: function (marker, eventName, args) {
-                    $scope.form.location.coordinates.latitude = marker.getPosition().lat();
-					$scope.form.location.coordinates.longitude = marker.getPosition().lng();
-					$scope.form.coordsSet = true;
-					console.log({latitude: marker.getPosition().lat(), longitude: marker.getPosition().lng()});
-				}
-            }
-        };
 	}
 ]);

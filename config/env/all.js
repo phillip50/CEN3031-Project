@@ -3,7 +3,7 @@
 module.exports = {
 	app: {
 		title: 'The Insect Collection',
-		description: 'Full-scale insect tracking built with MongoDB, Express, AngularJS, and Node.js',
+		description: 'Full-scale insect tracking built with the MEAN stack.',
 		keywords: 'Insects, Florida'
 	},
 	port: process.env.PORT || 3000,
