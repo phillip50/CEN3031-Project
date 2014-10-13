@@ -5,102 +5,103 @@
  */
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
-	Insect = mongoose.model('Insect'),
+	Gallery = mongoose.model('Gallery'),
 	_ = require('lodash');
 
 /**
- * Create a insect
+ * Create a gallery
  */
 exports.create = function(req, res) {
-	var insect = new Insect(req.body);
-	insect.user = req.user;
+	var gallery = new Gallery(req.body);
+	gallery.user = req.user;
 
-	insect.save(function(err) {
+	gallery.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(insect);
+			res.jsonp(gallery);
 		}
 	});
+
 };
 
 /**
- * Show the current insect
+ * Show the current gallery
  */
 exports.read = function(req, res) {
-	res.jsonp(req.insect);
+	res.jsonp(req.gallery);
 };
 
 /**
- * Update a insect
+ * Update a gallery
  */
 exports.update = function(req, res) {
-	var insect = req.insect;
+	var gallery = req.gallery;
 
-	insect = _.extend(insect, req.body);
+	gallery = _.extend(gallery, req.body);
 
-	insect.save(function(err) {
+	gallery.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(insect);
+			res.jsonp(gallery);
 		}
 	});
 };
 
 /**
- * Delete an insect
+ * Delete an gallery
  */
 exports.delete = function(req, res) {
-	var insect = req.insect;
+	var gallery = req.gallery;
 
-	insect.remove(function(err) {
+	gallery.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(insect);
+			res.jsonp(gallery);
 		}
 	});
 };
 
 /**
- * List of Insects
+ * List of Gallerys
  */
 exports.list = function(req, res) {
-	Insect.find().sort('-created').populate('user', 'displayName').exec(function(err, insects) {
+	Gallery.find().sort('-created').populate('user', 'displayName').exec(function(err, gallerys) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(insects);
+			res.jsonp(gallerys);
 		}
 	});
 };
 
 /**
- * Insect middleware
+ * Gallery middleware
  */
-exports.insectByID = function(req, res, next, id) {
-	Insect.findById(id).populate('user', 'displayName').exec(function(err, insect) {
+exports.galleryByID = function(req, res, next, id) {
+	Gallery.findById(id).populate('user', 'displayName').exec(function(err, gallery) {
 		if (err) return next(err);
-		if (!insect) return next(new Error('Failed to load insect ' + id));
-		req.insect = insect;
+		if (!gallery) return next(new Error('Failed to load gallery ' + id));
+		req.gallery = gallery;
 		next();
 	});
 };
 
 /**
- * Insect authorization middleware
+ * Gallery authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.insect.user.id !== req.user.id) {
+	if (req.gallery.user.id !== req.user.id) {
 		return res.status(403).send({
 			message: 'User is not authorized'
 		});

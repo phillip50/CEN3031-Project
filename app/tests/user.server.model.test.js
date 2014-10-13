@@ -24,6 +24,10 @@ describe('User Model Unit Tests:', function() {
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password',
+			ufid: '1234-5678',
+			school: 'School',
+			classCode: 'Code123',
+			userDescription: 'User Description goes here',
 			provider: 'local'
 		});
 		user2 = new User({
@@ -33,6 +37,10 @@ describe('User Model Unit Tests:', function() {
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password',
+			ufid: '1234-5678',
+			school: 'School',
+			classCode: 'Code123',
+			userDescription: 'User Description goes here',
 			provider: 'local'
 		});
 

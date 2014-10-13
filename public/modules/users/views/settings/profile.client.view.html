@@ -1,7 +1,7 @@
 <!-- FINDME -->
 <section data-ng-controller="SettingsController">
 <div class="row">
-	<h1>About {{user.displayName}}</h1>
+	<h1 style="padding:20px;">About {{user.displayName}}</h1>
 <div class="col col-md-6 well">
 		
 		<div>
@@ -9,13 +9,15 @@
 
 			<div class="col col-sm-6">
 				<p>
-					<strong>School:</strong> {{user.school}} <br>
-					<strong>Class:</strong> {{user.classCode}}<br>
-					<strong>Student Id:</strong> {{user.ufid}}<br>
+					<h3>
+						<strong>School:</strong>&nbsp {{user.school}} <br>
+						<strong>Class:</strong>&nbsp {{user.classCode}}<br>
+						<strong>Student Id:</strong>&nbsp {{user.ufid}}<br>
+					</h3>
 					<br>
 					{{user.userDescription}}
 					<br>
-					<a href= 'http://localhost:3000/#!/settings/profile'>Edit</a>
+					<a href= '#!/settings/profile'>Edit</a>
 					<br>
 					</p>
 			<table class="table" style="max-height: 300px; overflow-y:scroll;">
@@ -23,19 +25,25 @@
 	       		 	<td class="td">
 	       		 		<center>
 	       		 		<strong>Gallery 1</strong><br>
-	            		<img style="height: 75px;" src="/images/bug1.png">
+	       		 		<a href="#!/galleries">
+	            			<input type="image" style="height: 75px;" src="/images/bug1.png">
+	            		</a>
 	            		</center>
 	            	</td>
 	            	<td class="td">
 	            		<center>
 	            		<strong>Gallery 2</strong><br>
-	            		<img style="height: 75px;" src="/images/bug2.jpg">
+	       		 		<a href="#!/galleries">
+	            			<input type="image" style="height: 75px;" src="/images/bug2.jpg">
+	            		</a>
 	            		</center>
 	            	</td>
 	            	<td class="td">
 	            		<center>
 	            		<strong>Gallery 3</strong><br>
-	            		<img style="height: 75px;" src="/images/bug3.png">
+	       		 		<a href="#!/galleries">
+	            			<input type="image" style="height: 75px;" src="/images/bug3.png">
+	            		</a>
 	            		</center>
 	            	</td>
 	            </tr>
@@ -54,35 +62,53 @@
 			<thead><h2>Caught Insects</h2></thead>
 			<tr>
        		 	<td class="td">
-            		<img style="height: 125px;" src="/images/bug1.png">
+       		 		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug1.png">
+            		</a>
             	</td>
             	<td class="td">
-            		<img style="height: 125px;" src="/images/bug2.jpg">
+            		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug2.jpg">
+            		</a>
             	</td>
             	<td class="td">
-            		<img style="height: 125px;" src="/images/bug3.png">
+            		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug3.png">
+            		</a>
             	</td>
             </tr>
             <tr>
        		 	<td class="td">
-            		<img style="height: 125px;" src="/images/bug4.jpg">
+       		 		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug4.jpg">
+            		</a>
             	</td>
             	<td class="td">
-            		<img style="height: 125px;" src="/images/bug5.png">
+            		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug5.png">
+            		</a>
             	</td>
             	<td class="td">
-            		<img style="height: 125px;" src="/images/combee.png">
+            		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/combee.png">
+            		</a>
             	</td>
             </tr>
             <tr>
        		 	<td class="td">
-            		<img style="height: 125px;" src="/images/bug1.png">
+       		 		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug1.png">
+            		</a>
             	</td>
             	<td class="td">
-            		<img style="height: 125px;" src="/images/bug2.jpg">
+            		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug2.jpg">
+            		</a>
             	</td>
             	<td class="td">
-            		<img style="height: 125px;" src="/images/bug2.jpg">
+            		<a href="/#!/insects/5425cdf5806e219804c442cf">
+            			<img style="height: 125px;" src="/images/bug2.jpg">
+            		</a>
             	</td>
             </tr>
         </table>
