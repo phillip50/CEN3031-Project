@@ -82,7 +82,7 @@
 			$stateParams.articleId = '525a8422f6d0f87f0e407a33';
 
 			// Set GET response
-			$httpBackend.expectGET(/articles\/([0-9a-fA-F]{24})$/).respond(sampleArticle);
+			$httpBackend.expectGET(/articles/).respond(sampleArticle);
 
 			// Run controller functionality
 			scope.findOne();

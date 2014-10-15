@@ -23,6 +23,7 @@ describe('Insect Server Test', function(){
           ufid: '11110000',
           classCode: '123',
           school:'University of Florida'
+          
     });
 
     user.save(function() {

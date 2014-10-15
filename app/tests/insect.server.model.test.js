@@ -18,6 +18,7 @@ var user, insect;
  */
 describe('Insect Model Unit Tests:', function() {
 	beforeEach(function(done) {
+		
 		user = new User({
 			firstName: 'Full',
 			lastName: 'Name',

@@ -100,7 +100,7 @@
 			$stateParams.insectId = '525a8422f6d0f87f0e407a33';
 
 			// Set GET response
-			$httpBackend.expectGET(/insects\/([0-9a-fA-F]{24})$/).respond(sampleInsect);
+			$httpBackend.expectGET(/insects/).respond(sampleInsect);
 
 			// Run controller functionality
 			scope.findOne();
@@ -152,7 +152,7 @@
 			scope.longitude = -82.34787039550469;
 
 			// Set POST response
-			$httpBackend.expectPOST('insects', sampleInsectPostData).respond(sampleInsectResponse);
+			$httpBackend.expect('POST','/insects', sampleInsectPostData).respond(sampleInsectResponse);
 
 			// Run controller functionality
 			scope.create();
@@ -170,7 +170,7 @@
 			expect(scope.longitude).toEqual('');
 
 			// Test URL redirection after the insect was created
-			expect($location.path()).toBe('/insects/' + sampleInsectResponse._id);
+			expect($location.path()).toEqual('/insects/' + sampleInsectResponse._id);
 		}));
 
 		it('$scope.update() should update a valid insect', inject(function(Insects) {
@@ -194,7 +194,7 @@
 			scope.insect = sampleInsectPutData;
 
 			// Set PUT response
-			$httpBackend.expectPUT(/insects\/([0-9a-fA-F]{24})$/).respond();
+			$httpBackend.expectPUT(/insects/).respond();
 
 			// Run controller functionality
 			scope.update();
