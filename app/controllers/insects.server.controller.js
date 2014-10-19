@@ -12,6 +12,7 @@ var mongoose = require('mongoose'),
 var fs = require('fs'),
 //	uuid = require('uuid'),
     multiparty = require('multiparty');
+var ExifImage = require('exif').ExifImage;
 
 /**
  * Create a insect
@@ -44,12 +45,17 @@ exports.create = function(req, res) {
         var data = prefix + buf;
         insect.image.data = data;
 
-       /* var extIndex = tmpPath.lastIndexOf('.');
-        var extension = (extIndex < 0) ? '' : tmpPath.substr(extIndex);
-        // uuid is for generating unique filenames.
-        var fileName = uuid.v4() + extension;
-        var destPath = __dirname+ fileName;
-        */
+        try {
+    		new ExifImage({ image : tmpPath }, function (error, exifData) {
+        		if (error)
+           		     console.log('Error: '+ error.message);
+       		    else
+            		console.log(exifData.gps.GPSLatitude);
+            		console.log(exifData.gps.GPSLongitude);  // Do something with your data!
+    		});
+		} catch (error) {
+    		console.log('Error: ' + error.message);
+		}
 
 		insect.save(function(err) {
 			if (err) {
