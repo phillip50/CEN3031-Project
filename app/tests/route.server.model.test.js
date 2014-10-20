@@ -1,15 +1,13 @@
-'use strict'
+'use strict';
+
 var should = require('should'),
      app = require('../../server'),
      mongoose = require('mongoose'),
      User = mongoose.model('User'),
      Insect = mongoose.model('Insect'),
      request = require('supertest');
-  
-  var user, insect;
 
-
-
+ var user, insect;
 
 describe('Insect Server Test', function(){
     beforeEach(function(done) {
@@ -23,7 +21,7 @@ describe('Insect Server Test', function(){
           ufid: '11110000',
           classCode: '123',
           school:'University of Florida'
-          
+
     });
 
     user.save(function() {
@@ -41,9 +39,9 @@ describe('Insect Server Test', function(){
                     coordinates: {
                         latitude: 10,
                         longitude: 10,
-                    }   
+                    }
               },
-        
+
               user: user
          });
 
@@ -52,10 +50,10 @@ describe('Insect Server Test', function(){
             });
           });
   });
-    
+
   describe('Testing the GET methods', function() {
     it('Should recieve list of insects', function(done) {
-      
+
       request(app).get('/insects')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -65,7 +63,7 @@ describe('Insect Server Test', function(){
           res.body[0].should.have.property('name', insect.name);
           res.body[0].should.have.property('description', insect.description);
 
-          
+
           done();
         });
     });
@@ -87,7 +85,7 @@ describe('Insect Server Test', function(){
   });
 
     afterEach(function(done) {
-    
+
       Insect.remove(function() {
               User.remove(function() {
                   done();
@@ -95,7 +93,4 @@ describe('Insect Server Test', function(){
     });
   });
 
-
-})
-	
-
+});

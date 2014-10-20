@@ -1,0 +1,36 @@
+<section data-ng-controller="GroupsController" data-ng-init="find()">
+	<div class="page-header">
+		<h1>Groups</h1>
+	</div>
+
+	<table class="table" data-ng-if="groups.length > 0">
+		<thead>
+        	<tr>
+				<th width="40%">Name</th>
+				<th width="10%">Type</th>
+				<th width="10%">Members</th>
+				<th width="10%">Bugs</th>
+				<th width="15%">Owner</th>
+				<th width="15%">Created</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="group in groups" data-ng-click="showGroup('{{group._id}}')">
+				<!-- data-popover="{{group.description}}" data-popover-placement="top" data-popover-trigger="mouseenter" -->
+				<td>
+					<a data-ng-href="#!/groups/{{group._id}}" data-ng-bind="group.name"></a>
+					<p>{{group.description | limitTo: 100}}{{group.description.length > 100? '...':''}}</p>
+				</td>
+				<td data-ng-bind="group.type"></td>
+				<td data-ng-bind="group.members.length"></td>
+				<td data-ng-bind="group.insects.length"></td>
+				<td data-ng-bind="group.user.displayName"></td>
+				<td data-ng-bind="group.created | date:'longDate'"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="alert alert-warning text-center" data-ng-if="groups.$resolved && !groups.length">
+		No groups yet, why don't you <a href="/#!/groups/create">create one</a>?
+	</div>
+</section>

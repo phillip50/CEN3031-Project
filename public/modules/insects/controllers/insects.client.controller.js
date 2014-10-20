@@ -61,7 +61,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 
 					reader.onload = function(e) {
                 		$scope.form.photoPreviewUrl = e.target.result;
-            		}
+            		};
 
             		reader.readAsDataURL($scope.form.photoUpload.files[0]);
 				}

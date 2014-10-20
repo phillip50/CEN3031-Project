@@ -10,9 +10,8 @@ var mongoose = require('mongoose'),
 
 
 var fs = require('fs'),
-//	uuid = require('uuid'),
-    multiparty = require('multiparty');
-var ExifImage = require('exif').ExifImage;
+    multiparty = require('multiparty'),
+	ExifImage = require('exif').ExifImage;
 
 /**
  * Create a insect
@@ -27,7 +26,7 @@ exports.create = function(req, res) {
   	 	insect.scientificName = fields.scientificName[0];
   	 	insect.description = fields.description[0];
 		insect.dateFound = JSON.parse(fields.dateFound[0]);
-		insect.commentsEnabled = fields.commentsEnabled[0],
+		insect.commentsEnabled = fields.commentsEnabled[0];
   	 	insect.location = JSON.parse(fields.location[0]);
 
 		/*_.forEach(fields, function(data, key) {
@@ -82,8 +81,6 @@ exports.create = function(req, res) {
         });
 		*/
     });
-
-
 };
 
 /**
