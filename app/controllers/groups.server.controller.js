@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
 	Group = mongoose.model('Group'),
+	User = mongoose.model('User'),
 	_ = require('lodash');
 
 /**
@@ -14,6 +15,7 @@ var mongoose = require('mongoose'),
 exports.create = function(req, res) {
 	var group = new Group(req.body);
 	group.user = req.user;
+	group.members.push(req.user);
 
 	group.save(function(err) {
 		if (err) {
@@ -24,7 +26,34 @@ exports.create = function(req, res) {
 			res.jsonp(group);
 		}
 	});
+};
 
+/* Join a Group */
+exports.joinGroup = function(req, res) {
+	var group = req.group;
+	group = _.extend(group, req.body);
+
+	Group.findByIdAndUpdate(group._id, {$push: {'members': req.user}}, function(err, group) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}
+		else {
+			res.jsonp(group);
+		}
+	});
+
+	/*Group.update({'_id': group._id}, {$push: {'members': req.user}}, function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}
+		else {
+			res.jsonp({success: true});
+		}
+	});*/
 };
 
 /**
@@ -89,7 +118,7 @@ exports.list = function(req, res) {
  * Group middleware
  */
 exports.groupByID = function(req, res, next, id) {
-	Group.findById(id).populate('user', 'displayName').exec(function(err, group) {
+	Group.findById(id).populate([{path: 'user', select: 'displayName'}, {path: 'members', select: 'displayName'}]).exec(function(err, group) {
 		if (err) return next(err);
 		if (!group) return next(new Error('Failed to load group ' + id));
 		req.group = group;

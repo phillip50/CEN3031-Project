@@ -1,22 +1,53 @@
 <section data-ng-controller="GroupsController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1 data-ng-bind="group.name"></h1>
+		<h1>
+			{{group.name}} <small><a data-ng-href="/#!/user/{{group.user._id}}">{{group.user.displayName}}</a>'s {{group.type}}</small>
+			<span class="pull-right" data-ng-show="authentication.user._id == group.user._id">
+				<a class="btn btn-primary" data-ng-href="/#!/groups/{{group._id}}/edit">
+					<i class="glyphicon glyphicon-edit"></i>
+				</a>
+				<a class="btn btn-primary" data-ng-click="remove();">
+					<i class="glyphicon glyphicon-trash"></i>
+				</a>
+			</span>
+		</h1>
+
+		<dl class="dl-horizontal">
+			<dt>{{group.type}} Created</dt>
+			<dd>{{group.created | date:'longDate'}}</dd>
+
+			<dt>Description</dt>
+			<dd>{{group.description}}</dd>
+		</dl>
 	</div>
-	<div class="pull-right" data-ng-show="authentication.user._id == group.user._id">
-		<a class="btn btn-primary" href="/#!/groups/{{group._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
+
+	<h2>
+		Members <span class="badge">{{group.members.length}}</span>
+		<span class="pull-right" data-ng-show="authentication.user">
+			<a class="btn btn-primary" data-ng-hide="group.members.has(authentication.user._id)" data-ng-click="joinGroup();"><i class="glyphicon glyphicon-plus"></i> Join this {{group.type}}</a>
+			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id"><i class="glyphicon glyphicon-user"></i> Add Members</a>
+		</span>
+	</h2>
+	<div>
+		<p data-ng-hide="group.members">No members currently.</p>
+		<div data-ng-repeat="member in group.members">
+			<a data-ng-href="/#!/user/{{group.user._id}}">{{member.displayName}}</a>
+		</div>
 	</div>
-	<small>
-		<em class="text-muted">
-			Posted on
-			<span data-ng-bind="group.created | date:'mediumDate'"></span>
-			by
-			<span data-ng-bind="group.user.displayName"></span>
-		</em>
-	</small>
-	<p class="lead" data-ng-bind="group.description"></p>
+
+	<h2>
+		Galleries
+		<span class="pull-right" data-ng-show="authentication.user">
+			<a class="btn btn-primary" data-ng-show="group.members.indexOf(authentication.user._id) != -1"><i class="glyphicon glyphicon-plus"></i> Add a Gallery</a>
+		</span>
+	</h2>
+	<p data-ng-hide="group.insects">No galleries currently.</p>
+
+	<h2>
+		Insects
+		<span class="pull-right" data-ng-show="authentication.user">
+			<a class="btn btn-primary" data-ng-show="group.members.indexOf(authentication.user._id) != -1"><i class="glyphicon glyphicon-plus"></i> Add an Insect</a>
+		</span>
+	</h2>
+	<p data-ng-hide="group.insects">No insects currently.</p>
 </section>

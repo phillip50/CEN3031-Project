@@ -17,22 +17,28 @@ var fs = require('fs'),
  * Create a insect
  */
 exports.create = function(req, res) {
-	 var insect = new Insect();
-	 insect.user = req.user;
+	var insect = new Insect();
+	insect.user = req.user;
 
-  	 var form = new multiparty.Form();
-  	 form.parse(req, function(err, fields, files) {
+	function convertDMSToDD(degrees, minutes, seconds, direction) {
+		var dd = degrees + minutes/60 + seconds/(60*60);
+		if (direction === 'S' || direction === 'W') dd = dd * -1; // Don't do anything for N or E
+		return dd;
+	}
+
+  	var form = new multiparty.Form();
+  	form.parse(req, function(err, fields, files) {
+		// Add data from form into insect object
   	 	insect.name = fields.name[0];
   	 	insect.scientificName = fields.scientificName[0];
   	 	insect.description = fields.description[0];
 		insect.dateFound = JSON.parse(fields.dateFound[0]);
 		insect.commentsEnabled = fields.commentsEnabled[0];
-  	 	insect.location = JSON.parse(fields.location[0]);
+  	 	insect.locationTitle = fields.locationTitle[0];
+		insect.loc = JSON.parse(fields.loc[0]);
+		insect.loc.type = 'Point';
 
-		/*_.forEach(fields, function(data, key) {
-			if (typeof insect[key] !== 'undefined') console.log(data + ' ' + key);
-		});*/
-
+		// Save image
         var file = files.file[0];
         var contentType = file.headers['content-type'];
         var tmpPath = file.path;
@@ -44,28 +50,32 @@ exports.create = function(req, res) {
         var data = prefix + buf;
         insect.image.data = data;
 
-        try {
-    		new ExifImage({ image : tmpPath }, function (error, exifData) {
-        		if (error)
-           		     console.log('Error: '+ error.message);
-       		    else
-            		console.log(exifData.gps.GPSLatitude);
-            		console.log(exifData.gps.GPSLongitude);  // Do something with your data!
-    		});
-		} catch (error) {
-    		console.log('Error: ' + error.message);
-		}
+		// check for exif geo location data
+    		new ExifImage({image : tmpPath}, function (error, exifData) {
+        		if (error) {
+					console.log(error);
+					return res.status(400).send({
+						message: 'Could not verify photo.'
+					});
+				}
+       			else {
+            		var latitude = convertDMSToDD(exifData.gps.GPSLatitude[0], exifData.gps.GPSLatitude[1], exifData.gps.GPSLatitude[2], exifData.gps.GPSLatitudeRef);
+					var longitude = convertDMSToDD(exifData.gps.GPSLongitude[0], exifData.gps.GPSLongitude[1], exifData.gps.GPSLongitude[2], exifData.gps.GPSLongitudeRef);
+					insect.image.coordinates = [longitude, latitude];
 
-		insect.save(function(err) {
-			if (err) {
-				return res.status(400).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			}
-			else {
-				res.jsonp(insect);
-			}
-		});
+					// Finally save to database
+					insect.save(function(err) {
+						if (err) {
+							return res.status(400).send({
+								message: errorHandler.getErrorMessage(err)
+							});
+						}
+						else {
+							res.jsonp(insect);
+						}
+					});
+				}
+    		});
 
         // Server side file type checker.
       /*  if (contentType !== 'image/png' && contentType !== 'image/jpeg') {

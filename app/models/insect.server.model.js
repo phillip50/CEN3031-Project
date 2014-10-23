@@ -20,6 +20,10 @@ var InsectSchema = new Schema({
 			type: String,
 			default: '',
 			required: 'Content type is required'
+		},
+		coordinates: {
+			type: [Number], // [<longitude>, <latitude>]
+			required: 'Coordinates cannot be blank'
 		}
 	},
 	created: {
@@ -48,26 +52,24 @@ var InsectSchema = new Schema({
 		default: Date.now,
 		required: 'Date found cannot be blank'
 	},
-	location: {
-		title: {
-			type: String,
-			default: '',
-			trim: true,
-			required: 'Location cannot be blank'
-		},
-		coordinates: {
-			latitude: {
-				type: Number,
-				default: '',
-				required: 'Latitude cannot be blank'
-			},
-			longitude: {
-				type: Number,
-				default: '',
-				required: 'Longitude cannot be blank'
-			}
-		}
+	locationTitle: {
+		type: String,
+		default: '',
+		trim: true,
+		required: 'Location cannot be blank'
 	},
+	loc: { // GeoJSON object!
+	    type: {
+			type: String,
+			default: 'Point',
+	     	enum: ['Point', 'LineString', 'Polygon'],
+	      	required: true
+	    },
+	    coordinates: {
+			type: [Number], // [<longitude>, <latitude>]
+			required: 'Coordinates cannot be blank'
+		}
+ 	},
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
@@ -82,4 +84,5 @@ var InsectSchema = new Schema({
 	}
 });
 
+InsectSchema.index({loc: '2dsphere'});
 mongoose.model('Insect', InsectSchema);

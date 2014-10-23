@@ -37,6 +37,14 @@ var GroupSchema = new Schema({
 	members: [{
 		type : Schema.ObjectId,
 		ref: 'User'
+	}],
+	insects: [{
+		type : Schema.ObjectId,
+		ref: 'Insect'
+	}],
+	galleries: [{
+		type : Schema.ObjectId,
+		ref: 'Gallery'
 	}]
 });
 

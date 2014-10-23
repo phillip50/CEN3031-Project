@@ -9,13 +9,13 @@
 				<th width="40%">Name</th>
 				<th width="10%">Type</th>
 				<th width="10%">Members</th>
-				<th width="10%">Bugs</th>
+				<th width="10%">Insects</th>
 				<th width="15%">Owner</th>
 				<th width="15%">Created</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr data-ng-repeat="group in groups" data-ng-click="showGroup('{{group._id}}')">
+			<tr data-ng-repeat="group in groups" data-ng-click="showPath('/groups/{{group._id}}')">
 				<!-- data-popover="{{group.description}}" data-popover-placement="top" data-popover-trigger="mouseenter" -->
 				<td>
 					<a data-ng-href="#!/groups/{{group._id}}" data-ng-bind="group.name"></a>
@@ -24,7 +24,9 @@
 				<td data-ng-bind="group.type"></td>
 				<td data-ng-bind="group.members.length"></td>
 				<td data-ng-bind="group.insects.length"></td>
-				<td data-ng-bind="group.user.displayName"></td>
+				<td>
+					<a data-ng-bind="group.user.displayName" data-ng-href="/#!/user/{{group.user._id}}"></a>
+				</td>
 				<td data-ng-bind="group.created | date:'longDate'"></td>
 			</tr>
 		</tbody>

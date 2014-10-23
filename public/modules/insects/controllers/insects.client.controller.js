@@ -3,11 +3,13 @@
 angular.module('insects').controller('InsectsController', ['$scope', '$upload', '$http', '$stateParams', '$location', '$modal', 'Authentication', 'Insects',
 	function($scope, $upload, $http, $stateParams, $location, $modal, Authentication, Insects) {
 		$scope.authentication = Authentication;
-		$scope.gallerys =[
+
+		$scope.gallerys = [
 			{name: 'Poison Type'},
 			{name: 'Bug Type'},
 			{name: 'Flying Type'}
 		];
+
 		$scope.create = function() {
 			var insect = new Insects({
 				name: this.form.name,
@@ -15,7 +17,10 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 				description: this.form.description,
 				dateFound: this.form.dateFound,
 				commentsEnabled: this.form.commentsEnabled,
-				location: this.form.location
+				locationTitle: this.form.locationTitle,
+				loc: {
+					coordinates: [this.form.loc.coordinates.longitude, this.form.loc.coordinates.latitude]
+				}
 			});
 
 			$upload.upload({
@@ -32,9 +37,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 				$scope.form.description = '';
 				$scope.form.dateCreated = new Date();
 				$scope.form.commentsEnabled = true;
-				$scope.form.location.title = '';
-				$scope.form.location.coordinates.latitude = '';
-				$scope.form.location.coordinates.longitude = '';
+				$scope.form.locationTitle = '';
+				$scope.form.loc.coordinates.latitude = '';
+				$scope.form.loc.coordinates.longitude = '';
 				$scope.form.image = '';
 				$scope.form.isValid = false;
 				$scope.form.reviewForm = false;
@@ -45,7 +50,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 		};
 
 		$scope.form = {
-			location: {
+			loc: {
 				coordinates: {
 					latitude: '',
 					longitude: ''
@@ -87,7 +92,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 		};
 
 		$scope.marker = {
-			id:0,
+			id: 0,
 			coords: {
 				latitude: 29.6398801,
 				longitude: -82.3551082
@@ -95,8 +100,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 			options: { draggable: true },
 			events: {
 				dragend: function (marker, eventName, args) {
-					$scope.form.location.coordinates.latitude = marker.getPosition().lat();
-					$scope.form.location.coordinates.longitude = marker.getPosition().lng();
+					$scope.form.loc.coordinates.latitude = marker.getPosition().lat();
+					$scope.form.loc.coordinates.longitude = marker.getPosition().lng();
 					$scope.form.coordsSet = true;
 					$scope.$apply();
 				}

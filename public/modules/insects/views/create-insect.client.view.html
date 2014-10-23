@@ -26,7 +26,7 @@
 						</div>
 						<div class="form-group">
 							<label for="locationTitle">Location</label>
-							<input id="locationTitle" type="text" data-ng-model="form.location.title" class="form-control" placeholder="Place" required>
+							<input id="locationTitle" type="text" data-ng-model="form.locationTitle" class="form-control" placeholder="Place" required>
 						</div>
 						<h2>Info</h2>
 						<div class="form-group">
@@ -56,8 +56,8 @@
 							Place found
 							<span data-ng-show="form.coordsSet" class="glyphicon glyphicon-ok" style="color: #3c763d;"></span>
 						</label>
-						<input type="text" class="form-control hidden" data-ng-model="form.location.coordinates.latitude" data-ng-required="true">
-						<input type="text" class="form-control hidden" data-ng-model="form.location.coordinates.longitude" data-ng-required="true">
+						<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.latitude" data-ng-required="true">
+						<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.longitude" data-ng-required="true">
 						<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
 							<marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></marker>
 						</google-map>
@@ -92,10 +92,10 @@
 					<dd>{{form.dateFound | date:'mediumDate'}}</dd>
 
 					<dt>Location</dt>
-					<dd>{{form.location.title}}</dd>
+					<dd>{{form.locationTitle}}</dd>
 
 					<dt>Coordinates</dt>
-					<dd>{{form.location.coordinates.latitude}}, {{form.location.coordinates.longitude}}</dd>
+					<dd>{{form.loc.coordinates.latitude}}, {{form.loc.coordinates.longitude}}</dd>
 
 					<dt>Description</dt>
 					<dd>{{form.description}}</dd>
