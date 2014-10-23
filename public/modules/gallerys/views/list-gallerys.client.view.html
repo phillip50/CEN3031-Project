@@ -2,6 +2,21 @@
 	<div class="page-header">
 		<h1>Gallerys</h1>
 	</div>
+	<div class="row">
+		<div data-ng-repeat="insect in insects" class="col-sm-6 col-md-4">
+			<div class="thumbnail">
+				<img style="width: 100%; max-height: 300px;" class="pull-left" ng-src="{{insect.image.data}}">
+				<div class="caption clearfix">
+					<h3 data-ng-bind="insect.name"></h3>
+					<p>
+						{{insect.description}}
+						<em data-ng-show="!insect.description" class="text-muted">No description.</em>
+					</p>
+					<p class="text-right"><a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary" role="button">View</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="list-group">
 		<a data-ng-repeat="gallery in gallerys" data-ng-href="#!/insects" class="list-group-item">
 			<small class="list-group-item-text">
@@ -12,6 +27,7 @@
 			</small>
 			<h4 class="list-group-item-heading" data-ng-bind="gallery.title"></h4>
 			<p class="list-group-item-text" data-ng-bind="gallery.content"></p>
+
 		</a>
 	</div>
 	<div class="alert alert-warning text-center" data-ng-if="gallerys.$resolved && !gallerys.length">

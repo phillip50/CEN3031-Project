@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('gallerys').controller('GallerysController', ['$scope', '$stateParams', '$location', 'Authentication', 'Gallerys',
-	function($scope, $stateParams, $location, Authentication, Gallerys) {
+angular.module('gallerys').controller('GallerysController', ['$scope', '$stateParams', '$location', 'Authentication', 'Gallerys', 'Insects',
+	function($scope, $stateParams, $location, Authentication, Gallerys, Insects) {
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
@@ -47,8 +47,8 @@ angular.module('gallerys').controller('GallerysController', ['$scope', '$statePa
 
 		$scope.find = function() {
 			$scope.gallerys = Gallerys.query();
+			$scope.insects = Insects.query();
 		};
-
 		$scope.findOne = function() {
 			$scope.gallery = Gallerys.get({
 				galleryId: $stateParams.galleryId

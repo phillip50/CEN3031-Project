@@ -3,7 +3,11 @@
 angular.module('insects').controller('InsectsController', ['$scope', '$upload', '$http', '$stateParams', '$location', '$modal', 'Authentication', 'Insects',
 	function($scope, $upload, $http, $stateParams, $location, $modal, Authentication, Insects) {
 		$scope.authentication = Authentication;
-
+		$scope.gallerys =[
+			{name: 'Poison Type'},
+			{name: 'Bug Type'},
+			{name: 'Flying Type'}
+		];
 		$scope.create = function() {
 			var insect = new Insects({
 				name: this.form.name,

@@ -1,0 +1,19 @@
+<section data-ng-controller="InsectsController" data-ng-init="findOne()">
+    <div class="page-header clearfix">
+		<h1>
+        <form novalidate type="text" class="form control" ng-model="insect.name">
+            <small>Find: </small><input type="text" ng-model="insect.name"/> Name is: {{insect.name}} Location is: {{insect.location}}
+        </form>
+        </h1>
+	</div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <google-map center="sampleMap.center" zoom="sampleMap.zoom" draggable="true" options="sampleMap.options" bounds="sampleMap.bounds">
+				<marker coords="sampleMarker.coords" options="sampleMarker.options" events="sampleMarker.events" idkey="sampleMarker.id"></marker>
+			</google-map>
+
+            <!--<h3 class="vspace">Insects Nearby</h3>-->
+        </div>
+    </div>
+</section>

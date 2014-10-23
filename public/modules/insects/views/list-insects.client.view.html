@@ -1,6 +1,13 @@
 <section data-ng-controller="InsectsController" data-ng-init="find()">
 	<div class="page-header">
 		<h1>All Insects</h1>
+		<br>
+		  Gallery:
+		  <span  class="nullable">
+		    <select ng-model="gallery" ng-options="gallery.name for gallery in gallerys">
+		      <option value="">-- choose gallery --</option>
+		    </select>
+		  </span><br/>
 	</div>
 
 	<div class="alert alert-warning text-center" data-ng-if="insects.$resolved && !insects.length">
@@ -8,7 +15,7 @@
 	</div>
 
 	<div class="row">
-		<div data-ng-repeat="insect in insects" class="col-sm-6 col-md-4">
+		<div data-ng-repeat="insect in insects | filter:gallery" class="col-sm-6 col-md-4">
 			<div class="thumbnail">
 				<img style="width: 100%; max-height: 300px;" class="pull-left" ng-src="{{insect.image.data}}">
 				<div class="caption clearfix">

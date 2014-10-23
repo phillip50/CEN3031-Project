@@ -17,6 +17,10 @@ angular.module('insects').config(['$stateProvider',
 			url: '/insects/:insectsId',
 			templateUrl: 'modules/insects/views/view-insect.client.view.html'
 		}).
+		state('viewArea', {
+			url: '/area',
+			templateUrl: 'modules/insects/views/view-area.client.view.html'
+		}).
 		state('editInsect', {
 			url: '/insects/:insectsId/edit',
 			templateUrl: 'modules/insects/views/edit-insect.client.view.html'
