@@ -10,6 +10,17 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 	}
 ]);
 
+// Setting Google Maps Dependencies
+angular.module(ApplicationConfiguration.applicationModuleName).config(['GoogleMapApiProvider'.ns(),
+	function(GoogleMapApi) {
+        GoogleMapApi.configure({
+            // key: 'your api key',
+            v: '3.17',
+            libraries: 'weather,geometry,visualization'
+	    });
+	}
+]);
+
 //Then define the init function for starting up the application
 angular.element(document).ready(function() {
 	//Fixing facebook bug with redirect

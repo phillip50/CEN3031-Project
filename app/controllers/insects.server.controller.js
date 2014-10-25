@@ -11,6 +11,8 @@ var mongoose = require('mongoose'),
 
 var fs = require('fs'),
     multiparty = require('multiparty'),
+	formidable = require('formidable'),
+	gm = require('gm'),
 	ExifImage = require('exif').ExifImage;
 
 /**
@@ -20,13 +22,84 @@ exports.create = function(req, res) {
 	var insect = new Insect();
 	insect.user = req.user;
 
-	function convertDMSToDD(degrees, minutes, seconds, direction) {
-		var dd = degrees + minutes/60 + seconds/(60*60);
+	function convertDMStoDD(dms, direction) {
+		dms = dms.split(',', 3);
+		// Convert fractions if any
+		for (var i = 0; i < 3; i++) {
+			if (dms[i].indexOf('/') !== -1) {
+				var number = dms[i].split('/', 2);
+				dms[i] = number[0]/number[1];
+			}
+			continue;
+		}
+		var dd = dms[0] + dms[1]/60 + dms[2]/(3600);
 		if (direction === 'S' || direction === 'W') dd = dd * -1; // Don't do anything for N or E
 		return dd;
 	}
 
-  	var form = new multiparty.Form();
+	// Parse incoming data
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}
+
+		// Parsed, now insert data into new insect
+		insect.name = fields.name;
+		insect.scientificName = fields.scientificName;
+		if (fields.hasOwnProperty('description')) insect.description = fields.description;
+		insect.dateFound = JSON.parse(fields.dateFound);
+		if (fields.hasOwnProperty('commentsEnabled')) insect.commentsEnabled = JSON.parse(fields.commentsEnabled);
+		insect.locationTitle = fields.locationTitle;
+		insect.loc = JSON.parse(fields.loc);
+		insect.loc.type = 'Point';
+		insect.image.contentType = files.file.type;
+
+		fs.readFile(files.file.path, function (err, data) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			}
+
+			insect.image.original = 'data:' + files.file.type + ';base64,' + data.toString('base64');
+
+			// Check for exif data
+			gm(data).identify(function(err, image){
+				if (err) {
+					return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				}
+				// No GPS exif data (I'm sure there's a better way to write this)
+				else if (!image || !image.hasOwnProperty('Profile-EXIF') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude Ref') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude Ref')) {
+					return res.status(400).send({
+						message: 'Could not find GPS data in photo.'
+					});
+				}
+
+				var latitude = convertDMStoDD(image['Profile-EXIF']['GPS Latitude'], image['Profile-EXIF']['GPS Latitude Ref']),
+				    longitude = convertDMStoDD(image['Profile-EXIF']['GPS Longitude'], image['Profile-EXIF']['GPS Longitude Ref']);
+				insect.image.coordinates = [longitude, latitude];
+
+				// Finally save to database
+				insect.save(function(err) {
+					if (err) {
+						return res.status(400).send({
+							message: errorHandler.getErrorMessage(err)
+						});
+					}
+					else {
+						res.jsonp(insect);
+					}
+				});
+			});
+		});
+    });
+
+  	/*var form = new multiparty.Form();
   	form.parse(req, function(err, fields, files) {
 		// Add data from form into insect object
   	 	insect.name = fields.name[0];
@@ -50,15 +123,29 @@ exports.create = function(req, res) {
         var data = prefix + buf;
         insect.image.data = data;
 
+		return res.status(400).send({
+			message: 'cat'//errorHandler.getErrorMessage(err)
+		});
+
+		/*gm(filePath).size(function(err, value) {
+			if (err) return res.status(400).send({
+				message: err//errorHandler.getErrorMessage(err)
+			});
+			console.log(value);
+  			// note : value may be undefined
+		});*/
+
 		// check for exif geo location data
+		/*try {
     		new ExifImage({image : tmpPath}, function (error, exifData) {
-        		if (error) {
-					console.log(error);
-					return res.status(400).send({
-						message: 'Could not verify photo.'
+				// error or no gps data (has to be a better way to write)
+        		if (error || _.isEmpty(exifData.gps) || typeof exifData.gps.GPSLatitude !== 'object' || typeof exifData.gps.GPSLatitude !== 'object' || typeof exifData.gps.GPSLatitudeRef !== 'string' || typeof exifData.gps.GPSLongitudeRef !== 'string') {
+					return console.log(error.message); res.status(400).send({
+						message: error.message
 					});
 				}
        			else {
+					// Convert DMS coords in photo to GeoJSON in the database
             		var latitude = convertDMSToDD(exifData.gps.GPSLatitude[0], exifData.gps.GPSLatitude[1], exifData.gps.GPSLatitude[2], exifData.gps.GPSLatitudeRef);
 					var longitude = convertDMSToDD(exifData.gps.GPSLongitude[0], exifData.gps.GPSLongitude[1], exifData.gps.GPSLongitude[2], exifData.gps.GPSLongitudeRef);
 					insect.image.coordinates = [longitude, latitude];
@@ -76,6 +163,11 @@ exports.create = function(req, res) {
 					});
 				}
     		});
+		} catch (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}*/
 
         // Server side file type checker.
       /*  if (contentType !== 'image/png' && contentType !== 'image/jpeg') {
@@ -89,8 +181,8 @@ exports.create = function(req, res) {
             }
             return res.json(destPath);
         });
-		*/
-    });
+
+    });*/
 };
 
 /**
@@ -105,6 +197,7 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
 	var insect = req.insect;
+	//console.log(req);
 
 	insect = _.extend(insect, req.body);
 
@@ -155,6 +248,9 @@ exports.list = function(req, res) {
  * Insect middleware
  */
 exports.insectByID = function(req, res, next, id) {
+	// if id from url is invalid, send nice error
+	//if (!mongoose.Types.ObjectId.isValid(id)) return next(new Error('Failed to load insect ' + id));
+
 	Insect.findById(id).populate('user', 'displayName').exec(function(err, insect) {
 		if (err) return next(err);
 		if (!insect) return next(new Error('Failed to load insect ' + id));

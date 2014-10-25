@@ -1,4 +1,4 @@
-<section data-ng-controller="InsectsController">
+<section data-ng-controller="InsectsController" data-ng-init="createPage()">
 	<div class="page-header">
 		<h1>New Insect</h1>
 	</div>
@@ -58,25 +58,20 @@
 						</label>
 						<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.latitude" data-ng-required="true">
 						<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.longitude" data-ng-required="true">
-						<google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
-							<marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></marker>
-						</google-map>
+						<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" bounds="map.bounds" control="map.gmap">
+							<ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></ui-gmap-marker>
+						</ui-gmap-google-map>
 					</div>
 				</div>
 
 				<div class="text-right">
 					<a class="btn btn-default" data-ng-click="form.cancel()">Cancel</a>
-					<a class="btn btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-click="reviewForm = true">Next</a>
-				</div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
+					<a class="btn btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-click="reviewForm = true; error = ''">Next</a>
 				</div>
 			</fieldset>
 
 			<fieldset data-ng-show="reviewForm">
 				<h2>Review your data</h2>
-
-				<img ng-src="{{form.photoPreviewUrl}}" alt="Photo Preview">
 
 				<dl class="dl-horizontal">
 					<dt>Name</dt>
@@ -103,9 +98,20 @@
 					<dt>Comments Enabled</dt>
 					<dd>{{(form.commentsEnabled)? "Yes":"No"}}</dd>
 				</dl>
+
+				<div data-ng-show="form.uploadingForm">
+					<progressbar class="progress-striped" type="{{form.progress.type}}" max="form.progress.max" value="form.progress.current">
+						<span>{{form.progress.current}}%</span>
+					</progressbar>
+				</div>
+
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+
 				<div class="text-right">
-					<a class="btn btn-default" data-ng-click="reviewForm = false">Back</a>
-					<button class="btn btn-primary" data-loading-text="Creating">Submit</button>
+					<a class="btn btn-default" data-ng-click="reviewForm = false; form.uploadingForm = false;">Back</a>
+					<button class="btn btn-primary" ng-disabled="form.uploadingForm">Submit</button>
 				</div>
 			</fieldset>
 		</form>

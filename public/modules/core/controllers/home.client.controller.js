@@ -1,10 +1,12 @@
 'use strict';
 /* FINDME */
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication',
-	function($scope, Authentication) {
+angular.module('core').controller('HomeController', ['$scope', 'GoogleMapApi'.ns(), 'Authentication',
+	function($scope, GoogleMapApi, Authentication) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
+
+		// Display insects on map
 		$scope.map = {
 			center: {
 				latitude: 29.6398801,
@@ -17,52 +19,32 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 				streetViewControl: false
 			}
 		};
+		$scope.markers = [];
 
-		$scope.markersEvents = {
-			dragend: function (gMarker, eventName, model) {
-				if (model.$id){
-					model = model.coords;//use scope portion then
-				}
-				console.log('Model: event:' + eventName + ' ' + JSON.stringify(model));
-			}
+		// Ready to manipulate map
+		GoogleMapApi.then(function(maps) {
+
+		});
+
+
+$scope.$watch(function() { return $scope.map.bounds; }, function() {
+	var markersTemp = [];
+	var markers = function(i, insect) {
+		var mark = {
+			latitude: insect.coords.latitude,
+			longitude: insect.coords.longitude,
+			title: 'insect' + i
 		};
+		//mark['idKey'] = i;
+		return mark;
+	};
 
-      	var createRandomMarker = function (i, bounds, bug, idKey) {
-            var lat_min = bounds.southwest.latitude,
-                lat_range = bounds.northeast.latitude - lat_min,
-                lng_min = bounds.southwest.longitude,
-                lng_range = bounds.northeast.longitude - lng_min;
-            // Note, the label* properties are only used if isLabel='true' in the directive.
-			var ret = {
-				id: i,
-				options: {
-					draggable: false,
-					labelAnchor: '10 39',
-					labelContent: i,
-					labelClass: 'labelMarker'
-				},
-				latitude: bug.coords.latitude,
-				longitude: bug.coords.longitude,
-				title: bug.name,
-				caughtBy: bug.caughtBy,
-				location: bug.location
-				//icon: bug.pic
-			};
-			ret.onClick = function() {
-				ret.show = !ret.show;
-			};
-			return ret;
-        };
-        $scope.randomMarkers = [];
-
-		// Get the bounds from the map once it's loaded
-		$scope.$watch(function() { return $scope.map.bounds; }, function() {
-			var markers = [];
-			for (var i = 0; i < $scope.sample_bugs.length; i++) {
-				markers.push(createRandomMarker(i, $scope.map.bounds, $scope.sample_bugs[i]));
-			}
-			$scope.randomMarkers = markers;
-		}, true);
+	for (var i = 0; i < $scope.sample_bugs.length; i++) {
+		markersTemp.push(markers(i, $scope.sample_bugs[i]));
+	}
+	console.log(markersTemp);
+	$scope.markers = markersTemp;
+});
 
 		// Test data
 		$scope.sample_bugs = [{

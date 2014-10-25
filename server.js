@@ -4,12 +4,22 @@
  */
 var init = require('./config/init')(),
 	config = require('./config/config'),
-	mongoose = require('mongoose');
+	mongoose = require('mongoose'),
+	exec = require('child_process').exec;
 
 /**
  * Main application entry file.
  * Please note that the order of loading is important.
  */
+
+// Check for GraphicsMagic
+exec('gm version', function (err, stdout, stderr) {
+	// Validate the output with one of the parameters.
+	if (err !== null) {
+		console.error('\x1b[31m', 'Could not find GraphicsMagic!');
+		console.log(err);
+	}
+});
 
 // Bootstrap db connection
 var db = mongoose.connect(config.db, function(err) {
@@ -32,4 +42,4 @@ app.listen(config.port);
 exports = module.exports = app;
 
 // Logging initialization
-console.log('The Insect Collection started on port ' + config.port);
+console.log('\x1b[37m\x1b[42m', 'The Insect Collection started on port ' + config.port, '\x1b[0m');

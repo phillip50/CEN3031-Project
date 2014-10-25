@@ -1,4 +1,4 @@
-<section data-ng-controller="InsectsController" data-ng-init="findOne()">
+<section data-ng-controller="InsectsController" data-ng-init="findOneEdit()">
 	<div class="page-header">
 		<h1>Edit Insect</h1>
 	</div>
@@ -26,7 +26,7 @@
 				<div class="form-group" ng-class="{ 'has-error' : submitted && insectForm.locationTitle.$invalid}">
 					<label class="control-label" for="locationTitle">Location Found</label>
 					<div class="controls">
-						<input name="locationTitle" type="text" data-ng-model="insect.location.title" id="locationTitle" class="form-control" placeholder="Location Found" required>
+						<input name="locationTitle" type="text" data-ng-model="insect.locationTitle" id="locationTitle" class="form-control" placeholder="Location Found" required>
 					</div>
 					<div ng-show="submitted && insectForm.locationTitle.$invalid" class="help-block">
 						<p ng-show="insectForm.locationTitle.$error.required" class="text-danger">Location found is required</p>
@@ -41,7 +41,7 @@
 						<p ng-show="insectForm.description.$error.required" class="text-danger">Description is required</p>
 					</div>
 				</div>
-				<div class="form-group" ng-class="{ 'has-error' : submitted && insectForm.commentsEnabled.$invalid}">			
+				<div class="form-group" ng-class="{ 'has-error' : submitted && insectForm.commentsEnabled.$invalid}">
 					<label class="control-label" for="commentsEnabled">
 				    	<input name="commentsEnabled" data-ng-model="insect.commentsEnabled" id="commentsEnabled" type="checkbox"> Enable comments
     				</label>

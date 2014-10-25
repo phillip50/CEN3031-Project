@@ -11,10 +11,25 @@ var mongoose = require('mongoose'),
  */
 var InsectSchema = new Schema({
 	image: {
-		data: {
+		small: {
+			type: String,
+			default: ''
+			//required: true
+		},
+		medium: {
+			type: String,
+			default: ''
+			//required: true
+		},
+		large: {
+			type: String,
+			default: ''
+			//required: true
+		},
+		original: {
 			type: String,
 			default: '',
-			required: 'Image is required'
+			required: true
 		},
 		contentType: {
 			type: String,

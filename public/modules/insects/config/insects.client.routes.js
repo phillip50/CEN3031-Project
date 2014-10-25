@@ -10,7 +10,7 @@ angular.module('insects').config(['$stateProvider',
 			templateUrl: 'modules/insects/views/list-insects.client.view.html'
 		}).
 		state('createInsect', {
-			url: '/insects/newCreate',
+			url: '/insects/create',
 			templateUrl: 'modules/insects/views/create-insect.client.view.html'
 		}).
 		state('viewInsect', {
