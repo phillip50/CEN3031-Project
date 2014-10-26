@@ -14,6 +14,7 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Goo
 				longitude: -82.3551082
 			},
 			zoom: 15,
+			gmap: null,
 			bounds: {},
 			options: {
 				scrollwheel: false,
@@ -31,11 +32,11 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Goo
 					latitude: insect.coords.latitude,
 					longitude: insect.coords.longitude,
 					options: {
-				        icon: {
-            				url: '/images/' + insect.pic,
-            				scaledSize: new google.maps.Size(50, 50)
-        				}
-    				},
+						icon: {
+            	url: '/images/' + insect.pic,
+            	scaledSize: new google.maps.Size(50, 50)
+        		}
+    			},
 					title: insect.name,
 					caughtBy: insect.caughtBy,
 					location: insect.location

@@ -14,20 +14,20 @@ var InsectSchema = new Schema({
 		small: { // 350x350
 			type: String,
 			default: '',
-			select: false
-			//required: true
+			select: false,
+			required: true
 		},
 		medium: { // 550
 			type: String,
 			default: '',
-			select: false
-			//required: true
+			select: false,
+			required: true
 		},
 		large: { // 950
 			type: String,
 			default: '',
-			select: false
-			//required: true
+			select: false,
+			required: true
 		},
 		original: {
 			type: String,
@@ -79,13 +79,13 @@ var InsectSchema = new Schema({
 		required: 'Location cannot be blank'
 	},
 	loc: { // GeoJSON object!
-	    type: {
+		type: {
 			type: String,
 			default: 'Point',
-	     	enum: ['Point', 'LineString', 'Polygon'],
-	      	required: true
-	    },
-	    coordinates: {
+	    enum: ['Point', 'LineString', 'Polygon'],
+			required: true
+	  },
+	  coordinates: {
 			type: [Number], // [<longitude>, <latitude>]
 			required: 'Coordinates cannot be blank'
 		}

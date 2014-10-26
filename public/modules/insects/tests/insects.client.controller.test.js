@@ -53,17 +53,24 @@
 		it('$scope.find() should create an array with at least one insect object fetched from XHR', inject(function(Insects) {
 			// Create sample insect using the Insects service
 			var sampleInsect = new Insects({
-				name: 'Insect from Test',
-				scientificName: 'Insect from Test',
-				description: 'An insect about tests!',
+				image: {
+					small: 'data:image/jpeg;base64,...etc',
+					medium: 'data:image/jpeg;base64,...etc',
+					large: 'data:image/jpeg;base64,...etc',
+					original: 'data:image/jpeg;base64,...etc',
+					contentType: 'image/jpeg',
+					coordinates: [0, 0]
+				},
+				name: 'Insect from test',
+				scientificName: 'Insect scientific name',
+				description: 'Insect description',
 				dateFound: new Date(),
-				location: {
-					title: 'The Swamp',
-					coordinates: {
-						latitude: 29.631146633445802,
-						longitude: -82.34787039550469
-					}
-				}
+				locationTitle: 'Location title',
+				loc: {
+					type: 'Point',
+					coordinates: [0,0]
+				},
+				commentsEnabled: true
 			});
 
 			// Create a sample insects array that includes the new insect
@@ -83,17 +90,24 @@
 		it('$scope.findOne() should create an array with one insect object fetched from XHR using a insectId URL parameter', inject(function(Insects) {
 			// Define a sample insect object
 			var sampleInsect = new Insects({
-				name: 'Insect from Test',
-				scientificName: 'Insect from Test',
-				description: 'An insect about tests!',
+				image: {
+					small: 'data:image/jpeg;base64,...etc',
+					medium: 'data:image/jpeg;base64,...etc',
+					large: 'data:image/jpeg;base64,...etc',
+					original: 'data:image/jpeg;base64,...etc',
+					contentType: 'image/jpeg',
+					coordinates: [0, 0]
+				},
+				name: 'Insect from test',
+				scientificName: 'Insect scientific name',
+				description: 'Insect description',
 				dateFound: new Date(),
-				location: {
-					title: 'The Swamp',
-					coordinates: {
-						latitude: 29.631146633445802,
-						longitude: -82.34787039550469
-					}
-				}
+				locationTitle: 'Location title',
+				loc: {
+					type: 'Point',
+					coordinates: [0,0]
+				},
+				commentsEnabled: true
 			});
 
 			// Set the URL parameter
@@ -113,33 +127,43 @@
 		it('$scope.create() with valid form data should send a POST request with the form input values and then locate to new object URL', inject(function(Insects) {
 			// Create a sample insect object
 			var sampleInsectPostData = new Insects({
-				name: 'Insect from Test',
-				scientificName: 'Insect from Test',
-				description: 'An insect about tests!',
+				image: {
+					small: 'data:image/jpeg;base64,...etc',
+					medium: 'data:image/jpeg;base64,...etc',
+					large: 'data:image/jpeg;base64,...etc',
+					original: 'data:image/jpeg;base64,...etc',
+					contentType: 'image/jpeg',
+					coordinates: [0, 0]
+				},
+				name: 'Insect from test',
+				scientificName: 'Insect scientific name',
+				description: 'Insect description',
 				dateFound: new Date(),
-				location: {
-					title: 'The Swamp',
-					coordinates: {
-						latitude: 29.631146633445802,
-						longitude: -82.34787039550469
-					}
-				}
+				locationTitle: 'Location title',
+				loc: {
+					type: 'Point',
+					coordinates: [0,0]
+				},
+				commentsEnabled: true
 			});
 
 			// Create a sample insect response
 			var sampleInsectResponse = new Insects({
-				_id: '525cf20451979dea2c000001',
-				name: 'Insect from Test',
-				scientificName: 'Insect from Test',
-				description: 'An insect about tests!',
+				image: {
+					large: 'data:image/jpeg;base64,...etc',
+					contentType: 'image/jpeg'
+				},
+				name: 'Insect from test',
+				scientificName: 'Insect scientific name',
+				description: 'Insect description',
 				dateFound: new Date(),
-				location: {
-					title: 'The Swamp',
-					coordinates: {
-						latitude: 29.631146633445802,
-						longitude: -82.34787039550469
-					}
-				}
+				created: new Date(),
+				locationTitle: 'Location title',
+				loc: {
+					type: 'Point',
+					coordinates: [0,0]
+				},
+				commentsEnabled: true
 			});
 
 			// Fixture mock form input values
@@ -177,18 +201,11 @@
 		it('$scope.update() should update a valid insect', inject(function(Insects) {
 			// Define a sample insect put data
 			var sampleInsectPutData = new Insects({
-				_id: '525cf20451979dea2c000001',
-				name: 'Insect from Test (Updated)',
-				scientificName: 'Insect from Test',
-				description: 'An insect about tests!',
-				dateFound: new Date(),
-				location: {
-					title: 'The Swamp',
-					coordinates: {
-						latitude: 29.631146633445802,
-						longitude: -82.34787039550469
-					}
-				}
+				name: 'Insect from test (updated)',
+				scientificName: 'Insect scientific name (updated)',
+				description: 'Insect description (updated)',
+				locationTitle: 'Location title (updated)',
+				commentsEnabled: false
 			});
 
 			// Mock insect in scope

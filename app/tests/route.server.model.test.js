@@ -7,53 +7,53 @@ var should = require('should'),
      Insect = mongoose.model('Insect'),
      request = require('supertest');
 
- var user, insect;
+var user, insect;
 
-describe('Insect Server Test', function(){
-    beforeEach(function(done) {
-      user = new User({
-          firstName: 'Full',
-          lastName: 'Name',
-          displayName: 'Full Name',
-          email: 'test@test.com',
-          username: 'username',
-          password: 'password',
-          ufid: '11110000',
-          classCode: '123',
-          school:'University of Florida'
-
+describe('Insect Server Test', function() {
+  beforeEach(function(done) {
+    user = new User({
+      firstName: 'Full',
+      lastName: 'Name',
+      displayName: 'Full Name',
+      email: 'test@test.com',
+      username: 'username',
+      password: 'password',
+      ufid: '11110000',
+      classCode: '123',
+      school:'University of Florida'
     });
 
     user.save(function() {
-        insect = new Insect({
-             image:{
-                   data: 'DAFAFRWSADASD',
-                   contentType: 'image/png'
-              },
-              name: 'Insect Title',
-              scientificName: 'Insect Content',
-              description: 'Insect description',
-              dateFound: '10/12/14',
-              location: {
-                    title: 'Title',
-                    coordinates: {
-                        latitude: 10,
-                        longitude: 10,
-                    }
-              },
-
-              user: user
-         });
+      insect = new Insect({
+        image: {
+          small: 'data:image/jpeg;base64,...etc',
+          medium: 'data:image/jpeg;base64,...etc',
+          large: 'data:image/jpeg;base64,...etc',
+          original: 'data:image/jpeg;base64,...etc',
+          contentType: 'image/jpeg',
+          coordinates: [0, 0]
+        },
+        name: 'Insect Title',
+        scientificName: 'Insect Content',
+        description: 'Insect Description',
+        dateFound: new Date(),
+        locationTitle: 'Location Title',
+        loc: {
+          type: 'Point',
+          coordinates: [0,0]
+        },
+        commentsEnabled: true,
+        user: user
+      });
 
       insect.save(function(err) {
-              done();
-            });
-          });
+        done();
+      });
+    });
   });
 
   describe('Testing the GET methods', function() {
     it('Should recieve list of insects', function(done) {
-
       request(app).get('/insects')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -63,13 +63,12 @@ describe('Insect Server Test', function(){
           res.body[0].should.have.property('name', insect.name);
           res.body[0].should.have.property('description', insect.description);
 
-
           done();
-        });
+        }
+      );
     });
 
     it('Should be able to recieve specific insect', function(done) {
-
       request(app).get('/insects/' + insect.id)
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -80,17 +79,16 @@ describe('Insect Server Test', function(){
           res.body.should.have.property('description', insect.description);
 
           done();
-        });
+        }
+      );
     });
   });
 
-    afterEach(function(done) {
-
-      Insect.remove(function() {
-              User.remove(function() {
-                  done();
+  afterEach(function(done) {
+    Insect.remove(function() {
+      User.remove(function() {
+        done();
       });
     });
   });
-
 });

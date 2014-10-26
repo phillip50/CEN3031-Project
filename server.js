@@ -16,8 +16,8 @@ var init = require('./config/init')(),
 exec('gm version', function (err, stdout, stderr) {
 	// Validate the output with one of the parameters.
 	if (err !== null) {
-		console.error('\x1b[31m', 'Could not find GraphicsMagic!');
-		console.log(err);
+		console.error('\x1b[31m', 'Could not find GraphicsMagic!', '\x1b[0m');
+		throw new Error('Please make sure GraphicsMagic is installed.');
 	}
 });
 

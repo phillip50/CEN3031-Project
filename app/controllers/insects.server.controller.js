@@ -195,9 +195,6 @@ exports.list = function(req, res) {
  * Insect middleware
  */
 exports.insectByID = function(req, res, next, id) {
-	// if id from url is invalid, send nice error
-	//if (!mongoose.Types.ObjectId.isValid(id)) return next(new Error('Failed to load insect ' + id));
-
 	Insect.findById(id).select('+image.large').populate('user', 'displayName').exec(function(err, insect) {
 		if (err) return next(err);
 		if (!insect) return next(new Error('Failed to load insect ' + id));

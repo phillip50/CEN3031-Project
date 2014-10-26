@@ -1,24 +1,19 @@
-CEN3031-Project
-===============
-Project - Insect Tracking Site
+The Insect Collection
+=====================
+A Fall 2014 CEN 3031 Project.
 
-Group Members:
+About
+-----
+Full scale insect tracking site built with the MEAN stack for the University of Florida [Entomology Department](http://entomology.ifas.ufl.edu/).
 
-1. Phillip Dingler
+View [user stories](https://trello.com/b/j91AZlz5/user-stories) at Trello.
 
-   Gatorlink ID - phil50
-   
-2. Abraham Yuen
+Team
+----
+Name, Gatorlink ID
 
-   Gatorlink ID - abraham.yuen
-3. Megan Dwyer
-
-   Gatorlink ID - wondachue
-   
-4. Stephen Falcone
-   
-   Gatorlink ID - sfalcone
-
-5. Christian Argueta
-
-   Gatorlink ID - cargueta
+1. Phillip Dingler *phil50*
+2. Abraham Yuen *abraham.yuen*
+3. Megan Dwyer *wondachue*
+4. Stephen Falcone *sfalcone*
+5. Christian Argueta *cargueta*

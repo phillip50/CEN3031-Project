@@ -18,7 +18,7 @@ var user, insect;
  */
 describe('Insect Model Unit Tests:', function() {
 	beforeEach(function(done) {
-		
+
 		user = new User({
 			firstName: 'Full',
 			lastName: 'Name',
@@ -33,22 +33,24 @@ describe('Insect Model Unit Tests:', function() {
 
 		user.save(function() {
 			insect = new Insect({
-				image:{
-					data: 'DAFAFRWSADASD',
-					contentType: 'image/png'
+				image: {
+					small: 'data:image/jpeg;base64,...etc',
+					medium: 'data:image/jpeg;base64,...etc',
+					large: 'data:image/jpeg;base64,...etc',
+					original: 'data:image/jpeg;base64,...etc',
+					contentType: 'image/jpeg',
+					coordinates: [0, 0]
 				},
 				name: 'Insect Title',
 				scientificName: 'Insect Content',
-				description: 'Insect description',
-				dateFound: '10/12/14',
-				location: {
-					title: 'Title',
-					coordinates: {
-						latitude: 10,
-						longitude: 10,
-					}
+				description: 'Insect Description',
+				dateFound: new Date(),
+				locationTitle: 'Location Title',
+				loc: {
+					type: 'Point',
+					coordinates: [0,0]
 				},
-				
+				commentsEnabled: true,
 				user: user
 			});
 
@@ -64,8 +66,8 @@ describe('Insect Model Unit Tests:', function() {
 			});
 		});
 
-	it('should have an image', function(done) {
-			insect.image.data = '';
+		it('should have a small image', function(done) {
+			insect.image.small = '';
 
 			return insect.save(function(err) {
 				should.exist(err);
@@ -73,8 +75,43 @@ describe('Insect Model Unit Tests:', function() {
 			});
 		});
 
+		it('should have a medium image', function(done) {
+			insect.image.medium = '';
 
-	it('should have a name', function(done) {
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+		it('should have a large image', function(done) {
+			insect.image.large = '';
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+		it('should have a original image', function(done) {
+			insect.image.original = '';
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+		it('should have photo set coordinates', function(done) {
+			insect.image.coordinates = null;
+
+			return insect.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+		it('should have a name', function(done) {
 			insect.name = '';
 
 			return insect.save(function(err) {
@@ -83,7 +120,7 @@ describe('Insect Model Unit Tests:', function() {
 			});
 		});
 
-	it('should have a scientificName', function(done) {
+		it('should have a scientific name', function(done) {
 			insect.scientificName = '';
 
 			return insect.save(function(err) {
@@ -92,7 +129,7 @@ describe('Insect Model Unit Tests:', function() {
 			});
 		});
 
-	it('should have a date', function(done) {
+		it('should have a date', function(done) {
 			insect.dateFound = '';
 
 			return insect.save(function(err) {
@@ -102,8 +139,8 @@ describe('Insect Model Unit Tests:', function() {
 		});
 
 
-	it('should have a location', function(done) {
-			insect.location.title = '';
+		it('should have an location title', function(done) {
+			insect.locationTitle = '';
 
 			return insect.save(function(err) {
 				should.exist(err);
@@ -111,33 +148,15 @@ describe('Insect Model Unit Tests:', function() {
 			});
 		});
 
-	it('should have a latitude', function(done) {
-			insect.location.coordinates.latitude = null;
+		it('should have user set coordinates', function(done) {
+			insect.loc.coordinates = null;
 
 			return insect.save(function(err) {
 				should.exist(err);
 				done();
 			});
 		});
-
-	it('should have a longitude', function(done) {
-			insect.location.coordinates.longitude = null;
-
-			return insect.save(function(err) {
-				should.exist(err);
-				done();
-			});
-		});
-
-
 	});
-
-	
-
-
-
-	
-	
 
 	afterEach(function(done) {
 		Insect.remove().exec();

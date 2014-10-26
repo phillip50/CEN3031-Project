@@ -27,13 +27,13 @@ describe('Group Model Unit Tests:', function() {
 			password: 'password',
 			school: 'school',
 			classCode: 'classCode'
-
 		});
 
 		user.save(function() {
 			group = new Group({
-				title: 'Group Title',
-				content: 'Group Content',
+				name: 'Group title',
+				description: 'Group description',
+				type: 'Group',
 				user: user
 			});
 
@@ -50,7 +50,16 @@ describe('Group Model Unit Tests:', function() {
 		});
 
 		it('should be able to show an error when try to save without title', function(done) {
-			group.title = '';
+			group.name = '';
+
+			return group.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+
+		it('should be able to show an error when try to save without a group type', function(done) {
+			group.type = '';
 
 			return group.save(function(err) {
 				should.exist(err);
