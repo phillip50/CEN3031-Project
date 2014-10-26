@@ -15,4 +15,11 @@
 }
 .angular-google-map-container { height: 400px; }
 
-body > footer {margin: 25px 0;}
+section.home .map {height: 500px;}
+section.home .map ui-gmap-google-map {position: absolute; top: 50px; left: 0; right: 0;}
+section.home .map .angular-google-map-container {height: 500px;}
+section.home .info .glyphicon {font-size: 100px; margin-bottom: 25px;}
+section.home hr {margin: 50px 0;}
+
+body > footer {margin: 40px 0 30px;}
+body > footer hr {margin: 0 0 40px;}

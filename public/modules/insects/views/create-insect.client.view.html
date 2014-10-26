@@ -24,10 +24,7 @@
 								</span>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="locationTitle">Location</label>
-							<input id="locationTitle" type="text" data-ng-model="form.locationTitle" class="form-control" placeholder="Place" required>
-						</div>
+
 						<h2>Info</h2>
 						<div class="form-group">
 							<label for="name">Name</label>
@@ -40,11 +37,17 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="locationTitle">Location</label>
+							<input id="locationTitle" type="text" data-ng-model="form.locationTitle" class="form-control" placeholder="Place" required>
+						</div>
+						<div class="form-group">
 							<label class="control-label" for="description">Description</label>
 							<div class="controls">
 								<textarea data-ng-model="form.description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
 							</div>
 						</div>
+
+						<h2>Other</h2>
 						<div class="form-group">
 							<label class="control-label" for="commentsEnabled">
 								<input data-ng-model="form.commentsEnabled" id="commentsEnabled" type="checkbox" checked> Enable comments
@@ -89,11 +92,8 @@
 					<dt>Location</dt>
 					<dd>{{form.locationTitle}}</dd>
 
-					<dt>Coordinates</dt>
-					<dd>{{form.loc.coordinates.latitude}}, {{form.loc.coordinates.longitude}}</dd>
-
 					<dt>Description</dt>
-					<dd>{{form.description}}</dd>
+					<dd>{{form.description}} <em data-ng-show="!form.description" class="text-muted">No description.</em></dd>
 
 					<dt>Comments Enabled</dt>
 					<dd>{{(form.commentsEnabled)? "Yes":"No"}}</dd>

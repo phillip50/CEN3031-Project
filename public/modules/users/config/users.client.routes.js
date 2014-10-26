@@ -10,17 +10,17 @@ angular.module('users').config(['$stateProvider',
 			templateUrl: 'modules/users/views/settings/edit-profile.client.view.html'
 		}).
 		state('bugcatcher', {
-			url: '/settings/bugcatcher',
-			templateUrl: 'modules/users/views/settings/profile.client.view.html'
+			url: '/profile/bugcatcher',
+			templateUrl: 'modules/users/views/profile/profile.client.view.html'
 		}).
 		state('password', {
 			url: '/settings/password',
 			templateUrl: 'modules/users/views/settings/change-password.client.view.html'
 		}).
-		state('accounts', {
+		/*state('accounts', {
 			url: '/settings/accounts',
 			templateUrl: 'modules/users/views/settings/social-accounts.client.view.html'
-		}).
+		}).*/
 		state('signup', {
 			url: '/signup',
 			templateUrl: 'modules/users/views/authentication/signup.client.view.html'

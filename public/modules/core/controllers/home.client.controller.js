@@ -1,8 +1,9 @@
 'use strict';
 /* FINDME */
+/* global google */
 
-angular.module('core').controller('HomeController', ['$scope', 'GoogleMapApi'.ns(), 'Authentication',
-	function($scope, GoogleMapApi, Authentication) {
+angular.module('core').controller('HomeController', ['$scope', '$location', 'GoogleMapApi'.ns(), 'Authentication',
+	function($scope, $location, GoogleMapApi, Authentication) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
 
@@ -12,10 +13,10 @@ angular.module('core').controller('HomeController', ['$scope', 'GoogleMapApi'.ns
 				latitude: 29.6398801,
 				longitude: -82.3551082
 			},
-			zoom: 14,
+			zoom: 15,
 			bounds: {},
 			options: {
-				scrollwheel: true,
+				scrollwheel: false,
 				streetViewControl: false
 			}
 		};
@@ -23,28 +24,30 @@ angular.module('core').controller('HomeController', ['$scope', 'GoogleMapApi'.ns
 
 		// Ready to manipulate map
 		GoogleMapApi.then(function(maps) {
+			var markersTemp = [];
+			var markers = function(i, insect) {
+				var marker = {
+					id: i,
+					latitude: insect.coords.latitude,
+					longitude: insect.coords.longitude,
+					options: {
+				        icon: {
+            				url: '/images/' + insect.pic,
+            				scaledSize: new google.maps.Size(50, 50)
+        				}
+    				},
+					title: insect.name,
+					caughtBy: insect.caughtBy,
+					location: insect.location
+				};
+				return marker;
+			};
 
+			for (var i = 0; i < $scope.sample_bugs.length; i++) {
+				markersTemp.push(markers(i, $scope.sample_bugs[i]));
+			}
+			$scope.markers = markersTemp;
 		});
-
-
-$scope.$watch(function() { return $scope.map.bounds; }, function() {
-	var markersTemp = [];
-	var markers = function(i, insect) {
-		var mark = {
-			latitude: insect.coords.latitude,
-			longitude: insect.coords.longitude,
-			title: 'insect' + i
-		};
-		//mark['idKey'] = i;
-		return mark;
-	};
-
-	for (var i = 0; i < $scope.sample_bugs.length; i++) {
-		markersTemp.push(markers(i, $scope.sample_bugs[i]));
-	}
-	console.log(markersTemp);
-	$scope.markers = markersTemp;
-});
 
 		// Test data
 		$scope.sample_bugs = [{

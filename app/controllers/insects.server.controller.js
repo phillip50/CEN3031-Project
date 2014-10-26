@@ -10,10 +10,8 @@ var mongoose = require('mongoose'),
 
 
 var fs = require('fs'),
-    multiparty = require('multiparty'),
 	formidable = require('formidable'),
-	gm = require('gm'),
-	ExifImage = require('exif').ExifImage;
+	gm = require('gm');
 
 /**
  * Create a insect
@@ -45,13 +43,18 @@ exports.create = function(req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		}
+		else if (files.file.type !== 'image/png' && files.file.type !== 'image/jpeg') {
+			return res.status(400).send({
+				message: 'Unsupported file type.'
+			});
+		}
 
 		// Parsed, now insert data into new insect
 		insect.name = fields.name;
 		insect.scientificName = fields.scientificName;
-		if (fields.hasOwnProperty('description')) insect.description = fields.description;
+		if (fields.description !== 'undefined') insect.description = fields.description;
 		insect.dateFound = JSON.parse(fields.dateFound);
-		if (fields.hasOwnProperty('commentsEnabled')) insect.commentsEnabled = JSON.parse(fields.commentsEnabled);
+		insect.commentsEnabled = JSON.parse(fields.commentsEnabled);
 		insect.locationTitle = fields.locationTitle;
 		insect.loc = JSON.parse(fields.loc);
 		insect.loc.type = 'Point';
@@ -66,7 +69,7 @@ exports.create = function(req, res) {
 
 			insect.image.original = 'data:' + files.file.type + ';base64,' + data.toString('base64');
 
-			// Check for exif data
+			// Check for exif data, resize into small, medium and large
 			gm(data).identify(function(err, image){
 				if (err) {
 					return res.status(400).send({
@@ -80,109 +83,53 @@ exports.create = function(req, res) {
 					});
 				}
 
+				// Image's actual coordinates
 				var latitude = convertDMStoDD(image['Profile-EXIF']['GPS Latitude'], image['Profile-EXIF']['GPS Latitude Ref']),
 				    longitude = convertDMStoDD(image['Profile-EXIF']['GPS Longitude'], image['Profile-EXIF']['GPS Longitude Ref']);
 				insect.image.coordinates = [longitude, latitude];
 
-				// Finally save to database
-				insect.save(function(err) {
-					if (err) {
-						return res.status(400).send({
+				// Large
+				gm(data).noProfile().resize('950', '950', '^').toBuffer(function(err, buffer) {
+					if (err) return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+
+					insect.image.large = 'data:' + files.file.type + ';base64,' + buffer.toString('base64');
+
+					// Medium
+					gm(buffer).resize('550', '550', '^').toBuffer(function(err, buffer) {
+						if (err) return res.status(400).send({
 							message: errorHandler.getErrorMessage(err)
 						});
-					}
-					else {
-						res.jsonp(insect);
-					}
+
+						insect.image.medium = 'data:' + files.file.type + ';base64,' + buffer.toString('base64');
+
+						// Small
+						gm(buffer).resize('350', '350', '^').gravity('Center').crop('350', '350').toBuffer(function(err, buffer) {
+							if (err) return res.status(400).send({
+								message: errorHandler.getErrorMessage(err)
+							});
+
+							insect.image.small = 'data:' + files.file.type + ';base64,' + buffer.toString('base64');
+
+							// Finally save to database
+							insect.save(function(err) {
+								if (err) {
+									return res.status(400).send({
+										message: errorHandler.getErrorMessage(err)
+									});
+								}
+								else {
+									res.jsonp(insect);
+								}
+							});
+						});
+					});
 				});
 			});
 		});
     });
-
-  	/*var form = new multiparty.Form();
-  	form.parse(req, function(err, fields, files) {
-		// Add data from form into insect object
-  	 	insect.name = fields.name[0];
-  	 	insect.scientificName = fields.scientificName[0];
-  	 	insect.description = fields.description[0];
-		insect.dateFound = JSON.parse(fields.dateFound[0]);
-		insect.commentsEnabled = fields.commentsEnabled[0];
-  	 	insect.locationTitle = fields.locationTitle[0];
-		insect.loc = JSON.parse(fields.loc[0]);
-		insect.loc.type = 'Point';
-
-		// Save image
-        var file = files.file[0];
-        var contentType = file.headers['content-type'];
-        var tmpPath = file.path;
-
-        var filePath = fs.readFileSync(file.path);
- 		insect.image.contentType = contentType;
-        var prefix = 'data:' + contentType + ';base64,';
-        var buf = filePath.toString('base64');
-        var data = prefix + buf;
-        insect.image.data = data;
-
-		return res.status(400).send({
-			message: 'cat'//errorHandler.getErrorMessage(err)
-		});
-
-		/*gm(filePath).size(function(err, value) {
-			if (err) return res.status(400).send({
-				message: err//errorHandler.getErrorMessage(err)
-			});
-			console.log(value);
-  			// note : value may be undefined
-		});*/
-
-		// check for exif geo location data
-		/*try {
-    		new ExifImage({image : tmpPath}, function (error, exifData) {
-				// error or no gps data (has to be a better way to write)
-        		if (error || _.isEmpty(exifData.gps) || typeof exifData.gps.GPSLatitude !== 'object' || typeof exifData.gps.GPSLatitude !== 'object' || typeof exifData.gps.GPSLatitudeRef !== 'string' || typeof exifData.gps.GPSLongitudeRef !== 'string') {
-					return console.log(error.message); res.status(400).send({
-						message: error.message
-					});
-				}
-       			else {
-					// Convert DMS coords in photo to GeoJSON in the database
-            		var latitude = convertDMSToDD(exifData.gps.GPSLatitude[0], exifData.gps.GPSLatitude[1], exifData.gps.GPSLatitude[2], exifData.gps.GPSLatitudeRef);
-					var longitude = convertDMSToDD(exifData.gps.GPSLongitude[0], exifData.gps.GPSLongitude[1], exifData.gps.GPSLongitude[2], exifData.gps.GPSLongitudeRef);
-					insect.image.coordinates = [longitude, latitude];
-
-					// Finally save to database
-					insect.save(function(err) {
-						if (err) {
-							return res.status(400).send({
-								message: errorHandler.getErrorMessage(err)
-							});
-						}
-						else {
-							res.jsonp(insect);
-						}
-					});
-				}
-    		});
-		} catch (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		}*/
-
-        // Server side file type checker.
-      /*  if (contentType !== 'image/png' && contentType !== 'image/jpeg') {
-            fs.unlink(tmpPath);
-            return res.status(400).send('Unsupported file type.');
-        }
-
-        fs.rename(tmpPath, destPath, function(err) {
-            if (err) {
-                return res.status(400).send('Image is not saved:');
-            }
-            return res.json(destPath);
-        });
-
-    });*/
+	// This is awful!
 };
 
 /**
@@ -233,7 +180,7 @@ exports.delete = function(req, res) {
  * List of Insects
  */
 exports.list = function(req, res) {
-	Insect.find().sort('-created').populate('user', 'displayName').exec(function(err, insects) {
+	Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').exec(function(err, insects) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -251,7 +198,7 @@ exports.insectByID = function(req, res, next, id) {
 	// if id from url is invalid, send nice error
 	//if (!mongoose.Types.ObjectId.isValid(id)) return next(new Error('Failed to load insect ' + id));
 
-	Insect.findById(id).populate('user', 'displayName').exec(function(err, insect) {
+	Insect.findById(id).select('+image.large').populate('user', 'displayName').exec(function(err, insect) {
 		if (err) return next(err);
 		if (!insect) return next(new Error('Failed to load insect ' + id));
 		req.insect = insect;

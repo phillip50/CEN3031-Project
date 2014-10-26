@@ -1,43 +1,53 @@
 <!-- FINDME -->
-<section data-ng-controller="HomeController">
-	<div class="jumbotron clearfix">
-		<div class="col-md-6">
-			<h1 class="text-uppercase">The <br>Insect<br> Collection</h1>
-            <div data-ng-hide="authentication.user">
-                <a class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
-                <a class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
-            </div>
-            <p data-ng-show="authentication.user">
-                Hi <strong data-ng-bind="authentication.user.displayName"></strong>!
-            </p>
-		</div>
-
-		<google-map class="col-md-6" center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
-            <markers models="randomMarkers" coords="'self'" options="'options'" events="markersEvents">
-                <windows show="show">
-                    <div ng-non-bindable>
-                        <strong>{{title}}</strong><br>
-                        Caught By {{caughtBy}}<br>
-                        Location {{location}}
-                    </div>
-                </windows>
-            </markers>
-		</google-map>
-
-		<ui-gmap-google-map class="col-md-6" center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
-			<ui-gmap-markers models="markers" coords="'self'" icon="'icon'">
-	        </ui-gmap-markers>
+<section data-ng-controller="HomeController" class="home">
+	<div class="row map">
+		<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds">
+			<ui-gmap-markers models="markers" fit="true" coords="'self'" icon="'icon'" options="'options'">
+				<ui-gmap-windows show="show">
+                	<div data-ng-non-bindable>
+						<strong>{{title}}</strong><br>
+						Caught By {{caughtBy}}<br>
+						Location {{location}}
+					</div>
+            	</ui-gmap-windows>
+			</ui-gmap-markers>
 		</ui-gmap-google-map>
 	</div>
 
-	<div class="row">
-        <div ng-repeat="sample in sample_bugs" class="col-md-2 text-center">
-            <img style="max-width: 100%; height: 125px;" ng-src="/images/{{sample.pic}}">
-            <div>
-                <h4><a data-ng-href="#!/insects/{{sample.articleId}}">{{sample.name}}</a></h4>
-                <p>Found By {{sample.caughtBy}}</p>
-                <p>Location {{sample.location}}</p>
-            </div>
+	<div class="jumbotron text-center">
+		<h1 class="text-uppercase">The Insect Collection</h1>
+        <div data-ng-hide="authentication.user">
+            <a class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
+            <a class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
+        </div>
+        <p data-ng-show="authentication.user">
+            Hi <strong data-ng-bind="authentication.user.displayName"></strong>!
+        </p>
+	</div>
+
+	<div class="row text-center info">
+		<div class="col-md-4">
+			<span class="glyphicon glyphicon-camera"></span>
+			<h2>Capture</h2>
+			<p>Take photos.</p>
 		</div>
-    </div>
+		<div class="col-md-4">
+			<span class="glyphicon glyphicon-cloud-upload"></span>
+			<h2>Upload</h2>
+			<p>Organize your collections.</p>
+		</div>
+		<div class="col-md-4">
+			<span class="glyphicon glyphicon-picture"></span>
+			<h2>Explore</h2>
+			<p>View everyones' insects.</p>
+		</div>
+	</div>
+
+	<hr>
+
+	<div class="row text-center">
+		<div class="col-md-12">
+			<h1>{{stats.insects || 0}} insects and counting.</h1>
+		</div>
+	</div>
 </section>

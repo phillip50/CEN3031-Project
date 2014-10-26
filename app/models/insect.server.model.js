@@ -11,25 +11,29 @@ var mongoose = require('mongoose'),
  */
 var InsectSchema = new Schema({
 	image: {
-		small: {
+		small: { // 350x350
 			type: String,
-			default: ''
+			default: '',
+			select: false
 			//required: true
 		},
-		medium: {
+		medium: { // 550
 			type: String,
-			default: ''
+			default: '',
+			select: false
 			//required: true
 		},
-		large: {
+		large: { // 950
 			type: String,
-			default: ''
+			default: '',
+			select: false
 			//required: true
 		},
 		original: {
 			type: String,
 			default: '',
-			required: true
+			required: true,
+			select: false
 		},
 		contentType: {
 			type: String,
@@ -38,7 +42,8 @@ var InsectSchema = new Schema({
 		},
 		coordinates: {
 			type: [Number], // [<longitude>, <latitude>]
-			required: 'Coordinates cannot be blank'
+			required: 'Coordinates cannot be blank',
+			select: false
 		}
 	},
 	created: {
