@@ -17,6 +17,8 @@ module.exports = {
 				'public/lib/bootstrap/dist/css/bootstrap-theme.css',
 			],
 			js: [
+			    'public/lib/pdfmake/build/pdfmake.min.js',
+			    'public/lib/pdfmake/build/vfs_fonts.js',
 				'public/lib/ng-file-upload/angular-file-upload-shim.min.js',
 				'public/lib/angular/angular.js',
 				'public/lib/ng-file-upload/angular-file-upload.min.js',
