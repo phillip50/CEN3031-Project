@@ -1,5 +1,6 @@
 'use strict';
 /* FINDME */
+/* global google */
 
 angular.module('core').controller('HomeController', ['$scope', '$location', 'Insects','GoogleMapApi'.ns(), 'Authentication',
 	function($scope, $location, Insects, GoogleMapApi, Authentication) {
@@ -25,48 +26,59 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 
 		// Ready to manipulate map
 		GoogleMapApi.then(function(maps) {
-			//var markersTemp = [];
+			var markersTemp = [];
 			var markers = function(i, insect) {
 				var marker = {
 					id: i,
-					//latitude: insect.coords.latitude,
-					latitude: insect.loc.coordinates[1],
-					//longitude: insect.coords.longitude,
-					longitude: insect.loc.coordinates[0],
+					latitude: insect.coords.latitude,
+					//latitude: insect.loc.coordinates[1],
+					longitude: insect.coords.longitude,
+					//longitude: insect.loc.coordinates[0],
 					options: {
 						icon: {
-            	url: '/images/bug1.png',
+            	url: '/images/'  + insect.pic,
             	scaledSize: new google.maps.Size(50, 50)
         		}
     			},
 					title: insect.name,
-					//caughtBy: insect.caughtBy,
-					caughtBy: insect.user.displayName,
-					//location: insect.location
-					location: insect.locationTitle
+					caughtBy: insect.caughtBy,
+					//caughtBy: insect.user.displayName,
+					location: insect.location
+					//location: insect.locationTitle
 				};
 				console.log(marker)
 				return marker;
 			};
 
-		/*for (var i = 0; i < $scope.sample_bugs.length; i++) {
+			/*for (var i = 0; i < $scope.sample_bugs.length; i++) {
 				markersTemp.push(markers(i, $scope.sample_bugs[i]));
 			}
 			*/
-			
 		
 			$scope.insects = Insects.query(function (response) {
 				var i = 0;
-    			angular.forEach(response, function (item) {
-        			markers(i, item);
+    			angular.forEach(response, function (insect) {
+    				var bug = {
+						id: i,
+						articleId: '5425cdf5806e219804c442cf',
+						name: insect.name,
+						pic: 'bug1.png',
+						caughtBy : insect.user.displayName,
+						location : insect.locationTitle,
+						coords: {
+							latitude: insect.loc.coordinates[1],
+							longitude:  insect.loc.coordinates[0]
+						}
+					};
+		
+        			markersTemp.push(markers(i, bug));
         			i++;
     			});
 			});
 
-
 			
 			
-			//$scope.markers = markersTemp;
+			$scope.markers = markersTemp;
 			
 		});
 
