@@ -1,12 +1,9 @@
 'use strict';
-/* FINDME */
-/* global google */
 
-angular.module('core').controller('HomeController', ['$scope', '$location', 'Insects','GoogleMapApi'.ns(), 'Authentication',
+angular.module('core').controller('HomeController', ['$scope', '$location', 'Insects', 'GoogleMapApi'.ns(), 'Authentication',
 	function($scope, $location, Insects, GoogleMapApi, Authentication) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
-	
 
 		// Display insects on map
 		$scope.map = {
@@ -30,125 +27,28 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 			var markers = function(i, insect) {
 				var marker = {
 					id: i,
-					latitude: insect.coords.latitude,
-					//latitude: insect.loc.coordinates[1],
-					longitude: insect.coords.longitude,
-					//longitude: insect.loc.coordinates[0],
+					latitude: insect.loc.coordinates[1],
+					longitude: insect.loc.coordinates[0],
 					options: {
 						icon: {
-            	url: insect.pic,
-            	scaledSize: new google.maps.Size(50, 50)
-        		}
-    			},
+            				url: insect.image.small,
+            				scaledSize: new google.maps.Size(50, 50)
+        				}
+    				},
 					title: insect.name,
-					caughtBy: insect.caughtBy,
-					//caughtBy: insect.user.displayName,
-					location: insect.location
-					//location: insect.locationTitle
+					caughtBy: insect.user.displayName,
+					location: insect.locationTitle
 				};
-				console.log(marker)
 				return marker;
 			};
 
-			/*for (var i = 0; i < $scope.sample_bugs.length; i++) {
-				markersTemp.push(markers(i, $scope.sample_bugs[i]));
-			}
-			*/
-		
-			$scope.insects = Insects.query(function (response) {
-				var i = 0;
-    			angular.forEach(response, function (insect) {
-    				var bug = {
-						id: i,
-						articleId: '5425cdf5806e219804c442cf',
-						name: insect.name,
-						pic: insect.image.small,
-						caughtBy : insect.user.displayName,
-						location : insect.locationTitle,
-						coords: {
-							latitude: insect.loc.coordinates[1],
-							longitude:  insect.loc.coordinates[0]
-						}
-					};
-		
-        			markersTemp.push(markers(i, bug));
-        			i++;
-    			});
+			Insects.query(function(insects) {
+				for (var i = 0; i < insects.length; i++) {
+					markersTemp.push(markers(i, insects[i]));
+				}
 			});
 
-			
-			
 			$scope.markers = markersTemp;
-			
 		});
-
-		// Test data
-		$scope.sample_bugs = [{
-			id: 0,
-			articleId: '5425cdf5806e219804c442cf',
-			name: 'Butterfry',
-			pic: 'bug1.png',
-			caughtBy : 'Ash',
-			location : 'Pallet Town',
-			coords: {
-				latitude: 29.631146633445802,
-				longitude: -82.34787039550469
-			}
-		}, {
-			id: 1,
-			articleId: '5425cdf5806e219804c442cf',
-			name: 'Ledyba',
-			pic: 'bug2.jpg',
-			caughtBy : 'Bugsy',
-			location : 'Gainesville',
-			coords: {
-				latitude: 29.64261231,
-				longitude: -82.348432409
-			}
-		}, {
-			id: 2,
-			articleId: '5425cdf5806e219804c442cf',
-			name: 'Caterpie',
-			pic: 'bug3.png',
-			caughtBy : 'Brock',
-			location : 'Hawaii',
-			coords: {
-				latitude: 29.6328801,
-				longitude: -82.3521082
-			}
-		}, {
-			id: 3,
-			articleId: '5425cdf5806e219804c442cf',
-			name: 'Weedle',
-			pic: 'bug4.jpg',
-			caughtBy : 'Misty',
-			location : 'Somewhere',
-			coords: {
-				latitude: 29.6308801,
-				longitude: -82.3451082
-			}
-		}, {
-			id: 4,
-			articleId: '5425cdf5806e219804c442cf',
-			name: 'Galvantula',
-			pic: 'bug5.png',
-			caughtBy : 'Jessie',
-			location : 'Nowhere',
-			coords: {
-				latitude: 29.6368801,
-				longitude: -82.3531082
-			}
-		}, {
-			id: 5,
-			articleId: '5425cdf5806e219804c442cf',
-			name: 'Combee',
-			pic: 'combee.png',
-			caughtBy : 'James',
-			location : 'Nowhere',
-			coords: {
-				latitude: 29.643162438647163,
-				longitude: -82.36231797783205
-			}
-		}];
 	}
 ]);

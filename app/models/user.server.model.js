@@ -51,26 +51,24 @@ var UserSchema = new Schema({
 	},
 	username: {
 		type: String,
-		unique: 'testing error message',
+		unique: 'This username has already been registered.',
 		required: 'Please fill in a username',
 		trim: true
 	},
-	ufid: {
+	gatorlink: {
 		type: String,
-		unique: 'testing error message',
-		required: 'Please fill in a ufid',
+		unique: 'This Gatorlink has already been registered.',
+		required: 'Please fill in your Gatorlink',
 		trim: true
 	},
 	classCode: {
 		type: String,
-		unique: 'testing error message',
-		required: 'Please fill in a classCode',
 		trim: true
+		//required: 'Please fill in a class code',
 	},
 	school: {
 		type: String,
-		unique: 'testing error message',
-		required: 'Please fill in a school',
+		required: 'Please fill in your school',
 		trim: true
 	},
 	password: {

@@ -1,133 +1,59 @@
-<!-- FINDME -->
-<section data-ng-controller="SettingsController">
-<div class="row">
-	<h1 class = "page-header" style="padding:20px;">About <font color = #6d9900>{{user.displayName}}</font></h1>
-<div class="col col-md-6 panel panel-primary well">
-		
-		<div>
-			<div class="row">
-
-			<div class="col col-sm-6">
-				<p>
-					<h3>
-						<strong>School:</strong>&nbsp {{user.school}} <br>
-						<strong>Class:</strong>&nbsp {{user.classCode}}<br>
-						<strong>Student Id:</strong>&nbsp {{user.ufid}}<br>
-					</h3>
-					<br>
-					{{user.userDescription}}
-					<br>
-					<a href= '#!/settings/profile'>Edit</a>
-					<br>
-					</p>
-			<table class="table" style="max-height: 300px; overflow-y:scroll;">
-				<tr>
-	       		 	<td class="td">
-	       		 		<center>
-	       		 		<strong>Gallery 1</strong><br>
-	       		 		<a href="#!/galleries">
-	            			<input type="image" style="height: 75px;" src="/images/bug1.png">
-	            		</a>
-	            		</center>
-	            	</td>
-	            	<td class="td">
-	            		<center>
-	            		<strong>Gallery 2</strong><br>
-	       		 		<a href="#!/galleries">
-	            			<input type="image" style="height: 75px;" src="/images/bug2.jpg">
-	            		</a>
-	            		</center>
-	            	</td>
-	            	<td class="td">
-	            		<center>
-	            		<strong>Gallery 3</strong><br>
-	       		 		<a href="#!/galleries">
-	            			<input type="image" style="height: 75px;" src="/images/bug3.png">
-	            		</a>
-	            		</center>
-	            	</td>
-	            </tr>
-        	</table>
-			</div>
-			<div class="col col-sm-6">
-				<img class = "img-thumbnail img-rounded" src="images/sampleuser.png">
-			</div>
-		</div>
-
-		</div>
-</div>
-<div class="col col-md-6 text-center" >
-		<div class="panel panel-success" style="height: 363px; overflow: scroll;">
-		<table class="table table-bordered">
-			<thead><h2>Caught Insects</h2></thead>
-			<tr>
-       		 	<td class="td">
-       		 		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug1.png">
-            		</a>
-            	</td>
-            	<td class="td">
-            		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug2.jpg">
-            		</a>
-            	</td>
-            	<td class="td">
-            		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug3.png">
-            		</a>
-            	</td>
-            </tr>
-            <tr>
-       		 	<td class="td">
-       		 		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug4.jpg">
-            		</a>
-            	</td>
-            	<td class="td">
-            		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug5.png">
-            		</a>
-            	</td>
-            	<td class="td">
-            		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/combee.png">
-            		</a>
-            	</td>
-            </tr>
-            <tr>
-       		 	<td class="td">
-       		 		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug1.png">
-            		</a>
-            	</td>
-            	<td class="td">
-            		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug2.jpg">
-            		</a>
-            	</td>
-            	<td class="td">
-            		<a href="/#!/insects/5425cdf5806e219804c442cf">
-            			<img style="height: 125px;" src="/images/bug2.jpg">
-            		</a>
-            	</td>
-            </tr>
-        </table>
-    </div>
-</div>
-</div>
-	<div class="list-group">
-		<a data-ng-repeat="gallery in galleries" data-ng-href="#!/galleries/{{galleries._id}}" class="list-group-item">
-			<embed ng-src="{{content}}" style="width:200px;height:200px;"></embed>
-			<small class="list-group-item-text">
-				Posted on
-				<span data-ng-bind="galleries.created | date:'mediumDate'"></span>
-				by
-				<span data-ng-bind="galleries.user.displayName"></span>
-			</small>
-			<h4 class="list-group-item-heading" data-ng-bind="galleries.title"></h4>
-		</a>
+<section data-ng-controller="ProfileController" data-ng-init="findUser()">
+	<div class="page-header">
+		<h1>
+			<span data-ng-bind="foundUser.displayName"></span>'s Profile
+			<span class="pull-right" data-ng-show="user._id == foundUser._id">
+				<a class="btn btn-primary" data-ng-href="/#!/settings/profile">
+					<i class="glyphicon glyphicon-edit"></i> Edit
+				</a>
+			</span>
+		</h1>
 	</div>
-	<div class="alert alert-warning text-center" data-ng-if="galleries.$resolved && !galleries.length">
-		No galleries yet, why don't you <a href="/#!/galleries/create">create one</a>?
+
+	<div class="row">
+		<div class="col-md-6">
+			<dl class="dl-horizontal">
+				<dt>About</dt>
+				<dd>{{foundUser.userDescription}} <em data-ng-show="!foundUser.userDescription" class="text-muted">{{foundUser.displayName}} hasn't written a description yet.</em></dd>
+
+				<dt>School</dt>
+				<dd>{{foundUser.school}}</dd>
+
+				<dt>Class</dt>
+				<dd>{{foundUser.classCode}}</dd>
+
+				<dt>Gatorlink</dt>
+				<dd>{{foundUser.gatorlink}}</dd>
+			</dl>
+		</div>
+
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Galleries <span class="badge">3</span></h3>
+ 				</div>
+
+ 				<div class="panel-body">
+					<a href="#!/galleries"><img style="height: 75px;" src="/images/bug1.png"></a>
+					<a href="#!/galleries"><img style="height: 75px;" src="/images/bug2.jpg"></a>
+					<a href="#!/galleries"><img style="height: 75px;" src="/images/bug3.png"></a>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Insects <span class="badge">6</span></h3>
+				</div>
+
+				<div class="panel-body">
+					<a href="#!/insects"><img style="height: 75px;" src="/images/bug1.png"></a>
+					<a href="#!/insects"><img style="height: 75px;" src="/images/bug2.jpg"></a>
+					<a href="#!/insects"><img style="height: 75px;" src="/images/bug3.png"></a>
+					<a href="#!/insects"><img style="height: 75px;" src="/images/bug4.jpg"></a>
+					<a href="#!/insects"><img style="height: 75px;" src="/images/bug5.png"></a>
+					<a href="#!/insects"><img style="height: 75px;" src="/images/combee.png"></a>
+				</div>
+			</div>
+		</div>
 	</div>
 </section>

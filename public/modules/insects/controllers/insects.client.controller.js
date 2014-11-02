@@ -237,7 +237,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 								]
 							]
 						},
-						layout: 'lightHorizontalLines'
+						layout: 'lightHorizontalLines',
+						pageBreak: 'before'
 					}],
 					styles: {
 						header: {

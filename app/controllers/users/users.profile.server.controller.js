@@ -49,8 +49,29 @@ exports.update = function(req, res) {
 };
 
 /**
+* Show the found user
+*/
+exports.read = function(req, res) {
+	res.jsonp(req.profile);
+};
+
+/**
  * Send User
  */
 exports.me = function(req, res) {
 	res.jsonp(req.user || null);
+};
+
+/**
+* User middleware
+*/
+exports.safeUserByID = function(req, res, next, id) {
+	User.findOne({
+		_id: id
+	}).select('firstName lastName displayName classCode school userDescription').exec(function(err, user) {
+		if (err) return next(err);
+		if (!user) return next(new Error('Failed to load User ' + id));
+		req.profile = user;
+		next();
+	});
 };

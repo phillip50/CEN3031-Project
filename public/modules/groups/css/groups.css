@@ -1,2 +1,2 @@
-table.table tr[data-ng-click] {cursor: pointer;}
-table.table tr[data-ng-click]:hover a {color: #2a6496; text-decoration: underline;}
+table.table tr td[data-ng-click] {cursor: pointer;}
+table.table tr td[data-ng-click]:hover a {color: #2a6496; text-decoration: underline;}

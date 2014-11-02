@@ -13,6 +13,10 @@ module.exports = function(app) {
 	app.route('/users/me').get(users.me);
 	app.route('/users').put(users.update);
 
+	// Setting up the public profile api
+	//app.route('/profile').get(users.me);
+	app.route('/users/:userId').get(users.read);
+
 	// Setting up the users password api
 	app.route('/users/password').post(users.changePassword);
 	app.route('/auth/forgot').post(users.forgot);
@@ -25,5 +29,5 @@ module.exports = function(app) {
 	app.route('/auth/signout').get(users.signout);
 
 	// Finish by binding the user middleware
-	app.param('userId', users.userByID);
+	app.param('userId', users.safeUserByID);
 };

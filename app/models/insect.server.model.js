@@ -82,10 +82,10 @@ var InsectSchema = new Schema({
 		type: {
 			type: String,
 			default: 'Point',
-	    enum: ['Point', 'LineString', 'Polygon'],
+	    	enum: ['Point', 'LineString', 'Polygon'],
 			required: true
-	  },
-	  coordinates: {
+	  	},
+	  	coordinates: {
 			type: [Number], // [<longitude>, <latitude>]
 			required: 'Coordinates cannot be blank'
 		}

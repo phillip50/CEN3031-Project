@@ -5,12 +5,16 @@ angular.module('users').config(['$stateProvider',
 	function($stateProvider) {
 		// Users state routing
 		$stateProvider.
-		state('profile', {
+		state('editProfile', {
 			url: '/settings/profile',
 			templateUrl: 'modules/users/views/settings/edit-profile.client.view.html'
 		}).
-		state('bugcatcher', {
-			url: '/profile/bugcatcher',
+		state('profile', {
+			url: '/profile',
+			templateUrl: 'modules/users/views/profile/profile.client.view.html'
+		}).
+		state('viewProfile', {
+			url: '/profile/:userId',
 			templateUrl: 'modules/users/views/profile/profile.client.view.html'
 		}).
 		state('password', {
