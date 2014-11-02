@@ -2,13 +2,18 @@
     <div class="page-header clearfix">
 		<h1>
             {{insect.name}} <small>{{insect.scientificName}}</small>
-            <span class="pull-right" data-ng-show="authentication.user._id == insect.user._id">
-                <a class="btn btn-primary" href="/#!/insects/{{insect._id}}/edit">
-                    <i class="glyphicon glyphicon-edit"></i>
+            <span class="pull-right">
+                <a class="btn btn-primary" data-ng-click="generatePDF();">
+                    <i class="glyphicon glyphicon-print"></i> PDF
                 </a>
-                <a class="btn btn-primary" data-ng-click="remove();">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
+                <span data-ng-show="authentication.user._id == insect.user._id">
+                    <a class="btn btn-primary" data-ng-href="/#!/insects/{{insect._id}}/edit" data-ng-show="authentication.user._id == insect.user._id">
+                        <i class="glyphicon glyphicon-edit"></i> Edit
+                    </a>
+                    <a class="btn btn-primary" data-ng-click="remove();">
+                        <i class="glyphicon glyphicon-trash"></i> Delete
+                    </a>
+                </span>
             </span>
         </h1>
 	</div>
@@ -60,9 +65,6 @@
                             <textarea name="comment" id="content" class="form-control" cols="30" rows="10" placeholder="Write a comment." required></textarea>
                             <input type="submit" value="Submit" class="btn btn-default">
                         </fieldset>
-                    </form>
-                    <form data-ng-submit="generatePDF()">
-                            <button type="submit">PDF</button>
                     </form>
                 </div>
             </div>

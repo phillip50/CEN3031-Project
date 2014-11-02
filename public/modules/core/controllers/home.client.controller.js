@@ -1,6 +1,5 @@
 'use strict';
 /* FINDME */
-/* global google */
 
 angular.module('core').controller('HomeController', ['$scope', '$location', 'GoogleMapApi'.ns(), 'Authentication',
 	function($scope, $location, GoogleMapApi, Authentication) {

@@ -10,33 +10,6 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 			{name: 'Flying Type'}
 		];
 
-		$scope.generatePDF = function() {
-				var x = $scope.insect.location;
-				console.log(x);
-				var docDefinition = {
-   						content: [
-     					// if you don't need styles, you can use a simple string to define a paragraph
-     					'This is a standard paragraph, using default style',
-
-     					// using a { text: '...' } object lets you set styling properties
-     					{ text: 'This paragraph will have a bigger font', fontSize: 15 },
-
-     					// if you set pass an array instead of a string, you'll be able
-     					// to style any fragment individually
-     					{
-       						text: [
-         					'This paragraph is defined as an array of elements to make it possible to ',
-         					{ text: 'restyle part of it and make it bigger ', fontSize: 15 },
-         					'than the rest.'
-       						]
-     					}
-   						]
-				 };
-
-				 	/*Downloads PDF*/
-				// pdfMake.createPdf(docDefinition).download();
-		};
-
 		$scope.createPage = function() {
 			$scope.form = {
 				loc: {
@@ -231,6 +204,66 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
+
+			$scope.generatePDF = function() {
+				var docDefinition = {
+					content: [
+					{text: 'Insect Guide', style: 'header'},
+					{
+						style: 'table',
+						table: {
+							widths: [200, '*'],
+							body: [
+								[
+									{text: 'Photo', style: 'tableHeader'},
+									{text: 'Infomation', style: 'tableHeader'}
+								], [
+									{image: $scope.insect.image.large, width: 200},
+									{
+										table: {
+											body: [
+												[{text: 'Name', bold: true}, $scope.insect.name],
+												[{text: 'Scientific Name', bold: true}, $scope.insect.scientificName],
+												[{text: 'Description', bold: true}, $scope.insect.description],
+												[{text: 'Caught By', bold: true}, $scope.insect.user.displayName],
+												[{text: 'Date Found', bold: true}, $scope.insect.dateFound],
+												[{text: 'Location Found', bold: true}, $scope.insect.locationTitle],
+												[{text: 'Coordinates', bold: true}, $scope.insect.loc.coordinates[0] + ', ' + $scope.insect.loc.coordinates[1]]
+											],
+										},
+										layout: 'noBorders'
+									}
+									//{text: 'nothing interesting here', italics: true, color: 'gray'}
+								]
+							]
+						},
+						layout: 'lightHorizontalLines'
+					}],
+					styles: {
+						header: {
+							fontSize: 18,
+							bold: true,
+							margin: [0, 0, 0, 10]
+						},
+						subheader: {
+							fontSize: 16,
+							bold: true,
+							margin: [0, 10, 0, 5]
+						},
+						table: {
+							margin: [0, 5, 0, 15]
+						},
+						tableHeader: {
+							bold: true,
+							fontSize: 13,
+							color: 'black'
+						}
+					}
+				};
+
+				// Open PDF
+				pdfMake.createPdf(docDefinition).open();
+			};
 
 			/*comments: [{
 					user: {
