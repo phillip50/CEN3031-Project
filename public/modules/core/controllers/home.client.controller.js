@@ -36,7 +36,7 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 					//longitude: insect.loc.coordinates[0],
 					options: {
 						icon: {
-            	url: '/images/'  + insect.pic,
+            	url: insect.pic,
             	scaledSize: new google.maps.Size(50, 50)
         		}
     			},
@@ -62,7 +62,7 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 						id: i,
 						articleId: '5425cdf5806e219804c442cf',
 						name: insect.name,
-						pic: 'bug1.png',
+						pic: insect.image.small,
 						caughtBy : insect.user.displayName,
 						location : insect.locationTitle,
 						coords: {
