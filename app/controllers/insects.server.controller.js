@@ -14,7 +14,6 @@ var fs = require('fs'),
 	gm = require('gm');
 
 
-
 /**
  * Create a insect
  */
@@ -35,6 +34,25 @@ exports.create = function(req, res) {
 		var dd = dms[0] + dms[1]/60 + dms[2]/(3600);
 		if (direction === 'S' || direction === 'W') dd = dd * -1; // Don't do anything for N or E
 		return dd;
+	}
+
+	/*If the selected location and actual location of the photo are not within close range
+	this function will return false*/
+	function checkProximity(coord1,coord2)
+	{
+		
+		if(coord1.coordinates[0] < coord2[0] - .02 || coord1.coordinates[0] > coord2[0] + .02)
+		{
+			return false;
+		}
+
+		if(coord1.coordinates[1] < coord2[1] - .02 || coord1.coordinates[0] > coord2[1] + .02)
+		{
+			return false;
+		}
+		else
+			return true;
+
 	}
 
 	// Parse incoming data
@@ -89,6 +107,14 @@ exports.create = function(req, res) {
 				var latitude = convertDMStoDD(image['Profile-EXIF']['GPS Latitude'], image['Profile-EXIF']['GPS Latitude Ref']),
 				    longitude = convertDMStoDD(image['Profile-EXIF']['GPS Longitude'], image['Profile-EXIF']['GPS Longitude Ref']);
 				insect.image.coordinates = [longitude, latitude];
+			
+
+				if(checkProximity(insect.loc, insect.image.coordinates) == false)
+				{
+					return res.status(400).send({
+						message: 'User selected location and actual location are not in range.'
+					});
+				}
 
 				// Large
 				gm(data).noProfile().resize('950', '950', '^').toBuffer(function(err, buffer) {
