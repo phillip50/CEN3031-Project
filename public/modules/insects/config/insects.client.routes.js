@@ -13,13 +13,13 @@ angular.module('insects').config(['$stateProvider',
 			url: '/insects/create',
 			templateUrl: 'modules/insects/views/create-insect.client.view.html'
 		}).
+		state('viewMap', {
+			url: '/insects/map',
+			templateUrl: 'modules/insects/views/view-map.client.view.html'
+		}).
 		state('viewInsect', {
 			url: '/insects/:insectsId',
 			templateUrl: 'modules/insects/views/view-insect.client.view.html'
-		}).
-		state('viewArea', {
-			url: '/area',
-			templateUrl: 'modules/insects/views/view-area.client.view.html'
 		}).
 		state('editInsect', {
 			url: '/insects/:insectsId/edit',

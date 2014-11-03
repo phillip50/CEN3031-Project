@@ -1,55 +1,84 @@
 <section data-ng-controller="SettingsController">
 	<div class="page-header">
-		<h1>Edit your profile</h1>
+		<h1>Edit my profile</h1>
 	</div>
 
 	<form name="userForm" data-ng-submit="updateUserProfile(userForm.$valid)" class="signin" autocomplete="off">
 		<fieldset>
 			<div data-ng-show="success" class="alert alert-success" role="alert">
-				<strong>Profile Saved Successfully</strong>
+				<strong>Saved.</strong>
 			</div>
 			<div data-ng-show="error" class="alert alert-danger" role="alert">
 				<strong data-ng-bind="error"></strong>
 			</div>
 
 			<div class="row">
-				<div class="col-md-5">
-					<h2>Personal</h2>
-					<div class="form-group">
-						<label for="firstName">First Name</label>
-						<input type="text" id="firstName" name="firstName" class="form-control" data-ng-model="user.firstName" placeholder="First Name" required>
-					</div>
-					<div class="form-group">
-						<label for="lastName">Last Name</label>
-						<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="user.lastName" placeholder="Last Name" required>
-					</div>
-					<div class="form-group">
-						<label for="email">Email</label>
-						<input type="email" id="email" name="email" class="form-control" data-ng-model="user.email" placeholder="Email" required>
-					</div>
-					<div class="form-group">
-						<label for="username">Username</label>
-						<input type="text" id="username" name="username" class="form-control" data-ng-model="user.username" placeholder="Username" required>
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Personal</h2>
+						</div>
+
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="firstName">First Name</label>
+								<input type="text" id="firstName" name="firstName" class="form-control" data-ng-model="user.firstName" placeholder="First Name" required>
+							</div>
+							<div class="form-group">
+								<label for="lastName">Last Name</label>
+								<input type="text" id="lastName" name="lastName" class="form-control" data-ng-model="user.lastName" placeholder="Last Name" required>
+							</div>
+							<div class="form-group">
+								<label for="userDescription">About Me</label>
+								<textarea data-ng-model="user.userDescription" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+							</div>
+						</div>
 					</div>
 				</div>
 
-				<div class="col-md-5">
-					<h2>Educational</h2>
-					<div class="form-group">
-						<label for="ufid">GatorLink</label>
-						<input type="text" id="gatorlink" name="gatorlink" class="form-control" data-ng-model="user.gatorlink" placeholder="GatorLink" required>
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Account</h2>
+						</div>
+
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="email">Email</label>
+								<input type="email" id="email" name="email" class="form-control" data-ng-model="user.email" placeholder="Email" required>
+							</div>
+							<div class="form-group">
+								<label for="username">Username</label>
+								<input type="text" id="username" name="username" class="form-control" data-ng-model="user.username" placeholder="Username" required>
+							</div>
+							<div class="form-group">
+								<label>Password</label><br>
+								<a data-ng-href="/#!/settings/password" class="btn btn-default">Change my password</a>
+							</div>
+						</div>
 					</div>
-					<div class="form-group">
-						<label for="classCode">Course Number</label>
-						<input type="text" id="courseCode" name="courseCode" class="form-control" data-ng-model="user.courseCode" placeholder="Ex: ENY3031">
-					</div>
-					<div class="form-group">
-						<label for="school">School</label>
-						<input type="text" id="school" name="school" class="form-control" data-ng-model="user.school" placeholder="Ex: University of Florida">
-					</div>
-					<div class="form-group">
-						<label for="userDescription">User Description</label>
-						<textarea data-ng-model="user.userDescription" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+				</div>
+
+				<div class="col-md-4">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Educational</h2>
+						</div>
+
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="school">School</label>
+								<input type="text" id="school" name="school" class="form-control" data-ng-model="user.school" placeholder="School">
+							</div>
+							<div class="form-group">
+								<label for="classCode">Course Number</label>
+								<input type="text" id="courseCode" name="courseCode" class="form-control" data-ng-model="user.courseCode" placeholder="Course Code">
+							</div>
+							<div class="form-group">
+								<label for="gatorlink">GatorLink</label>
+								<input type="text" id="gatorlink" name="gatorlink" class="form-control" data-ng-model="user.gatorlink" placeholder="GatorLink" required>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -1,2 +1,3 @@
 h3.vspace {margin-bottom: 20px;}
 .angular-google-map-container { height: 400px; }
+.viewMap .angular-google-map-container {height: 75vh; min-height: 500px;}

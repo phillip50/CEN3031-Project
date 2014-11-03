@@ -36,23 +36,15 @@ exports.create = function(req, res) {
 		return dd;
 	}
 
-	/*If the selected location and actual location of the photo are not within close range
-	this function will return false*/
-	function checkProximity(coord1,coord2)
-	{
-		
-		if(coord1.coordinates[0] < coord2[0] - .02 || coord1.coordinates[0] > coord2[0] + .02)
-		{
-			return false;
-		}
+	// If the selected location and actual location of the photo are not within close range
+	// this function will return false
+	function checkProximity(given, wanted) {
+		// [longitude, latitude]
+		var longitudePercentError = Math.abs((given[0] - wanted[0]) / wanted[0]);
+		var latitudePercentError = Math.abs((given[1] - wanted[1]) / wanted[1]);
 
-		if(coord1.coordinates[1] < coord2[1] - .02 || coord1.coordinates[0] > coord2[1] + .02)
-		{
-			return false;
-		}
-		else
-			return true;
-
+		if (longitudePercentError < 0.00005 && latitudePercentError < 0.00005) return true;
+		else return false;
 	}
 
 	// Parse incoming data
@@ -107,14 +99,24 @@ exports.create = function(req, res) {
 				var latitude = convertDMStoDD(image['Profile-EXIF']['GPS Latitude'], image['Profile-EXIF']['GPS Latitude Ref']),
 				    longitude = convertDMStoDD(image['Profile-EXIF']['GPS Longitude'], image['Profile-EXIF']['GPS Longitude Ref']);
 				insect.image.coordinates = [longitude, latitude];
-			
 
-				if(checkProximity(insect.loc, insect.image.coordinates) == false)
-				{
+				// Check if photo's coords are near user's given
+				if (checkProximity(insect.loc.coordinates, insect.image.coordinates) === false) {
 					return res.status(400).send({
-						message: 'User selected location and actual location are not in range.'
+						message: 'Your selected location and the photo\'s location are not nearby.'
 					});
 				}
+
+				// Check if dates match
+				var a = image['Profile-EXIF']['Date Time Original'].split(/:| /),
+					dateTaken = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
+
+				if (dateTaken.toDateString() !== insect.dateFound.toDateString()) {
+					return res.status(400).send({
+						message: 'Your selected date and the photo\'s date are not the same.'
+					});
+				}
+				insect.image.dateTaken = dateTaken;
 
 				// Large
 				gm(data).noProfile().resize('950', '950', '^').toBuffer(function(err, buffer) {

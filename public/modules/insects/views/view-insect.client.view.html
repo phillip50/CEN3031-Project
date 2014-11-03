@@ -3,14 +3,14 @@
 		<h1>
             {{insect.name}} <small>{{insect.scientificName}}</small>
             <span class="pull-right">
-                <a class="btn btn-primary" data-ng-click="generatePDF();">
+                <a class="btn btn-default" data-ng-click="generatePDF();">
                     <i class="glyphicon glyphicon-print"></i> PDF
                 </a>
                 <span data-ng-show="authentication.user._id == insect.user._id">
-                    <a class="btn btn-primary" data-ng-href="/#!/insects/{{insect._id}}/edit" data-ng-show="authentication.user._id == insect.user._id">
-                        <i class="glyphicon glyphicon-edit"></i> Edit
+                    <a class="btn btn-default" data-ng-href="/#!/insects/{{insect._id}}/edit">
+                        <i class="glyphicon glyphicon-pencil"></i> Edit
                     </a>
-                    <a class="btn btn-primary" data-ng-click="remove();">
+                    <a class="btn btn-danger" data-ng-click="remove();">
                         <i class="glyphicon glyphicon-trash"></i> Delete
                     </a>
                 </span>

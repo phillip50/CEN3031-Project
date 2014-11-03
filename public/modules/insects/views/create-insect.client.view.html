@@ -5,64 +5,93 @@
 
 	<form name="insectForm" data-ng-submit="create()" novalidate>
 		<fieldset data-ng-hide="reviewForm">
-			<h2>Photo</h2>
 			<div class="row">
 				<div class="col-md-6">
-					<div class="form-group">
-						<label for="photoUpload">Photo</label>
-						<input id="photoUpload" type="file" data-valid-file data-ng-model="form.photoUpload" class="form-control" accept="image/*" data-ng-required="true" data-ng-file-select="form.image = $files[0]; form.photoPreview();">
-					</div>
-					<div class="form-group">
-						<label for="dateFound">Date Found</label>
-						<div class="input-group">
-							<input id="dateFound" type="text" class="form-control" data-datepicker-popup="{{datePicker.format}}" data-ng-model="form.dateFound" data-is-open="datePicker.opened" data-min-date="datePicker.minDate" data-max-date="datePicker.maxDate" data-datepicker-options="datePicker.options"  data-ng-required="true" data-close-text="Close">
-							<span class="input-group-btn">
-								<button type="button" class="btn btn-default" data-ng-click="datePicker.open($event)">
-									<i class="glyphicon glyphicon-calendar"></i>
-								</button>
-							</span>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Photo</h2>
+						</div>
+
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="photoUpload">File</label>
+								<input id="photoUpload" type="file" data-valid-file data-ng-model="form.photoUpload" class="form-control" accept="image/*" data-ng-required="true" data-ng-file-select="form.image = $files[0]; form.photoPreview();">
+							</div>
+							<div class="form-group">
+								<label for="dateFound">Date Found</label>
+								<div class="input-group">
+									<input id="dateFound" type="text" class="form-control" data-datepicker-popup="{{datePicker.format}}" data-ng-model="form.dateFound" data-is-open="datePicker.opened" data-min-date="datePicker.minDate" data-max-date="datePicker.maxDate" data-datepicker-options="datePicker.options"  data-ng-required="true" data-close-text="Close">
+									<span class="input-group-btn">
+										<button type="button" class="btn btn-default" data-ng-click="datePicker.open($event)">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
+									</span>
+								</div>
+							</div>
 						</div>
 					</div>
 
-					<h2>Info</h2>
-					<div class="form-group">
-						<label for="name">Name</label>
-						<input id="name" type="text" data-ng-model="form.name" class="form-control" placeholder="Name" required>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="scientificName">Scientific Name</label>
-						<div class="controls">
-							<input type="text" data-ng-model="form.scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">About</h2>
 						</div>
-					</div>
-					<div class="form-group">
-						<label for="locationTitle">Location</label>
-						<input id="locationTitle" type="text" data-ng-model="form.locationTitle" class="form-control" placeholder="Place" required>
-					</div>
-					<div class="form-group">
-						<label class="control-label" for="description">Description</label>
-						<div class="controls">
-							<textarea data-ng-model="form.description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="name">Name</label>
+								<input id="name" type="text" data-ng-model="form.name" class="form-control" placeholder="Name" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="scientificName">Scientific Name</label>
+								<div class="controls">
+									<input type="text" data-ng-model="form.scientificName" id="scientificName" class="form-control" placeholder="Scientific Name" required>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="locationTitle">Location</label>
+								<input id="locationTitle" type="text" data-ng-model="form.locationTitle" class="form-control" placeholder="Place" required>
+							</div>
+							<div class="form-group">
+								<label class="control-label" for="description">Description</label>
+								<div class="controls">
+									<textarea data-ng-model="form.description" id="description" class="form-control" cols="30" rows="10" placeholder="Description"></textarea>
+								</div>
+							</div>
 						</div>
 					</div>
 
-					<h2>Other</h2>
-					<div class="form-group">
-						<label class="control-label" for="commentsEnabled">
-							<input data-ng-model="form.commentsEnabled" id="commentsEnabled" type="checkbox" checked> Enable comments
-						</label>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Other</h2>
+						</div>
+
+						<div class="panel-body">
+							<div class="form-group">
+								<label class="control-label" for="commentsEnabled">
+									<input data-ng-model="form.commentsEnabled" id="commentsEnabled" type="checkbox" checked> Enable comments
+								</label>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="form-group col-md-6">
-					<label class="control-label">
-						Place found
-						<span data-ng-show="form.coordsSet" class="glyphicon glyphicon-ok" style="color: #3c763d;"></span>
-					</label>
-					<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.latitude" data-ng-required="true">
-					<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.longitude" data-ng-required="true">
-					<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" bounds="map.bounds" control="map.gmap">
-						<ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></ui-gmap-marker>
-					</ui-gmap-google-map>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Location</h2>
+						</div>
+
+						<div class="panel-body">
+							<label class="control-label">
+								Place found
+								<span data-ng-show="form.coordsSet" class="glyphicon glyphicon-ok" style="color: #3c763d;"></span>
+							</label>
+							<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.latitude" data-ng-required="true">
+							<input type="text" class="form-control hidden" data-ng-model="form.loc.coordinates.longitude" data-ng-required="true">
+							<ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" events="map.events" bounds="map.bounds" control="map.gmap">
+								<ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id"></ui-gmap-marker>
+							</ui-gmap-google-map>
+						</div>
+					</div>
 				</div>
 			</div>
 
@@ -74,6 +103,10 @@
 
 		<fieldset data-ng-show="reviewForm">
 			<h2>Review your data</h2>
+
+			<div data-ng-show="error" class="alert alert-danger" role="alert">
+				<strong data-ng-bind="error"></strong>
+			</div>
 
 			<dl class="dl-horizontal">
 				<dt>Name</dt>
@@ -102,10 +135,6 @@
 				<progressbar class="progress-striped" type="{{form.progress.type}}" max="form.progress.max" value="form.progress.current">
 					<span>{{form.progress.current}}%</span>
 				</progressbar>
-			</div>
-
-			<div data-ng-show="error" class="text-danger">
-				<strong data-ng-bind="error"></strong>
 			</div>
 
 			<div class="text-right">

@@ -1,9 +1,18 @@
 <section data-ng-controller="InsectsController" data-ng-init="find()">
 	<div class="page-header">
-		<h1>All Insects</h1>
+		<h1>All Insects
+			<span class="pull-right">
+				<a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user._id">
+					<i class="glyphicon glyphicon-plus"></i> New Insect
+				</a>
+				<a class="btn btn-default" data-ng-href="/#!/insects/map">
+					<i class="glyphicon glyphicon-globe"></i> View Map
+				</a>
+			</span>
+		</h1>
 		<br>
 		  Gallery:
-		  <span  class="nullable">
+		  <span class="nullable">
 		    <select ng-model="gallery" ng-options="gallery.name for gallery in gallerys">
 		      <option value="">-- choose gallery --</option>
 		    </select>

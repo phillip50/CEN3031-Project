@@ -345,41 +345,53 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 			});
 		};
 
-		// Area Page
+		// Map Page
 		$scope.lookup = function() {
-			$scope.insect = Insects.get({
-				insectId: $stateParams.insectsId
-			});
-
+			// Display insects on map
 			$scope.map = {
 				center: {
 					latitude: 29.6398801,
 					longitude: -82.3551082
 				},
 				zoom: 15,
+				gmap: null,
 				bounds: {},
 				options: {
 					scrollwheel: true,
 					streetViewControl: false
 				}
 			};
+			$scope.markers = [];
 
-			$scope.marker = {
-				id: 0,
-				coords: {
-					latitude: 29.6398801,
-					longitude: -82.3551082
-				},
-				options: { draggable: true },
-				events: {
-					dragend: function (marker, eventName, args) {
-						$scope.form.loc.coordinates.latitude = marker.getPosition().lat();
-						$scope.form.loc.coordinates.longitude = marker.getPosition().lng();
-						$scope.form.coordsSet = true;
-						$scope.$apply();
+			// Ready to manipulate map
+			GoogleMapApi.then(function(maps) {
+				var markersTemp = [];
+				var markers = function(i, insect) {
+					var marker = {
+						id: i,
+						latitude: insect.loc.coordinates[1],
+						longitude: insect.loc.coordinates[0],
+						options: {
+							icon: {
+								url: insect.image.small,
+								scaledSize: new google.maps.Size(50, 50)
+							}
+						},
+						title: insect.name,
+						caughtBy: insect.user.displayName,
+						location: insect.locationTitle
+					};
+					return marker;
+				};
+
+				Insects.query($scope.map.bounds, function(insects) {
+					for (var i = 0; i < insects.length; i++) {
+						markersTemp.push(markers(i, insects[i]));
 					}
-				}
-			};
+				});
+
+				$scope.markers = markersTemp;
+			});
 		};
 	}
 ]);

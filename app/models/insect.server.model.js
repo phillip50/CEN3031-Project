@@ -44,6 +44,12 @@ var InsectSchema = new Schema({
 			type: [Number], // [<longitude>, <latitude>]
 			required: 'Coordinates cannot be blank',
 			select: false
+		},
+		dateTaken: {
+			type: Date,
+			default: Date.now,
+			required: 'Date taken cannot be blank',
+			select: false
 		}
 	},
 	created: {

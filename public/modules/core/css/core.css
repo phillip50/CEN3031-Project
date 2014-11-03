@@ -1,5 +1,5 @@
-.content {
-	margin-top: 50px;
+.content .container section[data-ui-view] {
+	padding-top: 50px;
 }
 .undecorated-link:hover {
 	text-decoration: none;

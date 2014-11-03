@@ -1,0 +1,26 @@
+<section data-ng-controller="InsectsController" data-ng-init="lookup()" class="viewMap">
+    <div class="page-header">
+        <h1>Map
+            <span class="pull-right">
+                <a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user">
+                    <i class="glyphicon glyphicon-plus"></i> New Insect
+                </a>
+                <a class="btn btn-default" data-ng-href="/#!/insects">
+                    <i class="glyphicon glyphicon-th-large"></i> View List
+                </a>
+            </span>
+        </h1>
+    </div>
+
+    <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.gmap" draggable="true" options="map.options" bounds="map.bounds">
+        <ui-gmap-markers models="markers" fit="true" coords="'self'" options="'options'">
+            <ui-gmap-windows show="show">
+                  <div data-ng-non-bindable>
+                    <strong>{{title}}</strong><br>
+                    Caught By {{caughtBy}}<br>
+                    Location {{location}}
+                  </div>
+              </ui-gmap-windows>
+        </ui-gmap-markers>
+    </ui-gmap-google-map>
+</section>

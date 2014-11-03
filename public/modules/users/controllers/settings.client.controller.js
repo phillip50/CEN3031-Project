@@ -16,6 +16,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 				user.$update(function(response) {
 					$scope.success = true;
 					Authentication.user = response;
+					$location.path('/profile/');
 				}, function(response) {
 					$scope.error = response.data.message;
 				});
