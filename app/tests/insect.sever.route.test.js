@@ -83,13 +83,7 @@ describe('Insect Server Test', function() {
       );
     });
 
-    it('POST /insects should return 200',function(done){
-       request(app).post('/insects')
-      .set('Content-Type','application/json')
-      .write(JSON.stringify(insect))
-      .expect(200,done);
-    });
-  });
+   });
 
   afterEach(function(done) {
     Insect.remove(function() {
