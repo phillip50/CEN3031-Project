@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$scope', '$upload', '$stateParams', '$location', '$modal', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
-	function($scope, $upload, $stateParams, $location, $modal, Authentication, Insects, GoogleMapApi) {
+angular.module('insects').controller('InsectsController', ['$scope', '$http', '$upload', '$stateParams', '$location', '$modal', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
+	function($scope, $http, $upload, $stateParams, $location, $modal, Authentication, Insects, GoogleMapApi) {
 		$scope.authentication = Authentication;
 
 		$scope.gallerys = [
@@ -205,6 +205,16 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 				$scope.error = errorResponse.data.message;
 			});
 
+			$scope.insectDownload = function(size) {
+				$http.get('/insects/' + $scope.insect._id + '/download/' + size)
+				.success(function(data, status, headers, config) {
+				    $scope.downloadImage = data;
+			  	})
+				.error(function(data, status, headers, config) {
+				    $scope.error = data.message;
+				});
+			};
+
 			$scope.generatePDF = function() {
 				var docDefinition = {
 					content: [
@@ -288,36 +298,6 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 					created: '2014-10-02T18:46:39.936Z',
 					message: 'Wow, it\'s so small! I think Butterfree is better overall. It learns a couple of useful status-hindering attacks and learns a few Psychic-type attacks like Psybeam and Confusion. Butterfree has a better move pool the Beedrill. However Beedrill has overall better stats then Butterfree.'
 				}]*/
-
-			/* For confirm to delete
-			$scope.comfirmRemove = function() {
-				var modalInstance = $modal.open({
-					templateUrl: 'confirmRemove.html',
-					controller: 'InsectsController',
-					resolve: {
-						insect: function() {
-							return $scope.insect;
-						},
-        				remove: function() {
-							return $scope.remove;
-    					}
-					}
-				});
-
-				modalInstance.result.then(function() {
-					$log.info('Modal dismissed at: ' + new Date());
-				});
-			};
-
-			$scope.ok = function() {
-				 console.log('close');
-				$modalInstance.close();
-				$scope.remove();
-			};
-
-			$scope.cancel = function() {
-				$modalInstance.dismiss('cancel');
-			};*/
 		};
 
 		// Edit Insect Page
@@ -384,7 +364,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$upload', 
 					return marker;
 				};
 
-				Insects.query($scope.map.bounds, function(insects) {
+				Insects.query(function(insects) {
 					for (var i = 0; i < insects.length; i++) {
 						markersTemp.push(markers(i, insects[i]));
 					}

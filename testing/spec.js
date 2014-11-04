@@ -5,8 +5,8 @@ describe('bugs homepage', function() {
 	browser.driver.sleep(2000);
 	//browser.wait(element(by.id("profile")).isPresent);
 	element(by.id('signin')).click();
-	element(by.id('username')).sendKeys('q');
-	element(by.id('password')).sendKeys('qwertyuiop');
+	element(by.id('username')).sendKeys('test');
+	element(by.id('password')).sendKeys('testtest');
 
 	browser.driver.sleep(2000);
 	element(by.id('signin')).click();

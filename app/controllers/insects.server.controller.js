@@ -89,9 +89,15 @@ exports.create = function(req, res) {
 					});
 				}
 				// No GPS exif data (I'm sure there's a better way to write this)
-				else if (!image || !image.hasOwnProperty('Profile-EXIF') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude Ref') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude Ref')) {
+				else if (!image.hasOwnProperty('Profile-EXIF') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude Ref') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude Ref')) {
 					return res.status(400).send({
 						message: 'Could not find GPS data in photo.'
+					});
+				}
+				// No Date exif data
+				else if (!image.hasOwnProperty('Profile-EXIF') || !image['Profile-EXIF'].hasOwnProperty('Date Time Original')) {
+					return res.status(400).send({
+						message: 'Could not find date and time in photo.'
 					});
 				}
 
@@ -170,6 +176,40 @@ exports.read = function(req, res) {
 };
 
 /**
+* Download insect's image
+*/
+exports.downloadImage = function(req, res) {
+	var size = req.params.size,
+		insectId = req.params.insectId;
+
+	// Not a valid size
+	if (['small', 'medium', 'large', 'original'].indexOf(size) === -1) {
+		return res.status(400).send({
+			message: 'Invalid image size for download.'
+		});
+	}
+
+	// Fetch image
+	Insect.findById(insectId).select('image.' + size + ' user').exec(function(err, insect) {
+		if (err) return res.status(400).send({
+			message: errorHandler.getErrorMessage(err)
+		});
+		if (!insect) return res.status(400).send({
+			message: 'Failed to load insect.'
+		});
+		if (insect.user !== req.user.id && size === 'original') return res.status(403).send({
+			message: 'You are not authorized to download the original image.'
+		});
+
+		res.set({
+			'Content-Type': 'application/octet-stream',
+			'Content-Disposition': 'attachment;filename=\"new.png\"'
+		});
+		res.jsonp(insect.image[size]);
+	});
+};
+
+/**
  * Update a insect
  */
 exports.update = function(req, res) {
@@ -224,8 +264,17 @@ exports.list = function(req, res) {
 /**
  * Insect middleware
  */
-exports.insectByID = function(req, res, next, id) {
+exports.insectByIDLargeImage = function(req, res, next, id) {
 	Insect.findById(id).select('+image.large').populate('user', 'displayName').exec(function(err, insect) {
+		if (err) return next(err);
+		if (!insect) return next(new Error('Failed to load insect ' + id));
+		req.insect = insect;
+		next();
+	});
+};
+
+exports.insectByID = function(req, res, next, id) {
+	Insect.findById(id).populate('user', 'displayName').exec(function(err, insect) {
 		if (err) return next(err);
 		if (!insect) return next(new Error('Failed to load insect ' + id));
 		req.insect = insect;

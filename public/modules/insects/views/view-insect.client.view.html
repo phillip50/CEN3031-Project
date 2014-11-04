@@ -1,4 +1,4 @@
-<section data-ng-controller="InsectsController" data-ng-init="findOne()">
+<section data-ng-controller="InsectsController" data-ng-init="findOne()" class="viewInsects">
     <div class="page-header clearfix">
 		<h1>
             {{insect.name}} <small>{{insect.scientificName}}</small>
@@ -10,92 +10,135 @@
                     <a class="btn btn-default" data-ng-href="/#!/insects/{{insect._id}}/edit">
                         <i class="glyphicon glyphicon-pencil"></i> Edit
                     </a>
-                    <a class="btn btn-danger" data-ng-click="remove();">
-                        <i class="glyphicon glyphicon-trash"></i> Delete
-                    </a>
+                    <div class="btn-group" dropdown is-open="deleteButton.isopen">
+                        <button type="button" class="btn btn-danger dropdown-toggle">
+                            <i class="glyphicon glyphicon-trash"></i> Delete
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li class="dropdown-header">You are about to delete this insect.</li>
+                            <li><a data-ng-click="remove();">Delete</a></li>
+                            <li><a data-ng-click="deleteButton.isopen = false;">Cancel</a></li>
+                        </ul>
+                    </div>
                 </span>
             </span>
         </h1>
 	</div>
 
+    <div data-ng-show="error" class="alert alert-danger" role="alert">
+        <strong data-ng-bind="error"></strong>
+    </div>
+
+    <img data-ng-src="{{downloadImage}}">
+
+    <div class="well well-sm text-center">
+        <img style="max-width: 100%; height: 400px;" data-ng-src="{{insect.image.large}}">
+        <div class="btn-group" dropdown is-open="downloadButton.isopen">
+            <button type="button" class="btn btn-default dropdown-toggle">
+                <i class="glyphicon glyphicon-save"></i> Download <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a data-ng-click="insectDownload('large');">Large</a></li>
+                <li><a data-ng-click="insectDownload('medium');">Medium</a></li>
+                <li><a data-ng-click="insectDownload('small');">Small</a></li>
+                <li class="divider" data-ng-show="authentication.user._id == insect.user._id">></li>
+                <li><a data-ng-click="insectDownload('original');" data-ng-show="authentication.user._id == insect.user._id">>Original</a></li>
+            </ul>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-8">
-            <div class="well well-sm text-center">
-				<img style="max-width: 100%; height: 380px;" ng-src="{{insect.image.large}}">
-            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">About</h2>
+                </div>
 
-            <h3 class="vspace">Info</h3>
-            <dl class="dl-horizontal">
-                <dt>Caught By</dt>
-                <dd><a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></dd>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>Caught By</dt>
+                        <dd><a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></dd>
 
-                <dt>Date Found</dt>
-                <dd>{{insect.dateFound | date:'longDate'}}</dd>
+                        <dt>Date Found</dt>
+                        <dd>{{insect.dateFound | date:'longDate'}}</dd>
 
-                <dt>Location</dt>
-                <dd>{{insect.locationTitle}}</dd>
+                        <dt>Location</dt>
+                        <dd>{{insect.locationTitle}}</dd>
 
-                <dt>Description</dt>
-                <dd>{{insect.description}} <em data-ng-show="!insect.description" class="text-muted">No description.</em></dd>
-            </dl>
-
-            <div data-ng-show="insect.commentsEnabled">
-                <h3 class="vspace">Comments</h3>
-                <ul class="media-list" data-ng-show="insect.comments">
-                    <li class="media" ng-repeat="comment in insect.comments">
-                        <a class="pull-left" data-ng-href="#!/profile/{{comment.user._id}}">
-                            <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" style="width: 64px; height: 64px;">
-                        </a>
-                        <div class="media-body">
-                            <h4 class="media-heading">
-                                <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
-                                <small class="pull-right" data-ng-bind="comment.created | date:'mediumDate'"></small>
-                            </h4>
-                            <p data-ng-bind="comment.message"></p>
-                        </div>
-                    </li>
-                </ul>
-                <p data-ng-hide="insect.comments">There are no comments for this insect. <span data-ng-show="authentication.user">Why don't you add one?</span></p>
-
-                <div data-ng-show="authentication.user">
-                    <h3>Add a new Comment</h3>
-                    <form name="insectComment" class="form-horizontal" data-ng-submit="update(insectForm.$valid)" novalidate>
-                        <fieldset>
-                            <label style="font-weight: normal;" class="control-label" for="comment">Commenting as <strong>{{authentication.user.displayName}}</strong></label>
-                            <textarea name="comment" id="content" class="form-control" cols="30" rows="10" placeholder="Write a comment." required></textarea>
-                            <input type="submit" value="Submit" class="btn btn-default">
-                        </fieldset>
-                    </form>
+                        <dt>Description</dt>
+                        <dd>{{insect.description}} <em data-ng-show="!insect.description" class="text-muted">No description.</em></dd>
+                    </dl>
                 </div>
             </div>
 
-            <div data-ng-show="!insect.commentsEnabled && authentication.user._id == insect.user._id">
-                <h3 class="vspace">Comments</h3>
-                <div class="alert alert-info" role="alert">
-                    <strong>Heads Up!</strong> You have disabled commenting for this insect.
+            <div data-ng-show="insect.commentsEnabled">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Comments</h2>
+                    </div>
+
+                    <div class="panel-body">
+                        <p data-ng-hide="insect.comments">There are no comments for this insect. <span data-ng-show="authentication.user">Why don't you add one?</span></p>
+
+                        <ul class="media-list" data-ng-show="insect.comments">
+                            <li class="media" ng-repeat="comment in insect.comments">
+                                <a class="pull-left" data-ng-href="#!/profile/{{comment.user._id}}">
+                                    <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" style="width: 64px; height: 64px;">
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
+                                        <small class="pull-right" data-ng-bind="comment.created | date:'mediumDate'"></small>
+                                    </h4>
+                                    <p data-ng-bind="comment.message"></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel panel-default" data-ng-show="authentication.user">
+                    <div class="panel-heading">
+                        <h2 class="panel-title">Add a new Comment</h2>
+                    </div>
+
+                    <div class="panel-body">
+                        <form name="insectComment" class="form-horizontal" data-ng-submit="update(insectForm.$valid)" novalidate>
+                            <fieldset>
+                                <label style="font-weight: normal;" class="control-label" for="comment">Commenting as <strong>{{authentication.user.displayName}}</strong></label>
+                                <textarea name="comment" id="content" class="form-control" cols="30" rows="10" placeholder="Write a comment." required></textarea>
+                                <input type="submit" value="Submit" class="btn btn-default">
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default" data-ng-show="!insect.commentsEnabled && authentication.user._id == insect.user._id">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Comments</h2>
+                </div>
+
+                <div class="panel-body">
+                    <p class="alert alert-info" role="alert">
+                        You have disabled commenting for this insect.
+                    </p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <ui-gmap-google-map center="insectMap.center" zoom="insectMap.zoom" draggable="true" options="insectMap.options" bounds="insectMap.bounds">
-				<ui-gmap-marker coords="insectMarker.coords" options="insectMarker.options" events="insectMarker.events" idkey="insectMarker.id"></ui-gmap-marker>
-			</ui-gmap-google-map>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="panel-title">Location Found</h2>
+                </div>
 
-            <!--<h3 class="vspace">Insects Nearby</h3>-->
+                <div class="panel-body">
+                    <ui-gmap-google-map center="insectMap.center" zoom="insectMap.zoom" draggable="true" options="insectMap.options" bounds="insectMap.bounds">
+                        <ui-gmap-marker coords="insectMarker.coords" options="insectMarker.options" events="insectMarker.events" idkey="insectMarker.id"></ui-gmap-marker>
+                    </ui-gmap-google-map>
+                </div>
+            </div>
         </div>
     </div>
-
-    <script type="text/ng-template" id="confirmRemove.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Delete {{insect.name}}</h3>
-        </div>
-        <div class="modal-body">
-            Are you sure you want to delete {{insect.name}}? It'll also will be removed from any galleries it is apart of.
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
-            <button class="btn btn-warning" data-ng-click="ok()">Remove</button>
-        </div>
-    </script>
 </section>

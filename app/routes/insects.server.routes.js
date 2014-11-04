@@ -12,11 +12,16 @@ module.exports = function(app) {
 		.get(insects.list)
 		.post(users.requiresLogin, insects.create);
 
-	app.route('/insects/:insectId')
+	app.route('/insects/:insectIdLargeImage')
 		.get(insects.read)
 		.put(users.requiresLogin, insects.hasAuthorization, insects.update)
 		.delete(users.requiresLogin, insects.hasAuthorization, insects.delete);
 
+	app.route('/insects/:insectId/download/:size')
+		.get(users.requiresLogin, insects.downloadImage);
+
 	// Finish by binding the insect middleware
 	app.param('insectId', insects.insectByID);
+	app.param('insectIdLargeImage', insects.insectByIDLargeImage);
+
 };

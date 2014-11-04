@@ -1,3 +1,8 @@
 h3.vspace {margin-bottom: 20px;}
 .angular-google-map-container { height: 400px; }
 .viewMap .angular-google-map-container {height: 75vh; min-height: 500px;}
+
+.viewInsects .angular-google-map-container {height: 300px;}
+.viewInsects .well {position: relative;}
+.viewInsects .well div[dropdown] {position: absolute; bottom: 9px; right: 9px;}
+.viewInsects .dropdown-menu li a {cursor: pointer;}
