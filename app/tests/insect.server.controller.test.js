@@ -1,13 +1,14 @@
 'use strict';
 
 var should = require('should'),
+     request = require('supertest'),
      app = require('../../server'),
      mongoose = require('mongoose'),
      Insect = mongoose.model('Insect'),
      User = mongoose.model('User'),
      insectController = require('../../app/controllers/insects'),
      httpMocks = require('node-mocks-http'),
-     request = require('supertest');
+     supertest = request(app);
 
 var user,res,req,insect2,insect;
 
@@ -21,7 +22,7 @@ describe('Insect Controller Tests', function() {
       email: 'test@test.com',
       username: 'username',
       password: 'password',
-      ufid: '11110000',
+      gatorlink: '11110000',
       classCode: '123',
       school:'University of Florida'
     });
@@ -29,12 +30,12 @@ describe('Insect Controller Tests', function() {
   req = httpMocks.createRequest({
       method: 'POST',
       url: '/insect',
-      body: insect
+      body: {data: insect2, file: '../../public/images/bug1.png'} 
   });
 
   //res = httpMocks.createResponse();
 
-  insect2 = new Insect({
+  insect = new Insect({
         image: {
           small: 'data:image/jpeg;base64,...etc',
           medium: 'data:image/jpeg;base64,...etc',
@@ -57,7 +58,7 @@ describe('Insect Controller Tests', function() {
       });
 
     user.save(function() {
-      insect = new Insect({
+      insect2 = new Insect({
         image: {
           small: 'data:image/jpeg;base64,...etc',
           medium: 'data:image/jpeg;base64,...etc',
@@ -86,53 +87,63 @@ describe('Insect Controller Tests', function() {
   });
 
 
-/*
+
    describe('Creating Insects', function() {
-      it('should create an inesct', function(done) {
-      request(app)
-      .post('/insects')
-      .send({data: insect2, file: '../../public/images/bug1.png'})
-      .expect(200)
-        .end(function(err, res){
-            if (err) throw err;
-        });
+
+
+       it('should create an insect', function(done) {
+             supertest.post('/insects')
+              //.field('data', insect)
+             //.field('user', user)
+              .attach('file', __dirname + '/bug1.png')
+              .expect(200)
+              .end(function(err, res){
+                if (err) { return done(err); }
+                done();
+            });
     });
+
 
     it('400 response to create an insect wih no exif data', function(done) {
       insect.locationTitle = '';
-      req.body = insect;
-      insectController.create(req,res, function() {
-        var status = JSON.parse(res._getStatusCode());
-        status.should.equal(400);
-        done();
-      });
+       supertest.post('/insects')
+              .send({data:'insect'})
+              .attach('file', __dirname + '/bug1.png')
+              .expect(400)
+              .end(function(err, res){
+                if (err) { return done(err); }
+                done();
+            });
         });
 
 
     it('400 response when no  matching exif data', function(done) {
-      insect.locationTitle = '';
-      req.body = insect;
-      insectController.create(req,res, function() {
-        var status = JSON.parse(res._getStatusCode());
-        status.should.equal(400);
-        done();
-      });
-        });
+       supertest.post('/insects')
+              .send({data:insect})
+              .attach('file', __dirname + '/bug1.png')
+              .expect(400)
+              .end(function(err, res){
+                if (err) { return done(err); }
+                done();
+            });
+        });;
 
     it('RES 400 when creating an insect that does have a png or jpeg type', function(done) {
       insect.contentType = 'image/jpeg';
-      req.body = insect;
-      insectController.create(req,res, function() {
-        var status = JSON.parse(res._getStatusCode());
-        status.should.equal(400);
-        done();
-      });
+            supertest.post('/insects')
+              .send({data:insect})
+              .attach('file', __dirname + '/bug1.png')
+              .expect(400)
+              .end(function(err, res){
+                if (err) { return done(err); }
+                done();
+            });
         });
 
 
 
      });
-*/
+
  /* describe('Updating insects', function() {
     it('be able to update an insect', function(done) {
         insectController.update(req, res, function() {

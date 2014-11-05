@@ -18,7 +18,7 @@ describe('Insect Server Test', function() {
       email: 'test@test.com',
       username: 'username',
       password: 'password',
-      ufid: '11110000',
+      gatorlink: '11110000',
       classCode: '123',
       school:'University of Florida'
     });
