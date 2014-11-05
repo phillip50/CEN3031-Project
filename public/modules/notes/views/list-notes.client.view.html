@@ -7,7 +7,7 @@
 			<h4 class="list-group-item-heading" data-ng-bind="gallery.name"></h4>
 			<div class = "row">
 				<div class ="col col-sm-2" data-ng-repeat="insect in insects | filter: galleryName">
-					<img style="height: 100px;" class="list-group-item-text" ng-src="{{insect.image}}" ></img>
+					<img style="height: 100px;" class="list-group-item-text" ng-src="{{insect.image.small}}" ></img>
 				</div>
 			</div>
 		</a>
