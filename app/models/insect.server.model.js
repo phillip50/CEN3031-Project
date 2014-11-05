@@ -62,6 +62,12 @@ var InsectSchema = new Schema({
 		trim: true,
 		required: 'Name cannot be blank'
 	},
+	galleryName: {
+		type: String,
+		default: '',
+		trim: true,
+		required: 'Name cannot be blank'
+	},
 	scientificName: {
 		type: String,
 		default: '',

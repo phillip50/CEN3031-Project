@@ -5,103 +5,103 @@
  */
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
-	Gallery = mongoose.model('Gallery'),
+	Note = mongoose.model('Note'),
 	_ = require('lodash');
 
 /**
- * Create a gallery
+ * Create a note
  */
 exports.create = function(req, res) {
-	var gallery = new Gallery(req.body);
-	gallery.user = req.user;
+	var note = new Note(req.body);
+	note.user = req.user;
 
-	gallery.save(function(err) {
+	note.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(gallery);
+			res.jsonp(note);
 		}
 	});
 
 };
 
 /**
- * Show the current gallery
+ * Show the current note
  */
 exports.read = function(req, res) {
-	res.jsonp(req.gallery);
+	res.jsonp(req.note);
 };
 
 /**
- * Update a gallery
+ * Update a note
  */
 exports.update = function(req, res) {
-	var gallery = req.gallery;
+	var note = req.note;
 
-	gallery = _.extend(gallery, req.body);
+	note = _.extend(note, req.body);
 
-	gallery.save(function(err) {
+	note.save(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(gallery);
+			res.jsonp(note);
 		}
 	});
 };
 
 /**
- * Delete an gallery
+ * Delete an note
  */
 exports.delete = function(req, res) {
-	var gallery = req.gallery;
+	var note = req.note;
 
-	gallery.remove(function(err) {
+	note.remove(function(err) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(gallery);
+			res.jsonp(note);
 		}
 	});
 };
 
 /**
- * List of Gallerys
+ * List of Notes
  */
 exports.list = function(req, res) {
-	Gallery.find().sort('-created').populate('user', 'displayName').exec(function(err, gallerys) {
+	Note.find().sort('-created').populate('user', 'displayName').exec(function(err, notes) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.jsonp(gallerys);
+			res.jsonp(notes);
 		}
 	});
 };
 
 /**
- * Gallery middleware
+ * Note middleware
  */
-exports.galleryByID = function(req, res, next, id) {
-	Gallery.findById(id).populate('user', 'displayName').exec(function(err, gallery) {
+exports.noteByID = function(req, res, next, id) {
+	Note.findById(id).populate('user', 'displayName').exec(function(err, note) {
 		if (err) return next(err);
-		if (!gallery) return next(new Error('Failed to load gallery ' + id));
-		req.gallery = gallery;
+		if (!note) return next(new Error('Failed to load note ' + id));
+		req.note = note;
 		next();
 	});
 };
 
 /**
- * Gallery authorization middleware
+ * Note authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.gallery.user.id !== req.user.id) {
+	if (req.note.user.id !== req.user.id) {
 		return res.status(403).send({
 			message: 'User is not authorized'
 		});

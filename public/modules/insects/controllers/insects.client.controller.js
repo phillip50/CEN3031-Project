@@ -9,7 +9,10 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 			{name: 'Bug Type'},
 			{name: 'Flying Type'}
 		];
-
+		$scope.addGallery = function(gallery) {
+			var newG = {name: gallery};
+			$scope.gallerys.push(newG);
+		};
 		$scope.createPage = function() {
 			$scope.form = {
 				loc: {
@@ -111,6 +114,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 			var insect = new Insects({
 				name: this.form.name,
+				galleryName: this.form.galleryName,
 				scientificName: this.form.scientificName,
 				description: this.form.description,
 				dateFound: this.form.dateFound,
@@ -133,6 +137,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 				// clear form if they make new insect
 				$scope.form.name = '';
+				$scope.form.galleryName = '';
 				$scope.form.scientificName = '';
 				$scope.form.description = '';
 				$scope.form.dateCreated = new Date();
@@ -173,6 +178,26 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 		// List Insects Pages
 		$scope.find = function() {
 			$scope.insects = Insects.query();
+			$scope.updateGallery = function() {
+				console.log($scope.insects[this.$index]);
+				$scope.insect = $scope.insects[this.$index];
+				console.log(this.insect.galleryName.name);
+				var insect = new Insects({
+					_id: $scope.insect._id,
+					name: $scope.insect.galleryName.name,
+					scientificName: $scope.insect.scientificName,
+					description: $scope.insect.description,
+					commentsEnabled: $scope.insect.commentsEnabled,
+					locationTitle: $scope.insect.locationTitle,
+					galleryName: $scope.insect.galleryName.name
+				});
+				console.log($scope.insect.galleryName.name);
+				insect.$update(function() {
+					$location.path('insects');
+				}, function(errorResponse) {
+					$scope.error = errorResponse.data.message;
+				});
+			};
 		};
 
 		// View Insect Page

@@ -63,6 +63,7 @@ exports.create = function(req, res) {
 
 		// Parsed, now insert data into new insect
 		insect.name = fields.name;
+		insect.galleryName = fields.galleryName;
 		insect.scientificName = fields.scientificName;
 		if (fields.description !== 'undefined') insect.description = fields.description;
 		insect.dateFound = JSON.parse(fields.dateFound);

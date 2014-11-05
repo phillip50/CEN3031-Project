@@ -1,0 +1,29 @@
+<section data-ng-controller="NotesController" data-ng-init="findOne()">
+	<div class="page-header">
+		<h1 data-ng-bind="thesenotes.title"></h1>
+	</div>
+	<div>
+		<a class="btn btn-primary" href="/#!/notes/{{note._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+		<div class="row" ng-repeat="note in thesenotes">
+			<div class="col">
+				<div class="col col-md-6" ng-repeat="insect in thesenotes.insectsInGal">
+					<div class="row">
+						<div class="col">
+							<img src={{insect.image.small}}></img>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<h3>Note: {{note.content}}</h3>
+				<textarea class="ng-pristine ng-valid" rows="6" style="height:3em" data-ng-model="note.content"></textarea>
+			</div>
+		</div>
+
+	</div>
+</section>

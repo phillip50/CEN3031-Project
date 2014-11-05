@@ -11,12 +11,26 @@
 			</span>
 		</h1>
 		<br>
-		  Gallery:
+		<div class="row">
+		<div class="col col-md-3">
+		  Sort by Gallery:
 		  <span class="nullable">
-		    <select ng-model="gallery" ng-options="gallery.name for gallery in gallerys">
-		      <option value="">-- choose gallery --</option>
+		    <select data-ng-model="galleryName" ng-options="gallery.name for gallery in gallerys">
+		      <option value="">-- No gallery selected --</option>
 		    </select>
 		  </span><br/>
+		 </div>
+		 <div class="col col-md-3">
+		 	<form name="insectForm" data-ng-submit="addGallery(thisGallery.content)" novalidate style="display: inline-block;">
+			<fieldset>
+				<span class="form-group" ng-class="{'has-error' : submitted && insectForm.galleryName.$invalid}" >
+		 		Add Gallery {{gallery}}: <textarea class="form-control ng-pristine ng-valid" rows="3" style="height:3em" data-ng-model="thisGallery.content" >
+		 		</textarea>
+				<input type="submit" value="+" class="btn btn-mini btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-submit="addGallery(this)" >
+		 		</span>
+		 	</fieldset>
+			</form>
+		</div>
 	</div>
 
 	<div class="alert alert-warning text-center" data-ng-if="insects.$resolved && !insects.length">
@@ -24,16 +38,36 @@
 	</div>
 
 	<div class="row">
-		<div data-ng-repeat="insect in insects | filter:gallery" class="col-sm-6 col-md-4 col-lg-3">
+		<div data-ng-repeat="insect in insects | filter:galleryName" class="col-sm-6 col-md-4 col-lg-3">
 			<div class="thumbnail">
 				<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
 				<div class="caption clearfix">
 					<h3 data-ng-bind="insect.name"></h3>
 					<p>
-						{{insect.description}}
+						About: {{insect.description}} <br><br>
+						Gallery: {{insect.galleryName.name}}
 						<em data-ng-show="!insect.description" class="text-muted">No description.</em>
+
 					</p>
-					<p class="text-right"><a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary" role="button">View</a></p>
+					
+					<form name="insectForm" data-ng-submit="updateGallery(insect)" novalidate>
+						<fieldset>
+						<div class="form-group" ng-class="{'has-error' : submitted && insectForm.galleryName.$invalid}">
+						Add to Gallery: {{$scope.newGallery}}
+						  <span class="nullable">
+						    <select name="galleryName" data-ng-model="insect.galleryName" id="galleryName"  class="form-control" ng-options="gallery.name for gallery in gallerys">
+						      <option value="">-- No gallery --</option>
+						    </select>
+							</input>
+						  </span><br/>
+						  	<div class="form-group">
+							<input type="submit" value="Update" class="btn btn-primary" data-ng-disabled="insectForm.$invalid">
+							</div>
+						</div>
+					</fieldset>
+
+				</form>
+				<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary" role="button">View</a>
 				</div>
 			</div>
 		</div>
