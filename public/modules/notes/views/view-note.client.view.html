@@ -9,6 +9,10 @@
 		<a class="btn btn-primary" data-ng-click="remove();">
 			<i class="glyphicon glyphicon-trash"></i>
 		</a>
+		<a class="btn btn-default" data-ng-click="generatePDF();">
+                    <i class="glyphicon glyphicon-print"></i> PDF
+        </a>
+        <br><br>
 		<div class="row" ng-repeat="note in thesenotes">
 			<div class="col">
 				<div class="col col-md-6" ng-repeat="insect in thesenotes.insectsInGal">

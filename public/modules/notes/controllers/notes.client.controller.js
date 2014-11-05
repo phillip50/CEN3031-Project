@@ -18,6 +18,11 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 			}
 		};
 		$scope.markers = [];
+		$scope.docDefinition = {};
+		$scope.generatePDF = function() {
+				// Open PDF
+			pdfMake.createPdf($scope.docDefinition).open();
+		};
 
 		$scope.gallerys = [];
 		$scope.insects = [];
@@ -93,6 +98,61 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 						theseInsects.push({latitude: insects[i].loc.coordinates[1],longitude: insects[i].loc.coordinates[0], image: insects[i].image, title: insects[i].name,location: insects[i].locationTitle});
 						//markersTemp.push(markers(i, insects[i]));
 					}
+							$scope.docDefinition.push( {
+					content: [
+					{text: 'Insect Guide', style: 'header'},
+					{
+						style: 'table',
+						table: {
+							widths: [200, '*'],
+							body: [
+								[
+									{text: 'Photo', style: 'tableHeader'},
+									{text: 'Infomation', style: 'tableHeader'}
+								], [
+									{image: insects[i].image.small, width: 200},
+									{
+										table: {
+											body: [
+												[{text: 'Name', bold: true}, insects[i].name],
+												[{text: 'Scientific Name', bold: true}, insects[i].scientificName],
+												[{text: 'Description', bold: true}, insects[i].description],
+												[{text: 'Date Found', bold: true}, insects[i].dateFound],
+												[{text: 'Location Found', bold: true}, insects[i].locationTitle],
+											],
+										},
+										layout: 'noBorders'
+									}
+									//{text: 'nothing interesting here', italics: true, color: 'gray'}
+								]
+							]
+						},
+						layout: 'lightHorizontalLines',
+						pageBreak: 'before'
+					}],
+					styles: {
+						header: {
+							fontSize: 18,
+							bold: true,
+							margin: [0, 0, 0, 10]
+						},
+						subheader: {
+							fontSize: 16,
+							bold: true,
+							margin: [0, 10, 0, 5]
+						},
+						table: {
+							margin: [0, 5, 0, 15]
+						},
+						tableHeader: {
+							bold: true,
+							fontSize: 13,
+							color: 'black'
+						}
+					}
+				});
+
+
 				}
 			});
 			//$scope.markers = markersTemp;
@@ -103,6 +163,9 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 				content: "Sample note"
 			};
 			console.log($scope.thesenotes);
+
+
+
 
 		};
 	}
