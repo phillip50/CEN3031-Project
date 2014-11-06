@@ -1,8 +1,8 @@
 <section data-ng-controller="ProfileController" data-ng-init="findUser()">
 	<div class="page-header">
 		<h1>
-			<span data-ng-bind="foundUser.displayName"></span>'s Profile
-			<span class="pull-right" data-ng-show="user._id == foundUser._id">
+			<span data-ng-bind="foundUser.info.displayName"></span>'s Profile
+			<span class="pull-right" data-ng-show="user._id == foundUser.info._id">
 				<a class="btn btn-default" data-ng-href="/#!/settings/profile">
 					<i class="glyphicon glyphicon-pencil"></i> Edit
 				</a>
@@ -11,47 +11,53 @@
 	</div>
 
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<dl class="dl-horizontal">
 				<dt>About</dt>
-				<dd>{{foundUser.userDescription}} <em data-ng-show="!foundUser.userDescription" class="text-muted">{{foundUser.displayName}} hasn't written a description yet.</em></dd>
+				<dd>{{foundUser.info.userDescription}} <em data-ng-show="!foundUser.info.userDescription" class="text-muted">{{foundUser.info.displayName}} hasn't written a description yet.</em></dd>
 
 				<dt>School</dt>
-				<dd>{{foundUser.school}}</dd>
+				<dd>{{foundUser.info.school}}</dd>
 
 				<dt>Class</dt>
-				<dd>{{foundUser.classCode}}</dd>
+				<dd>{{foundUser.info.classCode}}</dd>
 
 				<dt>Gatorlink</dt>
-				<dd>{{foundUser.gatorlink}}</dd>
+				<dd>{{foundUser.info.gatorlink}}</dd>
 			</dl>
 		</div>
+	</div>
 
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h2 class="panel-title">Galleries <span class="badge">3</span></h2>
- 				</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">Galleries <span class="badge" data-ng-bind="foundUser.insects.length"></span></h2>
+		</div>
 
- 				<div class="panel-body">
-					<a href="#!/galleries"><img style="height: 75px;" src="/images/bug1.png"></a>
-					<a href="#!/galleries"><img style="height: 75px;" src="/images/bug2.jpg"></a>
-					<a href="#!/galleries"><img style="height: 75px;" src="/images/bug3.png"></a>
-				</div>
-			</div>
+		<div class="panel-body">
+			<a href="#!/galleries"><img style="height: 75px;" src="/images/bug1.png"></a>
+			<a href="#!/galleries"><img style="height: 75px;" src="/images/bug2.jpg"></a>
+			<a href="#!/galleries"><img style="height: 75px;" src="/images/bug3.png"></a>
+		</div>
+	</div>
 
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h2 class="panel-title">Insects <span class="badge">6</span></h2>
-				</div>
+	<div class="page-header">
+		<h2>
+			<span data-ng-bind="foundUser.info.displayName"></span> Insects
+			<span class="badge" data-ng-bind="foundUser.insects.length"></span>
+		</h2>
+	</div>
 
-				<div class="panel-body">
-					<a href="#!/insects"><img style="height: 75px;" src="/images/bug1.png"></a>
-					<a href="#!/insects"><img style="height: 75px;" src="/images/bug2.jpg"></a>
-					<a href="#!/insects"><img style="height: 75px;" src="/images/bug3.png"></a>
-					<a href="#!/insects"><img style="height: 75px;" src="/images/bug4.jpg"></a>
-					<a href="#!/insects"><img style="height: 75px;" src="/images/bug5.png"></a>
-					<a href="#!/insects"><img style="height: 75px;" src="/images/combee.png"></a>
+	<div class="row">
+		<div class="col-sm-6 col-md-4 col-lg-3" data-ng-repeat="insect in foundUser.insects">
+			<div class="thumbnail">
+				<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+				<div class="caption clearfix">
+					<h3 data-ng-bind="insect.name"></h3>
+					<p>
+						{{insect.description}}
+						<em data-ng-show="!insect.description" class="text-muted">No description.</em>
+					</p>
+					<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary pull-right" role="button">View</a>
 				</div>
 			</div>
 		</div>

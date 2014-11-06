@@ -2,6 +2,7 @@
 
 module.exports = {
 	db: 'mongodb://localhost/bugs-dev',
+	//db: 'mongodb://(username):(password)@ds051630.mongolab.com:51630/theinsectcollection',
 	app: {
 		title: 'The Insect Collection - Development Environment'
 	},

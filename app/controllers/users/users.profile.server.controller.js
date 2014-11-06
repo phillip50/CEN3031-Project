@@ -7,7 +7,8 @@ var _ = require('lodash'),
 	errorHandler = require('../errors'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	User = mongoose.model('User');
+	User = mongoose.model('User'),
+	Insect = mongoose.model('Insect');
 
 /**
  * Update user details
@@ -53,6 +54,26 @@ exports.update = function(req, res) {
 */
 exports.read = function(req, res) {
 	res.jsonp(req.profile);
+};
+
+/**
+* Show the found user with their insects
+*/
+exports.profileRead = function(req, res) {
+	var userId = req.user.id;
+
+	Insect.find({user: userId}).select('name image.small').sort('-created').exec(function(err, insects) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp({
+				info: req.profile,
+				insects: insects
+			});
+		}
+	});
 };
 
 /**
