@@ -43,7 +43,7 @@ exports.create = function(req, res) {
 		var longitudePercentError = Math.abs((given[0] - wanted[0]) / wanted[0]);
 		var latitudePercentError = Math.abs((given[1] - wanted[1]) / wanted[1]);
 
-		if (longitudePercentError < 0.00005 && latitudePercentError < 0.00005) return true;
+		if (longitudePercentError < 0.000075 && latitudePercentError < 0.000075) return true;
 		else return false;
 	}
 
@@ -257,7 +257,20 @@ exports.delete = function(req, res) {
  * List of Insects
  */
 exports.list = function(req, res) {
-	Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').exec(function(err, insects) {
+	var query = req.query,
+		limit = 50;
+	if (query.hasOwnProperty('limit')) {
+		if (parseInt(query.limit, 10) && parseInt(query.limit, 10) <= 50 && parseInt(query.limit, 10) > 0) {
+			limit = parseInt(query.limit, 10);
+		}
+		else {
+			return res.status(400).send({
+				message: 'Invalid limit for query.'
+			});
+		}
+	}
+
+	Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).exec(function(err, insects) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

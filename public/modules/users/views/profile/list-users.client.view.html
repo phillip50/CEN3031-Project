@@ -1,4 +1,4 @@
-<section data-ng-controller="ProfileController" data-ng-init="listUsers()">
+<section data-ng-controller="ProfileController" data-ng-init="listUsers()" class="listUsers">
 	<div class="page-header">
 		<h1>
 			All Users
@@ -16,7 +16,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-ng-repeat="user in users">
+					<tr data-ng-repeat="user in users" data-ng-click="showPath('/profile/{{user._id}}')">
 						<td>
 							<a data-ng-bind="user.displayName" data-ng-href="/#!/profile/{{user._id}}"></a>
 						</td>

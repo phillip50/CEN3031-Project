@@ -42,7 +42,7 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 				return marker;
 			};
 
-			Insects.query(function(insects) {
+			Insects.query({limit: 10}, function(insects) {
 				for (var i = 0; i < insects.length; i++) {
 					markersTemp.push(markers(i, insects[i]));
 				}

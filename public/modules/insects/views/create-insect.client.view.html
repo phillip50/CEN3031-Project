@@ -4,7 +4,7 @@
 	</div>
 
 	<form name="insectForm" data-ng-submit="create()" novalidate>
-		<fieldset data-ng-hide="reviewForm">
+		<fieldset data-ng-hide="form.reviewForm || form.uploadingForm">
 			<div class="row">
 				<div class="col-md-6">
 					<div class="panel panel-default">
@@ -96,50 +96,60 @@
 			</div>
 
 			<div class="text-right">
-				<a class="btn btn-default" data-ng-click="form.cancel()">Cancel</a>
-				<a class="btn btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-click="reviewForm = true; error = ''">Next</a>
+				<a class="btn btn-default" data-ng-click="confirm()">Cancel</a>
+				<a class="btn btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-click="form.reviewForm = true; error = ''">Next</a>
 			</div>
 		</fieldset>
 
-		<fieldset data-ng-show="reviewForm">
-			<h2>Review your data</h2>
+		<fieldset data-ng-show="form.reviewForm">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Review your data</h2>
+				</div>
+
+				<div class="panel-body">
+					<dl class="dl-horizontal">
+						<dt>Name</dt>
+						<dd>{{form.name}}</dd>
+
+						<dt>Scientific Name</dt>
+						<dd>{{form.scientificName}}</dd>
+
+						<dt>Caught By</dt>
+						<dd>{{authentication.user.displayName}}</dd>
+
+						<dt>Date Found</dt>
+						<dd>{{form.dateFound | date:'mediumDate'}}</dd>
+
+						<dt>Location</dt>
+						<dd>{{form.locationTitle}}</dd>
+
+						<dt>Description</dt>
+						<dd>{{form.description}} <em data-ng-show="!form.description" class="text-muted">No description.</em></dd>
+
+						<dt>Comments Enabled</dt>
+						<dd>{{(form.commentsEnabled)? "Yes":"No"}}</dd>
+					</dl>
+				</div>
+			</div>
+
+			<div class="text-right">
+				<a class="btn btn-default" data-ng-click="form.reviewForm = false; form.uploadingForm = false;">Back</a>
+				<button class="btn btn-primary" ng-disabled="form.uploadingForm">Submit</button>
+			</div>
+		</fieldset>
+
+		<fieldset data-ng-show="form.uploadingForm">
+			<progressbar class="progress-striped" data-ng-class="form.progress.active? 'active':''" type="{{form.progress.type}}" max="form.progress.max" value="form.progress.current">
+				<span>{{form.progress.task}} {{form.progress.current}}%</span>
+			</progressbar>
 
 			<div data-ng-show="error" class="alert alert-danger" role="alert">
 				<strong data-ng-bind="error"></strong>
 			</div>
 
-			<dl class="dl-horizontal">
-				<dt>Name</dt>
-				<dd>{{form.name}}</dd>
-
-				<dt>Scientific Name</dt>
-				<dd>{{form.scientificName}}</dd>
-
-				<dt>Caught By</dt>
-				<dd>{{authentication.user.displayName}}</dd>
-
-				<dt>Date Found</dt>
-				<dd>{{form.dateFound | date:'mediumDate'}}</dd>
-
-				<dt>Location</dt>
-				<dd>{{form.locationTitle}}</dd>
-
-				<dt>Description</dt>
-				<dd>{{form.description}} <em data-ng-show="!form.description" class="text-muted">No description.</em></dd>
-
-				<dt>Comments Enabled</dt>
-				<dd>{{(form.commentsEnabled)? "Yes":"No"}}</dd>
-			</dl>
-
-			<div data-ng-show="form.uploadingForm">
-				<progressbar class="progress-striped" type="{{form.progress.type}}" max="form.progress.max" value="form.progress.current">
-					<span>{{form.progress.current}}%</span>
-				</progressbar>
-			</div>
-
 			<div class="text-right">
-				<a class="btn btn-default" data-ng-click="reviewForm = false; form.uploadingForm = false;">Back</a>
-				<button class="btn btn-primary" ng-disabled="form.uploadingForm">Submit</button>
+				<a class="btn btn-default" data-ng-disabled="!error" data-ng-click="form.reset()">Back</a>
 			</div>
 		</fieldset>
 	</form>

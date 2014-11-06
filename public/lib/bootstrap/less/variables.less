@@ -10,8 +10,8 @@
 @gray-darker:            lighten(#000, 13.5%); // #222
 @gray-dark:              lighten(#000, 20%);   // #333
 @gray:                   lighten(#000, 33.5%); // #555
-@gray-light:             lighten(#000, 46.7%); // #777
-@gray-lighter:           lighten(#000, 93.5%); // #eee
+@gray-light:             lighten(#000, 73.7%); // #777
+@gray-lighter:           lighten(#000, 98.5%); // #fefefe
 
 @brand-primary:         #428bca;
 @brand-success:         #5cb85c;
@@ -343,8 +343,8 @@
 @navbar-collapse-max-height:       340px;
 
 @navbar-default-color:             @gray-lighter;
-@navbar-default-bg:                #627723;
-@navbar-default-border:            lighten(@navbar-default-bg, 15%);
+@navbar-default-bg:                #7DA328;
+@navbar-default-border:            darken(@navbar-default-bg, 2.5%);
 
 // Navbar links
 @navbar-default-link-color:                @gray-lighter;
@@ -369,22 +369,22 @@
 // Inverted navbar
 // Reset inverted navbar basics
 @navbar-inverse-color:                      @gray-lighter;
-@navbar-inverse-bg:                         #627723;
-@navbar-inverse-border:                     lighten(@navbar-inverse-bg, 15%);
+@navbar-inverse-bg:                         #7DA328;
+@navbar-inverse-border:                     darken(@navbar-inverse-bg, 2.5%);
 
 // Inverted navbar links
 @navbar-inverse-link-color:                 @gray-lighter;
 @navbar-inverse-link-hover-color:           #fff;
-@navbar-inverse-link-hover-bg:              transparent;
+@navbar-inverse-link-hover-bg:              darken(@navbar-inverse-bg, 5%);
 @navbar-inverse-link-active-color:          @navbar-inverse-link-hover-color;
-@navbar-inverse-link-active-bg:             darken(@navbar-inverse-bg, 6.5%);
+@navbar-inverse-link-active-bg:             darken(@navbar-inverse-bg, 10%);
 @navbar-inverse-link-disabled-color:        #444;
 @navbar-inverse-link-disabled-bg:           transparent;
 
 // Inverted navbar brand label
 @navbar-inverse-brand-color:                @navbar-inverse-link-color;
 @navbar-inverse-brand-hover-color:          #fff;
-@navbar-inverse-brand-hover-bg:             transparent;
+@navbar-inverse-brand-hover-bg:             darken(@navbar-inverse-bg, 6.5%);
 
 // Inverted navbar toggle
 @navbar-inverse-toggle-hover-bg:            #333;

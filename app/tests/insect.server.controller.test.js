@@ -30,7 +30,7 @@ describe('Insect Controller Tests', function() {
   req = httpMocks.createRequest({
       method: 'POST',
       url: '/insect',
-      body: {data: insect2, file: '../../public/images/bug1.png'} 
+      body: {data: insect2, file: '../../public/images/bug1.png'}
   });
 
   //res = httpMocks.createResponse();
@@ -126,7 +126,7 @@ describe('Insect Controller Tests', function() {
                 if (err) { return done(err); }
                 done();
             });
-        });;
+        });
 
     it('RES 400 when creating an insect that does have a png or jpeg type', function(done) {
       insect.contentType = 'image/jpeg';
@@ -150,8 +150,8 @@ describe('Insect Controller Tests', function() {
             var status = res._getStatusCode();
             status.should.equal(200);
             done();
-        
-        
+
+
       });
     });
 
@@ -167,13 +167,13 @@ describe('Insect Controller Tests', function() {
             status.should.equal(200);
             done();
           });
-      
+
 
     });
   });
 */
 
-    
+
 
     /*Unit Tests for the insect controller*/
    /*

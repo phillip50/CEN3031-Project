@@ -14,3 +14,6 @@
 	right: 10px;
 	position: absolute;
 }
+
+.listUsers table tr {cursor: pointer;}
+.listUsers table tr:hover a {text-decoration: underline; color: #2a6496;}

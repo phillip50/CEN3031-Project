@@ -7,7 +7,11 @@ angular.module('users').controller('ProfileController', ['$scope', '$http', '$st
 		// If user is not signed in then redirect back home
 		if (!$scope.user) $location.path('/');
 
-		$scope.listUsers = function() {			
+		$scope.showPath = function(path) {
+			$location.path(path);
+		};
+
+		$scope.listUsers = function() {
 			$http.get('/users/list')
 			.success(function(data, status, headers, config) {
 				$scope.users = data;

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$scope', '$http', '$upload', '$stateParams', '$location', '$modal', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
-	function($scope, $http, $upload, $stateParams, $location, $modal, Authentication, Insects, GoogleMapApi) {
+angular.module('insects').controller('InsectsController', ['$scope', '$http', '$upload', '$stateParams', '$location', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
+	function($scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
 		$scope.authentication = Authentication;
 
 		$scope.gallerys = [
@@ -13,7 +13,11 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 			var newG = {name: gallery};
 			$scope.gallerys.push(newG);
 		};
+
 		$scope.createPage = function() {
+			// If user is not signed in then redirect back
+			if (!$scope.authentication.user) $location.path('/insects');
+
 			$scope.form = {
 				loc: {
 					coordinates: {
@@ -29,11 +33,20 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				progress: {
 					current: 0,
 					max: 100,
-					type: 'info'
+					type: 'info',
+					task: 'Uploading',
+					active: true
 				},
 				coordsSet: false,
 				cancel: function() {
 					$location.path('insects');
+				},
+				reset: function() {
+					$scope.form.progress.current = 0;
+					$scope.form.reviewForm = false;
+					$scope.form.uploadingForm = false;
+					$scope.form.progress.active = true;
+					$scope.form.progress.task = 'Uploading';
 				}
 			};
 
@@ -109,6 +122,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 		$scope.create = function() {
 			// Enable progress bar
+			$scope.form.reviewForm = false;
 			$scope.form.uploadingForm = true;
 			$scope.form.progress.type = 'info';
 
@@ -131,8 +145,10 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				file: this.form.image,
 				data: insect
 			}).progress(function(evt) {
-				$scope.form.progress.current = parseInt(100.0 * evt.loaded / evt.total);
+				$scope.form.progress.current = parseInt(75 * evt.loaded / evt.total, 10);
+				if ($scope.form.progress.current === 75) $scope.form.progress.task = 'Processing';
 			}).success(function(response, status, headers, config) {
+				$scope.form.progress.current = 100;
 				$location.path('insects/' + response._id);
 
 				// clear form if they make new insect
@@ -154,7 +170,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				$scope.form.coordsSet = false;
 			}).error(function(data, status, headers, config) {
 				$scope.error = data.message;
-				$scope.form.progress.current = 0;
+				$scope.form.progress.active = false;
 				$scope.form.progress.type = 'warning';
 			});
 		};
