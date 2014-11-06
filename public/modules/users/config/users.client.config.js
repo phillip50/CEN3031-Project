@@ -1,5 +1,15 @@
 'use strict';
 
+// Configuring the menus
+angular.module('users').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Users', 'users', 'dropdown', '/users(/list)?');
+		Menus.addSubMenuItem('topbar', 'users', 'All Users', 'users/list');
+		Menus.addSubMenuItem('topbar', 'users', 'My Profile', 'profile/');
+	}
+]);
+
 // Config HTTP Error Handling
 angular.module('users').config(['$httpProvider',
 	function($httpProvider) {
@@ -17,7 +27,7 @@ angular.module('users').config(['$httpProvider',
 								$location.path('signin');
 								break;
 							case 403:
-								// Add unauthorized behaviour 
+								// Add unauthorized behaviour
 								break;
 						}
 

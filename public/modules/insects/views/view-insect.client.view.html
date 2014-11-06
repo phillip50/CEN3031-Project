@@ -1,6 +1,28 @@
 <section data-ng-controller="InsectsController" data-ng-init="findOne()" class="viewInsects">
+    <div class="photo text-center">
+        <div class="photo-container">
+            <img data-ng-src="{{insect.image.large}}">
+            <div class="btn-group" dropdown is-open="downloadButton.isopen">
+                <button type="button" class="btn btn-default dropdown-toggle">
+                    <i class="glyphicon glyphicon-save"></i> Download <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a data-ng-click="insectDownload('small');">Thumbnail</a></li>
+                    <li><a data-ng-click="insectDownload('medium');">Medium</a></li>
+                    <li><a data-ng-click="insectDownload('large');">Large</a></li>
+                    <li class="divider" data-ng-show="authentication.user._id == insect.user._id">></li>
+                    <li><a data-ng-click="insectDownload('original');" data-ng-show="authentication.user._id == insect.user._id">Original</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="page-header clearfix">
-		<h1>
+        <div data-ng-show="error" class="alert alert-danger" role="alert">
+            <strong data-ng-bind="error"></strong>
+        </div>
+
+        <h1>
             {{insect.name}} <small>{{insect.scientificName}}</small>
             <span class="pull-right">
                 <a class="btn btn-default" data-ng-click="generatePDF();">
@@ -23,28 +45,6 @@
                 </span>
             </span>
         </h1>
-	</div>
-
-    <div data-ng-show="error" class="alert alert-danger" role="alert">
-        <strong data-ng-bind="error"></strong>
-    </div>
-
-    <img data-ng-src="{{downloadImage}}">
-
-    <div class="well well-sm text-center">
-        <img style="max-width: 100%; height: 400px;" data-ng-src="{{insect.image.large}}">
-        <div class="btn-group" dropdown is-open="downloadButton.isopen">
-            <button type="button" class="btn btn-default dropdown-toggle">
-                <i class="glyphicon glyphicon-save"></i> Download <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a data-ng-click="insectDownload('large');">Large</a></li>
-                <li><a data-ng-click="insectDownload('medium');">Medium</a></li>
-                <li><a data-ng-click="insectDownload('small');">Small</a></li>
-                <li class="divider" data-ng-show="authentication.user._id == insect.user._id">></li>
-                <li><a data-ng-click="insectDownload('original');" data-ng-show="authentication.user._id == insect.user._id">>Original</a></li>
-            </ul>
-        </div>
     </div>
 
     <div class="row">
@@ -56,7 +56,13 @@
 
                 <div class="panel-body">
                     <dl class="dl-horizontal">
-                        <dt>Caught By</dt>
+                        <dt>Name</dt>
+                        <dd>{{insect.name}}</dd>
+
+                        <dt>Scientific Name</dt>
+                        <dd>{{insect.scientificName}}</dd>
+
+                        <dt>Found By</dt>
                         <dd><a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></dd>
 
                         <dt>Date Found</dt>

@@ -233,7 +233,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 			$scope.insectDownload = function(size) {
 				$http.get('/insects/' + $scope.insect._id + '/download/' + size)
 				.success(function(data, status, headers, config) {
-				    $scope.downloadImage = data;
+					window.open(data);
+					//document.location.href = data;
 			  	})
 				.error(function(data, status, headers, config) {
 				    $scope.error = data.message;

@@ -77,6 +77,21 @@ exports.profileRead = function(req, res) {
 };
 
 /**
+* List all users
+*/
+exports.listUsers = function(req, res) {
+	User.find().select('displayName created userDescription').sort('-created').exec(function(err, users) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(users);
+		}
+	});
+};
+
+/**
  * Send User
  */
 exports.me = function(req, res) {

@@ -15,6 +15,7 @@ module.exports = function(app) {
 
 	// Setting up the public profile api
 	//app.route('/profile').get(users.me);
+	app.route('/users/list').get(users.listUsers);
 	app.route('/users/:userId').get(users.profileRead);
 
 	// Setting up the users password api

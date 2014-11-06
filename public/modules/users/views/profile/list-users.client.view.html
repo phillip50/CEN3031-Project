@@ -1,0 +1,37 @@
+<section data-ng-controller="ProfileController" data-ng-init="listUsers()">
+	<div class="page-header">
+		<h1>
+			All Users
+		</h1>
+	</div>
+
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<table class="table" data-ng-if="users.length > 0">
+				<thead>
+					<tr>
+						<th width="25%">Name</th>
+						<th width="50%">About</th>
+						<th width="25%">Joined</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="user in users">
+						<td>
+							<a data-ng-bind="user.displayName" data-ng-href="/#!/profile/{{user._id}}"></a>
+						</td>
+						<td>
+							{{user.userDescription}}
+							<em data-ng-show="!user.userDescription" class="text-muted">{{user.displayName}} hasn't written a description yet.</em>
+						</td>
+						<td data-ng-bind="user.created | date:'longDate'"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="alert alert-warning text-center" data-ng-if="users.$resolved && !users.length">
+		No users found.
+	</div>
+</section>

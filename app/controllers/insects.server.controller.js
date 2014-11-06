@@ -191,22 +191,28 @@ exports.downloadImage = function(req, res) {
 	}
 
 	// Fetch image
-	Insect.findById(insectId).select('image.' + size + ' user').exec(function(err, insect) {
+	Insect.findById(insectId).select('image.' + size + ' user image.contentType').populate('user', 'displayName').exec(function(err, insect) {
 		if (err) return res.status(400).send({
 			message: errorHandler.getErrorMessage(err)
 		});
 		if (!insect) return res.status(400).send({
 			message: 'Failed to load insect.'
 		});
-		if (insect.user !== req.user.id && size === 'original') return res.status(403).send({
+		if (insect.user.id !== req.user.id && size === 'original') return res.status(403).send({
 			message: 'You are not authorized to download the original image.'
 		});
 
 		res.set({
-			'Content-Type': 'application/octet-stream',
-			'Content-Disposition': 'attachment;filename=\"new.png\"'
+			'Content-Type': insect.image.contentType,
+			'Content-Disposition': 'attachment; filename="image.png"'
 		});
-		res.jsonp(insect.image[size]);
+		res.send(insect.image[size]);
+
+		/*res.set({
+			'Content-Type': 'application/octet-stream',
+			'Content-Disposition': 'attachment; filename="image.png"'
+		});
+		res.send(insect.image[size].replace(/^data:image\/[^;]/, 'data:application/octet-stream'));*/
 	});
 };
 

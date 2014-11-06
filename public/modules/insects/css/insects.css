@@ -2,7 +2,9 @@ h3.vspace {margin-bottom: 20px;}
 .angular-google-map-container { height: 400px; }
 .viewMap .angular-google-map-container {height: 75vh; min-height: 500px;}
 
+.viewInsects .photo {height: 480px;}
+.viewInsects .photo .photo-container {position: absolute; background: #212124; left: 0; right: 0; padding: 15px;}
+.viewInsects .photo .photo-container img {max-width: 100%; height: 450px;}
+.viewInsects .photo .btn-group {position: absolute; bottom: 15px; right: 15px;}
 .viewInsects .angular-google-map-container {height: 300px;}
-.viewInsects .well {position: relative;}
-.viewInsects .well div[dropdown] {position: absolute; bottom: 9px; right: 9px;}
 .viewInsects .dropdown-menu li a {cursor: pointer;}
