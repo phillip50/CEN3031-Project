@@ -116,5 +116,5 @@ var InsectSchema = new Schema({
 	}
 });
 
-InsectSchema.index({loc: '2dsphere'});
+InsectSchema.index({loc: '2dsphere'}, {created: 1});
 mongoose.model('Insect', InsectSchema);

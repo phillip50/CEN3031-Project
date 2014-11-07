@@ -60,7 +60,7 @@ exports.read = function(req, res) {
 * Show the found user with their insects
 */
 exports.profileRead = function(req, res) {
-	var userId = req.user.id;
+	var userId = req.params.userId;
 
 	Insect.find({user: userId}).select('user name image.small description').sort('-created').exec(function(err, insects) {
 		if (err) {

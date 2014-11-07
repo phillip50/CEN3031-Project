@@ -289,8 +289,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 								]
 							]
 						},
-						layout: 'lightHorizontalLines',
-						pageBreak: 'before'
+						layout: 'lightHorizontalLines'
 					}],
 					styles: {
 						header: {
