@@ -23,3 +23,5 @@ section.home hr {margin: 50px 0;}
 
 body > footer {margin: 40px 0 30px;}
 body > footer hr {margin: 0 0 40px;}
+
+.thumbnail .caption .p {word-wrap: break-word;}

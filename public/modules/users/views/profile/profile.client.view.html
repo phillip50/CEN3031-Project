@@ -50,9 +50,11 @@
 	<div class="row">
 		<div class="col-sm-6 col-md-4 col-lg-3" data-ng-repeat="insect in foundUser.insects">
 			<div class="thumbnail">
-				<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+				<a data-ng-href="#!/insects/{{insect._id}}">
+					<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+				</a>
 				<div class="caption clearfix">
-					<h3 data-ng-bind="insect.name"></h3>
+					<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
 					<p>
 						{{insect.description}}
 						<em data-ng-show="!insect.description" class="text-muted">No description.</em>

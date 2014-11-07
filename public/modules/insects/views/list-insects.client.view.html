@@ -10,26 +10,27 @@
 				</a>
 			</span>
 		</h1>
-		<br>
+
 		<div class="row">
-		<div class="col col-md-3">
-		  Sort by Gallery:
-		  <span class="nullable">
-		    <select data-ng-model="galleryName" ng-options="gallery.name for gallery in gallerys">
-		      <option value="">-- No gallery selected --</option>
-		    </select>
-		  </span><br/>
-		 </div>
-		 <div class="col col-md-3">
-		 	<form name="insectForm" data-ng-submit="addGallery(thisGallery.content)" novalidate style="display: inline-block;">
-			<fieldset>
-				<span class="form-group" ng-class="{'has-error' : submitted && insectForm.galleryName.$invalid}" >
-		 		Add Gallery {{gallery}}: <textarea class="form-control ng-pristine ng-valid" rows="3" style="height:3em" data-ng-model="thisGallery.content" >
-		 		</textarea>
-				<input type="submit" value="+" class="btn btn-mini btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-submit="addGallery(this)" >
-		 		</span>
-		 	</fieldset>
-			</form>
+			<div class="col-md-3">
+				Sort by Gallery:
+			  	<span class="nullable">
+			    	<select data-ng-model="galleryName" ng-options="gallery.name for gallery in gallerys">
+			      		<option value="">-- No gallery selected --</option>
+			    	</select>
+			  	</span>
+			</div>
+			<div class="col-md-3">
+		 		<form name="insectForm" data-ng-submit="addGallery(thisGallery.content)" novalidate style="display: inline-block;">
+					<fieldset>
+						<span class="form-group" ng-class="{'has-error' : submitted && insectForm.galleryName.$invalid}">
+		 					Add Gallery {{gallery}}:
+							<textarea class="form-control ng-pristine ng-valid" rows="3" style="height:3em" data-ng-model="thisGallery.content"></textarea>
+							<input type="submit" value="+" class="btn btn-mini btn-primary" data-ng-disabled="insectForm.$invalid" data-ng-submit="addGallery(this)">
+		 				</span>
+		 			</fieldset>
+				</form>
+			</div>
 		</div>
 	</div>
 
@@ -40,15 +41,14 @@
 	<div class="row">
 		<div data-ng-repeat="insect in insects | filter:insect.galleryName" class="col-sm-6 col-md-4 col-lg-3">
 			<div class="thumbnail">
-
-				<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+				<a data-ng-href="#!/insects/{{insect._id}}">
+					<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+				</a>
 				<div class="caption clearfix">
-					<h3 data-ng-bind="insect.name"></h3>
+					<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
 					<p>
-						About: {{insect.description}} <br><br>
-						Gallery: {{insect.galleryName.name}}
-						<em data-ng-show="!insect.description" class="text-muted">No description.</em>
-
+						<em data-ng-bind="insect.scientificName"></em><br>
+						<span>Gallery: {{insect.galleryName.name}}</span>
 					</p>
 
 					<form name="insectForm" data-ng-submit="updateGallery(insect)" novalidate>
@@ -74,15 +74,7 @@
 		</div>
 	</div>
 
-	<div class="row text-center">
-		<ul class="pagination pagination-lg" data-ng-if="insects.length">
-			<li class="disabled"><a href="#">&laquo;</a></li>
-			<li class="active"><a href="#">1</a></li>
-			<!--<li><a href="#">2</a></li>
-			<li><a href="#">3</a></li>
-			<li><a href="#">4</a></li>
-			<li><a href="#">5</a></li>-->
-			<li class="disabled"><a href="#">&raquo;</a></li>
-		</ul>
+	<div class="row text-center" data-ng-if="insects.length">
+		<pagination total-items="pagination.totalItems" items-per-page="pagination.itemsPerPage" data-ng-model="pagination.currentPage" data-ng-change="pagination.pageChanged()"></pagination>
 	</div>
 </section>

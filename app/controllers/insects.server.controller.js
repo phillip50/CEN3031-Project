@@ -258,27 +258,56 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 	var query = req.query,
-		limit = 50;
-	if (query.hasOwnProperty('limit')) {
-		if (parseInt(query.limit, 10) && parseInt(query.limit, 10) <= 50 && parseInt(query.limit, 10) > 0) {
-			limit = parseInt(query.limit, 10);
-		}
-		else {
-			return res.status(400).send({
-				message: 'Invalid limit for query.'
-			});
-		}
-	}
+		limit = 50,
+		skip = 0;
 
-	Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).exec(function(err, insects) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(insects);
+	// If count query
+	if (query.hasOwnProperty('count') && parseInt(query.count, 10) === 1) {
+		Insect.count().exec(function(err, count) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp({count: parseInt(count, 10)});
+			}
+		});
+	}
+	else {
+		// Limit number of insects returned
+		if (query.hasOwnProperty('limit')) {
+			if (parseInt(query.limit, 10) && parseInt(query.limit, 10) <= 50 && parseInt(query.limit, 10) > 0) {
+				limit = parseInt(query.limit, 10);
+			}
+			else {
+				return res.status(400).send({
+					message: 'Invalid value for limit.'
+				});
+			}
 		}
-	});
+
+		// Skip ahead in insects db
+		if (query.hasOwnProperty('skip')) {
+			if (parseInt(query.skip, 10) >= 0) {
+				skip = parseInt(query.skip, 10);
+			}
+			else {
+				return res.status(400).send({
+					message: 'Invalid value for skip.'
+				});
+			}
+		}
+
+		Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).skip(skip).exec(function(err, insects) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(insects);
+			}
+		});
+	}
 };
 
 /**

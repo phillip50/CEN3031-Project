@@ -193,7 +193,34 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 		// List Insects Pages
 		$scope.find = function() {
-			$scope.insects = Insects.query();
+			var skip = 0;
+			//if ($stateParams.hasOwnProperty('skip') && parseInt($stateParams.skip, 10) >= 0) skip = parseInt($stateParams.skip, 10);
+
+			$scope.insects = Insects.query({
+				limit: 12,
+				skip: skip
+			});
+
+			// Get total count
+			Insects.get({count: 1}, function(data) {
+				$scope.pagination.totalItems = data.count;
+			});
+
+			$scope.pagination = {
+				totalItems: 0,
+				currentPage: 0,
+				itemsPerPage: 12,
+				pageChanged: function(page) {
+					$scope.insects = Insects.query({
+						limit: 12,
+						skip: ($scope.pagination.currentPage - 1) * 12
+					});
+					$location.search({
+						skip: ($scope.pagination.currentPage - 1) * 12
+					});
+				}
+			};
+
 			$scope.updateGallery = function() {
 				console.log($scope.insects[this.$index]);
 				$scope.insect = $scope.insects[this.$index];
