@@ -87,6 +87,7 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 		};
 
 		$scope.findOne = function() {
+			console.log("called");
 			var titleThis0 = $stateParams.noteId.split(":")[1];
 			var titleThis = titleThis0.substring(1,titleThis0.length-2);
 			var theseInsects = [];

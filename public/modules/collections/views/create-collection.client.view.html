@@ -1,0 +1,48 @@
+<section data-ng-controller="CollectionsController">
+	<div class="page-header">
+		<h1>New Collection</h1>
+	</div>
+	<div class="col-md-12">
+		<form name="collectionForm" class="form-horizontal" data-ng-init="getInsects()" data-ng-submit="create()" novalidate>
+			<fieldset>
+				<div class="form-group" ng-class="{ 'has-error': collectionForm.title.$dirty && collectionForm.title.$invalid }">
+					<label class="control-label" for="title">Title</label>
+					<div class="controls">
+						<input name="title" type="text" data-ng-model="title" id="title" class="form-control" placeholder="Title" required>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="content">About</label>
+					<div class="controls">
+						<textarea name="content" data-ng-model="content" id="content" class="form-control" cols="20" rows="2" placeholder="Content"></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="content">Select Insects to Add to Collection</label>
+					<div class = "controls">
+						<table class = "table">
+							<div class = "row" >
+								<div class ="col col-sm-2 addImage" data-ng-repeat="insect in insects" >
+		        						<input type="checkbox" name="imgCheck" value="thisImg" id="{{insect._id}}" >
+		        						</input>
+		        						<label for="{{insect._id}}">
+		        							<img src="{{insect.image.small}}" style="height: 100px;" class="list-group-item-text" >
+		        						</label>
+		        						<span class="glyphicon glyphicon-ok glypher"></span>
+								</div>
+							</div>
+						</table>
+					</div>
+				</div>
+			</div>
+				</div>
+				<div class="form-group">
+					<input type="submit" class="btn btn-default">
+				</div>
+				<div data-ng-show="error" class="text-danger" style="margin:20px;">
+					<strong data-ng-bind="error"></strong>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</section>

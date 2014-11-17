@@ -12,6 +12,15 @@ describe('bugs homepage', function() {
 	element(by.id('signin')).click();
 	browser.driver.sleep(2000);
 	browser.get('http://localhost:3000/#!/insects');
+	element(by.id('addGal')).sendKeys('testtest');
+	element(by.id('submitGal')).click();
+	element(by.id('dropGal')).sendKeys('BKN01');
+	element(by.id('dropGal')).sendKeys('\ue015');
+	element(by.id('dropGal')).sendKeys('BKN01');
+	element(by.id('dropGal')).sendKeys('\ue015');
+	element(by.id('dropGal')).sendKeys('BKN01');
+	element(by.id('dropGal')).sendKeys('\ue015');
+	element(by.id('dropGal')).sendKeys('BKN01');
 	browser.driver.sleep(2000);
 
     element(by.css('.col-md-4:nth-of-type(1) .thumbnail a.btn')).click();

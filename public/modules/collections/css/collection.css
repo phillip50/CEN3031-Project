@@ -1,0 +1,46 @@
+input[type=checkbox] {
+	display:none;
+}
+ 
+input[type=checkbox] + label {
+	background: #999;
+	height: 16px;
+	width: 16px;
+	display:inline-block;
+	padding: 0 0 0 0px;
+}
+input[type=checkbox] + label img{
+	border-radius: 5px;
+}
+input[type=checkbox]:checked + label {
+	opacity: .5;
+	height: 16px;
+	width: 16px;
+	display:inline-block;
+	padding: 0 0 0 0px;
+}
+input[type=checkbox]:checked + label img {
+	outline: none;
+    border-color: green;
+    -webkit-box-shadow: 0px 0px 20px gray;
+       -moz-box-shadow: 0px 0px 20px gray;
+            box-shadow: 0px 0px 20px gray;
+    border: 3px solid white;
+}
+input[type=checkbox] + label + .glyphicon {
+	visibility: hidden;
+}
+input[type=checkbox]:checked + label + .glyphicon {
+	visibility: visible;
+}
+.addImage{
+	margin-bottom:50px;
+}
+.glypher {
+	position:relative;
+    top:-50px;
+    right:110px;
+    text-align:right;
+    display:block;
+    color: white;
+}
