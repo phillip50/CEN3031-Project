@@ -30,7 +30,7 @@
 
 	<div class="panel panel-default hidden">
 		<div class="panel-heading">
-			<h2 class="panel-title">Galleries <span class="badge" data-ng-bind="foundUser.insects.length"></span></h2>
+			<h2 class="panel-title">Galleries <span class="badge" data-ng-bind="foundUser.count"></span></h2>
 		</div>
 
 		<div class="panel-body">
@@ -43,7 +43,7 @@
 	<div class="page-header">
 		<h2>
 			<span data-ng-bind="foundUser.info.displayName"></span> Insects
-			<span class="badge" data-ng-bind="foundUser.insects.length"></span>
+			<span class="badge" data-ng-bind="foundUser.count"></span>
 		</h2>
 	</div>
 
@@ -63,6 +63,10 @@
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<div class="text-center" ng-data-if="foundUser.count > 12">
+		<a data-ng-href="#!/insects/user/{{foundUser.info._id}}" class="btn btn-primary" role="button">View all of {{foundUser.info.displayName}} insects ({{foundUser.count}})</a>
 	</div>
 
 	<div class="alert alert-warning text-center" data-ng-if="foundUser.insects.length < 1">

@@ -14,6 +14,8 @@ describe('bugs homepage', function() {
 	browser.get('http://localhost:3000/#!/insects');
 	browser.driver.sleep(2000);
 
+    element(by.css('.col-md-4:nth-of-type(1) .thumbnail a.btn')).click();
+
     //element(by.css('ul[value=0]')).click();
 
     //var todoList = element.all(by.repeater('todo in todos'));

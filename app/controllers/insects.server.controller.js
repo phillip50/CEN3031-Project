@@ -6,13 +6,12 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
 	Insect = mongoose.model('Insect'),
+	User = mongoose.model('User'),
 	_ = require('lodash');
-
 
 var fs = require('fs'),
 	formidable = require('formidable'),
 	gm = require('gm');
-
 
 /**
  * Create a insect
@@ -89,14 +88,19 @@ exports.create = function(req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				}
+				else if (!image.hasOwnProperty('Profile-EXIF')) {
+					return res.status(400).send({
+						message: 'Could not find EXIF data in photo.'
+					});
+				}
 				// No GPS exif data (I'm sure there's a better way to write this)
-				else if (!image.hasOwnProperty('Profile-EXIF') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude Ref') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude Ref')) {
+				else if (!image['Profile-EXIF'].hasOwnProperty('GPS Latitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Latitude Ref') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude') || !image['Profile-EXIF'].hasOwnProperty('GPS Longitude Ref')) {
 					return res.status(400).send({
 						message: 'Could not find GPS data in photo.'
 					});
 				}
 				// No Date exif data
-				else if (!image.hasOwnProperty('Profile-EXIF') || !image['Profile-EXIF'].hasOwnProperty('Date Time Original')) {
+				else if (!image['Profile-EXIF'].hasOwnProperty('Date Time Original') && !image['Profile-EXIF'].hasOwnProperty('GPS Date Stamp')) {
 					return res.status(400).send({
 						message: 'Could not find date and time in photo.'
 					});
@@ -115,8 +119,17 @@ exports.create = function(req, res) {
 				}
 
 				// Check if dates match
-				var a = image['Profile-EXIF']['Date Time Original'].split(/:| /),
-					dateTaken = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
+				var a = '';
+				if (image['Profile-EXIF'].hasOwnProperty('Date Time Original')) a = image['Profile-EXIF']['Date Time Original'].split(/:| /);
+				else {
+					a = image['Profile-EXIF']['GPS Date Stamp'].split(/:| /);
+					// to fix
+					a[3] = 0;
+					a[4] = 0;
+					a[5] = 0;
+				}
+
+				var dateTaken = new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
 
 				if (dateTaken.toDateString() !== insect.dateFound.toDateString()) {
 					return res.status(400).send({
@@ -258,47 +271,85 @@ exports.delete = function(req, res) {
  */
 exports.list = function(req, res) {
 	var query = req.query,
-		limit = 50,
+		limit = 12,
 		skip = 0;
 
-	// If count query
+	// Skip ahead in insects db
+	if (query.hasOwnProperty('skip')) {
+		if (parseInt(query.skip, 10) >= 0) {
+			skip = parseInt(query.skip, 10);
+		}
+		else {
+			return res.status(400).send({
+				message: 'Invalid value for skip.'
+			});
+		}
+	}
+
+	// If informational, no insect query
 	if (query.hasOwnProperty('count') && parseInt(query.count, 10) === 1) {
-		Insect.count().exec(function(err, count) {
+		// If user query
+		if (query.hasOwnProperty('userId')) {
+			var userId = query.userId;
+
+			Insect.find({user: userId}).count().exec(function(err, count) {
+				if (err) {
+					return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					User.findOne({_id: userId}).select('displayName').exec(function(err, user) {
+						if (err) {
+							return res.status(400).send({
+								message: errorHandler.getErrorMessage(err)
+							});
+						}
+						else if (!user) {
+							return res.status(400).send({
+								message: 'Could not find user.'
+							});
+						}
+						else {
+							res.jsonp({
+								count: parseInt(count, 10),
+								user: user
+							});
+						}
+					});
+				}
+			});
+		}
+		// Normal
+		else {
+			Insect.count().exec(function(err, count) {
+				if (err) {
+					return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					res.jsonp({count: parseInt(count, 10)});
+				}
+			});
+		}
+	}
+
+	// If user query
+	else if (query.hasOwnProperty('userId')) {
+		var userId = query.userId;
+
+		Insect.find({user: userId}).select('name image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				res.jsonp({count: parseInt(count, 10)});
+				res.jsonp(insects);
 			}
 		});
 	}
+	// Normal query
 	else {
-		// Limit number of insects returned
-		if (query.hasOwnProperty('limit')) {
-			if (parseInt(query.limit, 10) && parseInt(query.limit, 10) <= 50 && parseInt(query.limit, 10) > 0) {
-				limit = parseInt(query.limit, 10);
-			}
-			else {
-				return res.status(400).send({
-					message: 'Invalid value for limit.'
-				});
-			}
-		}
-
-		// Skip ahead in insects db
-		if (query.hasOwnProperty('skip')) {
-			if (parseInt(query.skip, 10) >= 0) {
-				skip = parseInt(query.skip, 10);
-			}
-			else {
-				return res.status(400).send({
-					message: 'Invalid value for skip.'
-				});
-			}
-		}
-
-		Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).skip(skip).exec(function(err, insects) {
+		Insect.find().select('user name image.small').sort('-created').populate('user', 'displayName').skip(skip).limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)

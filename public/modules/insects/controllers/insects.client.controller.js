@@ -193,31 +193,53 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 		// List Insects Pages
 		$scope.find = function() {
+			// Skip insects for pagination
 			var skip = 0;
-			//if ($stateParams.hasOwnProperty('skip') && parseInt($stateParams.skip, 10) >= 0) skip = parseInt($stateParams.skip, 10);
+			if ($stateParams.hasOwnProperty('skip') && parseInt($stateParams.skip, 10) >= 0) skip = parseInt($stateParams.skip, 10);
 
-			$scope.insects = Insects.query({
-				limit: 12,
-				skip: skip
-			});
+			function fetch(skip, firstRun) {
+				// If finding a user's insects
+				if ($stateParams.hasOwnProperty('userId')) {
+					//if (skip == 0) $location.path('insects/user/' + $stateParams.userId, false);
+					//else $location.path('insects/user/' + $stateParams.userId + '/skip/' + skip, false);
 
-			// Get total count
-			Insects.get({count: 1}, function(data) {
-				$scope.pagination.totalItems = data.count;
-			});
+					$scope.insects = Insects.query({
+						userId: $stateParams.userId,
+						skip: skip
+					});
+
+					// Get total count
+					Insects.get({userId: $stateParams.userId, count: 1}, function(data) {
+						$scope.foundUser = data.user;
+						$scope.pagination.totalItems = data.count;
+					});
+				}
+				// List all insects
+				else {
+					//if (skip == 0) $location.path('insects', false);
+					//else $location.path('insects/skip/' + skip, false);
+
+					$scope.insects = Insects.query({
+						limit: 12,
+						skip: skip
+					});
+
+					// Get total count
+					Insects.get({count: 1}, function(data) {
+						$scope.pagination.totalItems = data.count;
+						if (firstRun) $scope.pagination.currentPage = parseInt((skip / data.count) * 12, 10);
+					});
+				}
+			}
+
+			fetch(skip, true);
 
 			$scope.pagination = {
 				totalItems: 0,
 				currentPage: 0,
 				itemsPerPage: 12,
 				pageChanged: function(page) {
-					$scope.insects = Insects.query({
-						limit: 12,
-						skip: ($scope.pagination.currentPage - 1) * 12
-					});
-					$location.search({
-						skip: ($scope.pagination.currentPage - 1) * 12
-					});
+					fetch(($scope.pagination.currentPage - 1) * 12);
 				}
 			};
 
@@ -341,7 +363,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				};
 
 				// Open PDF
-				pdfMake.createPdf(docDefinition).open();
+				pdfMake.createPdf(docDefinition).download();
 			};
 
 			/*comments: [{

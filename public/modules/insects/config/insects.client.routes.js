@@ -9,6 +9,18 @@ angular.module('insects').config(['$stateProvider',
 			url: '/insects',
 			templateUrl: 'modules/insects/views/list-insects.client.view.html'
 		}).
+		state('listInsectsSkip', {
+			url: '/insects/skip/:skip',
+			templateUrl: 'modules/insects/views/list-insects.client.view.html'
+		}).
+		state('listInsectsOfUser', {
+			url: '/insects/user/:userId',
+			templateUrl: 'modules/insects/views/list-insects.client.view.html'
+		}).
+		state('listInsectsOfUserSkip', {
+			url: '/insects/user/:userId/skip/:skip',
+			templateUrl: 'modules/insects/views/list-insects.client.view.html'
+		}).
 		state('createInsect', {
 			url: '/insects/create',
 			templateUrl: 'modules/insects/views/create-insect.client.view.html'

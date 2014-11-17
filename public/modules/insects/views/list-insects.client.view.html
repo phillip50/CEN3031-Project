@@ -1,6 +1,10 @@
 <section data-ng-controller="InsectsController" data-ng-init="find()">
 	<div class="page-header">
-		<h1>All Insects
+		<h1><span data-ng-hide="foundUser">All Insects</span>
+			<span data-ng-show="foundUser">
+				<a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a>'s Insects ({{pagination.totalItems}})
+			</span>
+
 			<span class="pull-right">
 				<a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user._id">
 					<i class="glyphicon glyphicon-plus"></i> New Insect
@@ -47,7 +51,9 @@
 				<div class="caption clearfix">
 					<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
 					<p>
-						<em data-ng-bind="insect.scientificName"></em><br>
+						<em data-ng-bind="insect.scientificName" style="display: block;"></em>
+						<span data-ng-show="insect.user" style="display: block;">Found by <a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></span>
+						<span data-ng-bind="insect.description"></span><br>
 						<span>Gallery: {{insect.galleryName.name}}</span>
 					</p>
 
