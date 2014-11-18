@@ -4,18 +4,24 @@
 			<span data-ng-show="foundUser">
 				<a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a>'s Insects ({{pagination.totalItems}})
 			</span>
+			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 
 			<span class="pull-right">
 				<a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user._id">
 					<i class="glyphicon glyphicon-plus"></i> New Insect
 				</a>
-				<a class="btn btn-default" data-ng-href="/#!/insects/map">
-					<i class="glyphicon glyphicon-globe"></i> View Map
-				</a>
+				<span class="btn-group" role="group">
+					<a class="btn btn-primary" data-ng-href="/#!/insects" disabled="disabled">
+						<i class="glyphicon glyphicon-th-large"></i> View List
+					</a>
+					<a class="btn btn-default" data-ng-href="/#!/insects/map">
+						<i class="glyphicon glyphicon-globe"></i> View Map
+					</a>
+				</span>
 			</span>
 		</h1>
 
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-md-3">
 				Sort by Gallery:
 			  	<span class="nullable">
@@ -24,7 +30,7 @@
 			    	</select>
 			  	</span>
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-3" >
 		 		<form name="insectForm" data-ng-submit="addGallery(thisGallery.content)" novalidate style="display: inline-block;">
 					<fieldset>
 						<span class="form-group" ng-class="{'has-error' : submitted && insectForm.galleryName.$invalid}">
@@ -35,11 +41,11 @@
 		 			</fieldset>
 				</form>
 			</div>
-		</div>
+		</div>-->
 	</div>
 
 	<div class="alert alert-warning text-center" data-ng-if="insects.$resolved && !insects.length">
-		No insects yet, why don't you <a href="/#!/insects/create">create one</a>?
+		No insects found.
 	</div>
 
 	<div class="row">
@@ -53,11 +59,12 @@
 					<p>
 						<em data-ng-bind="insect.scientificName" style="display: block;"></em>
 						<span data-ng-show="insect.user" style="display: block;">Found by <a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></span>
-						<span data-ng-bind="insect.description"></span><br>
-						<span>Gallery: {{insect.galleryName.name}}</span>
+						<span data-ng-bind="insect.dateFound | date:'longDate'"></span>
+						<span data-ng-if="foundUser" data-ng-bind="insect.description"></span><br>
+						<!--<span>Gallery: {{insect.galleryName.name}}</span>-->
 					</p>
 
-					<form name="insectForm" data-ng-submit="updateGallery(insect)" novalidate>
+					<!--<form name="insectForm" data-ng-submit="updateGallery(insect)" novalidate>
 						<fieldset>
 						<div class="form-group" ng-class="{'has-error' : submitted && insectForm.galleryName.$invalid}">
 						Add to Gallery: {{$scope.newGallery}}
@@ -73,8 +80,8 @@
 						</div>
 					</fieldset>
 
-				</form>
-				<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary" role="button">View</a>
+				</form>-->
+				<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary pull-right" role="button">View</a>
 				</div>
 			</div>
 		</div>

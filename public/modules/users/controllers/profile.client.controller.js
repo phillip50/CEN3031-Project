@@ -22,12 +22,16 @@ angular.module('users').controller('ProfileController', ['$scope', '$http', '$st
 		};
 
 		$scope.findUser = function() {
+			$scope.loading = true;
+
 			// If bare URL with no userid, find logged in profile
 			var userId = $stateParams.userId;
 			if ($stateParams.userId === '') userId = Authentication.user._id;
 
 			$scope.foundUser = Users.get({
 				userId: userId
+			}, function() {
+				$scope.loading = false;
 			});
 		};
 	}

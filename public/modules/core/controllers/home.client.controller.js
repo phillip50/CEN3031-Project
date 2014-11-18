@@ -5,6 +5,11 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
 
+		// Number of insects counter
+		Insects.get({count: 1}, function(data) {
+			$scope.totalInsects = data.count;
+		});
+
 		// Display insects on map
 		$scope.map = {
 			center: {

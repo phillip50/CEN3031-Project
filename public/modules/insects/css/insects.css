@@ -8,3 +8,5 @@ h3.vspace {margin-bottom: 20px;}
 .viewInsects .photo .btn-group {position: absolute; bottom: 15px; right: 15px;}
 .viewInsects .angular-google-map-container {height: 300px;}
 .viewInsects .dropdown-menu li a {cursor: pointer;}
+
+.thumbnail .caption p {word-wrap: break-word;}

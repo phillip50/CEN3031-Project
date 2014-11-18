@@ -193,11 +193,15 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 		// List Insects Pages
 		$scope.find = function() {
+			$scope.loading = true;
+
 			// Skip insects for pagination
 			var skip = 0;
 			if ($stateParams.hasOwnProperty('skip') && parseInt($stateParams.skip, 10) >= 0) skip = parseInt($stateParams.skip, 10);
 
 			function fetch(skip, firstRun) {
+				$scope.loading = true;
+
 				// If finding a user's insects
 				if ($stateParams.hasOwnProperty('userId')) {
 					//if (skip == 0) $location.path('insects/user/' + $stateParams.userId, false);
@@ -212,6 +216,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					Insects.get({userId: $stateParams.userId, count: 1}, function(data) {
 						$scope.foundUser = data.user;
 						$scope.pagination.totalItems = data.count;
+						$scope.loading = false;
 					});
 				}
 				// List all insects
@@ -228,6 +233,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					Insects.get({count: 1}, function(data) {
 						$scope.pagination.totalItems = data.count;
 						if (firstRun) $scope.pagination.currentPage = parseInt((skip / data.count) * 12, 10);
+						$scope.loading = false;
 					});
 				}
 			}
@@ -243,7 +249,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				}
 			};
 
-			$scope.updateGallery = function() {
+			/*$scope.updateGallery = function() {
 				console.log($scope.insects[this.$index]);
 				$scope.insect = $scope.insects[this.$index];
 				console.log(this.insect.galleryName.name);
@@ -262,7 +268,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				}, function(errorResponse) {
 					$scope.error = errorResponse.data.message;
 				});
-			};
+			};*/
 		};
 
 		// View Insect Page
@@ -416,7 +422,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 		};
 
 		// Map Page
-		$scope.lookup = function() {
+		$scope.map = function() {
 			// Display insects on map
 			$scope.map = {
 				center: {
@@ -432,13 +438,13 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				}
 			};
 			$scope.markers = [];
+			$scope.markersIds = [];
 
 			// Ready to manipulate map
 			GoogleMapApi.then(function(maps) {
-				var markersTemp = [];
 				var markers = function(i, insect) {
 					var marker = {
-						id: i,
+						id: insect._id,
 						latitude: insect.loc.coordinates[1],
 						longitude: insect.loc.coordinates[0],
 						options: {
@@ -454,13 +460,36 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					return marker;
 				};
 
-				Insects.query(function(insects) {
-					for (var i = 0; i < insects.length; i++) {
-						markersTemp.push(markers(i, insects[i]));
-					}
-				});
+				$scope.$watch(function() { return $scope.map.bounds; }, function(nv, ov) {
+					$scope.loading = true;
 
-				$scope.markers = markersTemp;
+					var markersTemp = [],
+						markersIdsTemp = [];
+
+					if (!ov.southwest && nv.southwest || ov.southwest && nv.southwest) {
+						var boxBounds = {
+							bounds: {
+								southwest: [$scope.map.bounds.southwest.longitude, $scope.map.bounds.southwest.latitude],
+								northeast: [$scope.map.bounds.northeast.longitude, $scope.map.bounds.northeast.latitude]
+							},
+							limit: 50
+						};
+
+						Insects.query(boxBounds, function(insects) {
+							for (var i = 0; i < insects.length; i++) {
+								// throw out duplicates already on map
+								if ($scope.markersIds.indexOf(insects[i]['_id']) === -1) {
+									markersTemp.push(markers(i, insects[i]));
+									markersIdsTemp.push(insects[i]['_id']);
+								}
+							}
+
+							$scope.markers = $scope.markers.concat(markersTemp);
+							$scope.markersIds = $scope.markersIds.concat(markersIdsTemp);
+							$scope.loading = false;
+						});
+					}
+				}, true);
 			});
 		};
 	}

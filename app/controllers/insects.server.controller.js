@@ -286,7 +286,19 @@ exports.list = function(req, res) {
 		}
 	}
 
-	// If informational, no insect query
+	// Limit amount of insects returned
+	if (query.hasOwnProperty('limit')) {
+		if (parseInt(query.limit, 10) >= 0 && parseInt(query.limit, 10) <= 100) {
+			limit = parseInt(query.limit, 10);
+		}
+		else {
+			return res.status(400).send({
+				message: 'Invalid value for limit.'
+			});
+		}
+	}
+
+	// If informational, no insect to be returned query
 	if (query.hasOwnProperty('count') && parseInt(query.count, 10) === 1) {
 		// If user query
 		if (query.hasOwnProperty('userId')) {
@@ -331,6 +343,29 @@ exports.list = function(req, res) {
 				}
 			});
 		}
+	}
+
+	// Map query
+	else if (query.hasOwnProperty('bounds')) {
+		var bounds = JSON.parse(query.bounds);
+
+		var findQuery = {
+			loc: {
+				$geoWithin: {
+					$box: [bounds.southwest, bounds.northeast]
+				}
+			}
+		};
+
+		Insect.find(findQuery).select('+image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.jsonp(insects);
+			}
+		});
 	}
 
 	// If user query

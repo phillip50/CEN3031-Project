@@ -62,7 +62,7 @@ exports.read = function(req, res) {
 exports.profileRead = function(req, res) {
 	var userId = req.params.userId;
 
-	Insect.find({user: userId}).select('name image.small description').sort('-created').limit(12).exec(function(err, insects) {
+	Insect.find({user: userId}).select('name image.small description dateFound').sort('-created').limit(12).exec(function(err, insects) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

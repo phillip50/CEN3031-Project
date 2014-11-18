@@ -1,19 +1,25 @@
-<section data-ng-controller="InsectsController" data-ng-init="lookup()" class="viewMap">
+<section data-ng-controller="InsectsController" data-ng-init="map()" class="viewMap">
     <div class="page-header">
-        <h1>Map
+        <h1>All Insects ({{markers.length}} shown)
+            <small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
             <span class="pull-right">
                 <a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user">
                     <i class="glyphicon glyphicon-plus"></i> New Insect
                 </a>
-                <a class="btn btn-default" data-ng-href="/#!/insects">
-                    <i class="glyphicon glyphicon-th-large"></i> View List
-                </a>
+                <span class="btn-group" role="group">
+                    <a class="btn btn-default" data-ng-href="/#!/insects">
+                        <i class="glyphicon glyphicon-th-large"></i> View List
+                    </a>
+                    <a class="btn btn-primary" data-ng-href="/#!/insects/map" disabled="disabled">
+                        <i class="glyphicon glyphicon-globe"></i> View Map
+                    </a>
+                </span>
             </span>
         </h1>
     </div>
 
     <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.gmap" draggable="true" options="map.options" bounds="map.bounds">
-        <ui-gmap-markers models="markers" fit="true" coords="'self'" options="'options'">
+        <ui-gmap-markers models="markers" coords="'self'" options="'options'">
             <ui-gmap-windows show="show">
                   <div data-ng-non-bindable>
                     <strong>{{title}}</strong><br>

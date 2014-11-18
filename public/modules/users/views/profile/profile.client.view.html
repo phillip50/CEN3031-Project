@@ -1,7 +1,8 @@
 <section data-ng-controller="ProfileController" data-ng-init="findUser()">
 	<div class="page-header">
 		<h1>
-			<span data-ng-bind="foundUser.info.displayName"></span>'s Profile
+			<span data-ng-show="!loading">{{foundUser.info.displayName}}'s Profile</span>
+			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 			<span class="pull-right" data-ng-show="user._id == foundUser.info._id">
 				<a class="btn btn-default" data-ng-href="/#!/settings/profile">
 					<i class="glyphicon glyphicon-pencil"></i> Edit
@@ -56,6 +57,7 @@
 				<div class="caption clearfix">
 					<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
 					<p>
+						<span data-ng-bind="insect.dateFound | date:'longDate'"></span>
 						{{insect.description}}
 						<em data-ng-show="!insect.description" class="text-muted">No description.</em>
 					</p>
