@@ -337,7 +337,7 @@ exports.list = function(req, res) {
 	else if (query.hasOwnProperty('userId')) {
 		var userId = query.userId;
 
-		Insect.find({user: userId}).select('name image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
+		Insect.find({user: userId}).select('+image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
@@ -349,7 +349,7 @@ exports.list = function(req, res) {
 	}
 	// Normal query
 	else {
-		Insect.find().select('user name image.small').sort('-created').populate('user', 'displayName').skip(skip).limit(limit).exec(function(err, insects) {
+		Insect.find().select('+image.small').sort('-created').populate('user', 'displayName').skip(skip).limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
