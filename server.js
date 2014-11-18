@@ -11,7 +11,7 @@ var init = require('./config/init')(),
  * Main application entry file.
  * Please note that the order of loading is important.
  */
-
+/*
 // Check for GraphicsMagic
 exec('gm version', function (err, stdout, stderr) {
 	// Validate the output with one of the parameters.
@@ -20,7 +20,7 @@ exec('gm version', function (err, stdout, stderr) {
 		throw new Error('Please make sure GraphicsMagic is installed.');
 	}
 });
-
+*/
 // Bootstrap db connection
 var db = mongoose.connect(config.db, function(err) {
 	if (err) {
