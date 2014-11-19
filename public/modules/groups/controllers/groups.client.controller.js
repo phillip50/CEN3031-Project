@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('groups').controller('GroupsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Groups',
-	function($scope, $http, $stateParams, $location, Authentication, Groups) {
+angular.module('groups').controller('GroupsController', ['$scope', '$http', '$stateParams', '$location', 'Authentication', 'Groups', 'Insects',
+	function($scope, $http, $stateParams, $location, Authentication, Groups, Insects) {
 		$scope.authentication = Authentication;
 
 		$scope.create = function() {
@@ -77,6 +77,34 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 				// or server returns response with an error status.
 			});*/
 		};
+
+		$scope.find2 = function() {
+				var slides = $scope.slides = [10];
+				$scope.insects = Insects.query();
+
+		};
+
+		$scope.leaveGroup = function() {
+			var group = $scope.group;
+
+			group.$leaveGroup(function() {
+				//$location.path('groups/' + group._id);
+				// Add user to members
+				//$location.path('groups/' + group._id);
+				//$scope.group.members.push(Authentication.user);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+
+			/*$http.post('groups/' + group._id, {action: 'joinGroup', id: Authentication.user._id}).success(function(data, status, headers, config) {
+				// this callback will be called asynchronously
+				// when the response is available
+			}).error(function(data, status, headers, config) {
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+			});*/
+		};
+
 
 		$scope.showPath = function(path) {
 			$location.path(path);

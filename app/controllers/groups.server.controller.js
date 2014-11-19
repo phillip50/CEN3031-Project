@@ -32,17 +32,31 @@ exports.create = function(req, res) {
 exports.joinGroup = function(req, res) {
 	var group = req.group;
 	group = _.extend(group, req.body);
-
-	Group.findByIdAndUpdate(group._id, {$push: {'members': req.user}}, function(err, group) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
+	Group.findOne({members: req.user}, function(error, user){
+  		if(user)
+  		{
+  			console.log("user exists");
+  			return res.status(400).send({
+				message: 'User is already in group'
 			});
+  		}
+  		else
+  		{
+  			Group.findByIdAndUpdate(group._id, {$push: {'members': req.user}}, function(err, group) {
+				if (err) {
+						return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+				});
 		}
 		else {
 			res.jsonp(group);
 		}
-	});
+		});
+
+  		}
+	})
+
+	
 
 	/*Group.update({'_id': group._id}, {$push: {'members': req.user}}, function(err) {
 		if (err) {
@@ -55,6 +69,24 @@ exports.joinGroup = function(req, res) {
 		}
 	});*/
 };
+
+exports.leaveGroup = function(req, res) {
+	var group = req.group;
+	console.log("");
+	group = _.extend(group, req.body);
+	
+  		
+  	Group.findByIdAndUpdate(group._id, {$pull: {'members': req.user}}, function(err, group) {
+				if (err) {
+						return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+				});
+		}
+		else {
+			res.jsonp(group);
+		}
+		});
+ };
 
 /**
  * Show the current group

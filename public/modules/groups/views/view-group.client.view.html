@@ -1,4 +1,4 @@
-<section data-ng-controller="GroupsController" data-ng-init="findOne()">
+<section data-ng-controller="GroupsController" data-ng-init="findOne();find2()">
 	<div class="page-header">
 		<h1>
 			{{group.name}} <small><a data-ng-href="/#!/user/{{group.user._id}}">{{group.user.displayName}}</a>'s {{group.type}}</small>
@@ -25,6 +25,7 @@
 		Members <span class="badge">{{group.members.length}}</span>
 		<span class="pull-right" data-ng-show="authentication.user">
 			<a class="btn btn-primary" data-ng-hide="group.members.has(authentication.user._id)" data-ng-click="joinGroup();"><i class="glyphicon glyphicon-plus"></i> Join this {{group.type}}</a>
+			<a class="btn btn-primary" data-ng-hide="group.members.has(authentication.user._id)" data-ng-click="leaveGroup();"><i class="glyphicon glyphicon-plus"></i> Leave this {{group.type}}</a>
 			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id"><i class="glyphicon glyphicon-user"></i> Add Members</a>
 		</span>
 	</h2>
@@ -50,4 +51,13 @@
 		</span>
 	</h2>
 	<p data-ng-hide="group.insects">No insects currently.</p>
+
+	<div style="height: 305px">
+    <carousel interval="myInterval">
+      <slide ng-repeat="insect in insects" active="slide.active">
+        <img ng-src="{{insect.image.small}}" style="margin:auto;">
+      </slide>
+    </carousel>
+  </div>
+
 </section>
