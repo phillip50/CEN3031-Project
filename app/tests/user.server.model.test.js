@@ -43,6 +43,19 @@ describe('User Model Unit Tests:', function() {
 			userDescription: 'User Description goes here',
 			provider: 'local'
 		});
+		user3 = new User({
+			firstName: 'First',
+			lastName: 'Last',
+			displayName: 'First Last',
+			email: 'email@email.com',
+			username: 'user',
+			password: '12345678',
+			gatorlink: 'gatorlink123',
+			school: 'University',
+			classCode: 'class123',
+			userDescription: 'no description',
+			provider: 'local'
+		});
 
 		done();
 	});
@@ -67,12 +80,26 @@ describe('User Model Unit Tests:', function() {
 			});
 		});
 
-		it('should be able to show an error when try to save without first name', function(done) {
+		it('should not be able to save without first name', function(done) {
 			user.firstName = '';
 			return user.save(function(err) {
 				should.exist(err);
 				done();
 			});
+		});
+		
+		it('should not be able to save without username', function(done) {
+			user.firstName = 'Full';
+			user.username = 'username';
+			return user.save(function(err) {
+				should.exist(err);
+				done();
+			});
+		});
+		
+		it('should be able to save a second user without errors', function(done) {
+			user.save();
+			user3.save(done);
 		});
 	});
 
