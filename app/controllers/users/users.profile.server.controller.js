@@ -113,7 +113,7 @@ exports.me = function(req, res) {
 exports.safeUserByID = function(req, res, next, id) {
 	User.findOne({
 		_id: id
-	}).select('firstName lastName displayName classCode school userDescription').exec(function(err, user) {
+	}).select('firstName lastName displayName classCode school userDescription gatorlink').exec(function(err, user) {
 		if (err) return next(err);
 		if (!user) return next(new Error('Failed to load User ' + id));
 		req.profile = user;
