@@ -90,7 +90,7 @@ describe('User Model Unit Tests:', function() {
 		
 		it('should not be able to save without username', function(done) {
 			user.firstName = 'Full';
-			user.username = 'username';
+			user.username = '';
 			return user.save(function(err) {
 				should.exist(err);
 				done();
@@ -98,6 +98,7 @@ describe('User Model Unit Tests:', function() {
 		});
 		
 		it('should be able to save a second user without errors', function(done) {
+			user.username = 'username';
 			user.save();
 			user3.save(done);
 		});
