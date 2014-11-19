@@ -437,7 +437,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					latitude: 29.6398801,
 					longitude: -82.3551082
 				},
-				zoom: 15,
+				zoom: 16,
 				gmap: null,
 				bounds: {},
 				options: {
