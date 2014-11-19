@@ -31,7 +31,7 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
 			var markersTemp = [];
 			var markers = function(i, insect) {
 				var marker = {
-					id: i,
+					id: insect._id,
 					latitude: insect.loc.coordinates[1],
 					longitude: insect.loc.coordinates[0],
 					options: {
@@ -40,9 +40,11 @@ angular.module('core').controller('HomeController', ['$scope', '$location', 'Ins
             				scaledSize: new google.maps.Size(50, 50)
         				}
     				},
-					title: insect.name,
-					caughtBy: insect.user.displayName,
-					location: insect.locationTitle
+					name: insect.name,
+					scientificName: insect.scientificName,
+					user: insect.user,
+					dateFound: insect.dateFound,
+					locationTitle: insect.locationTitle
 				};
 				return marker;
 			};

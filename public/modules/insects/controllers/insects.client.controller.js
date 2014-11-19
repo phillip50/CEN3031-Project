@@ -423,6 +423,14 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 		// Map Page
 		$scope.map = function() {
+			// If finding a user's insects
+			if ($stateParams.hasOwnProperty('userId')) {
+				// Get total count
+				Insects.get({userId: $stateParams.userId, count: 1}, function(data) {
+					$scope.foundUser = data.user;
+				});
+			}
+
 			// Display insects on map
 			$scope.map = {
 				center: {
@@ -453,9 +461,11 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 								scaledSize: new google.maps.Size(50, 50)
 							}
 						},
-						title: insect.name,
-						caughtBy: insect.user.displayName,
-						location: insect.locationTitle
+						name: insect.name,
+						scientificName: insect.scientificName,
+						user: insect.user,
+						dateFound: insect.dateFound,
+						locationTitle: insect.locationTitle
 					};
 					return marker;
 				};
@@ -474,6 +484,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 							},
 							limit: 50
 						};
+
+						// If finding a user's insects
+						if ($stateParams.hasOwnProperty('userId')) boxBounds.userId = $stateParams.userId;
 
 						Insects.query(boxBounds, function(insects) {
 							for (var i = 0; i < insects.length; i++) {

@@ -1,21 +1,30 @@
 <section data-ng-controller="InsectsController" data-ng-init="find()">
 	<div class="page-header">
-		<h1><span data-ng-hide="foundUser">All Insects</span>
+		<h1>
+			<span data-ng-hide="foundUser">All Insects</span>
 			<span data-ng-show="foundUser">
 				<a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a>'s Insects ({{pagination.totalItems}})
 			</span>
 			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 
 			<span class="pull-right">
-				<a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user._id">
+				<a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user._id && !foundUser">
 					<i class="glyphicon glyphicon-plus"></i> New Insect
 				</a>
-				<span class="btn-group" role="group">
-					<a class="btn btn-primary" data-ng-href="/#!/insects" disabled="disabled">
-						<i class="glyphicon glyphicon-th-large"></i> View List
+				<span class="btn-group" role="group" data-ng-hide="foundUser">
+					<a class="btn btn-primary active" data-ng-href="/#!/insects" disabled="disabled">
+						<i class="glyphicon glyphicon-th-large"></i> List
 					</a>
 					<a class="btn btn-default" data-ng-href="/#!/insects/map">
-						<i class="glyphicon glyphicon-globe"></i> View Map
+						<i class="glyphicon glyphicon-globe"></i> Map
+					</a>
+				</span>
+				<span class="btn-group" role="group" data-ng-show="foundUser">
+					<a class="btn btn-primary active" data-ng-href="/#!/insects/user/{{foundUser._id}}" disabled="disabled">
+						<i class="glyphicon glyphicon-th-large"></i> List
+					</a>
+					<a class="btn btn-default" data-ng-href="/#!/insects/map/user/{{foundUser._id}}">
+						<i class="glyphicon glyphicon-globe"></i> Map
 					</a>
 				</span>
 			</span>

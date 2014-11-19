@@ -357,7 +357,11 @@ exports.list = function(req, res) {
 			}
 		};
 
-		Insect.find(findQuery).select('+image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
+		if (query.hasOwnProperty('userId')) {
+			findQuery.user = query.userId;
+		}
+
+		Insect.find(findQuery).select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)

@@ -1,17 +1,29 @@
 <section data-ng-controller="InsectsController" data-ng-init="map()" class="viewMap">
     <div class="page-header">
-        <h1>All Insects ({{markers.length}} shown)
+        <h1>
+            <span data-ng-hide="foundUser">All Insects ({{markers.length}} shown)</span>
+            <span data-ng-show="foundUser">
+                <a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a>'s Insects ({{markers.length}} shown)
+            </span>
             <small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
             <span class="pull-right">
                 <a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="authentication.user">
                     <i class="glyphicon glyphicon-plus"></i> New Insect
                 </a>
-                <span class="btn-group" role="group">
+                <span class="btn-group" role="group" data-ng-hide="foundUser">
                     <a class="btn btn-default" data-ng-href="/#!/insects">
-                        <i class="glyphicon glyphicon-th-large"></i> View List
+                        <i class="glyphicon glyphicon-th-large"></i> List
                     </a>
-                    <a class="btn btn-primary" data-ng-href="/#!/insects/map" disabled="disabled">
-                        <i class="glyphicon glyphicon-globe"></i> View Map
+                    <a class="btn btn-primary active" data-ng-href="/#!/insects/map" disabled="disabled">
+                        <i class="glyphicon glyphicon-globe"></i> Map
+                    </a>
+                </span>
+                <span class="btn-group" role="group" data-ng-show="foundUser">
+                    <a class="btn btn-default" data-ng-href="/#!/insects/user/{{foundUser._id}}">
+                        <i class="glyphicon glyphicon-th-large"></i> List
+                    </a>
+                    <a class="btn btn-primary active" data-ng-href="/#!/insects/map/user/{{foundUser._id}}" disabled="disabled">
+                        <i class="glyphicon glyphicon-globe"></i> Map
                     </a>
                 </span>
             </span>
@@ -21,11 +33,20 @@
     <ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.gmap" draggable="true" options="map.options" bounds="map.bounds">
         <ui-gmap-markers models="markers" coords="'self'" options="'options'">
             <ui-gmap-windows show="show">
-                  <div data-ng-non-bindable>
-                    <strong>{{title}}</strong><br>
-                    Caught By {{caughtBy}}<br>
-                    Location {{location}}
-                  </div>
+                <div class="window" ng-non-bindable>
+                    <img src="{{options.icon.url}}">
+                    <h3>
+                        <a href="#!/insects/{{id}}">{{name}}</a>
+                    </h3>
+                    <p class="clearfix">
+                        <em>{{scientificName}}</em>
+                        <span>Found by <a href="#!/profile/{{user._id}}">{{user.displayName}}</a></span>
+                        <span>{{dateFound | date:'longDate'}}</span>
+                        <span>Location found: {{locationTitle}}</span>
+                        <br>
+                        <a href="#!/insects/{{id}}" class="btn btn-primary pull-right" role="button">View</a>
+                    </p>
+                </div>
               </ui-gmap-windows>
         </ui-gmap-markers>
     </ui-gmap-google-map>

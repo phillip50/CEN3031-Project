@@ -43,8 +43,15 @@
 
 	<div class="page-header">
 		<h2>
-			<span data-ng-bind="foundUser.info.displayName"></span> Insects
-			<span class="badge" data-ng-bind="foundUser.count"></span>
+			<span data-ng-bind="foundUser.info.displayName"></span> Insects ({{foundUser.count}})
+			<span class="pull-right">
+				<a class="btn btn-default" data-ng-href="/#!/insects/create" data-ng-show="user._id == foundUser.info._id">
+					<i class="glyphicon glyphicon-plus"></i> New Insect
+				</a>
+				<a class="btn btn-default" data-ng-href="/#!/insects/map/user/{{foundUser.info._id}}">
+					<i class="glyphicon glyphicon-globe"></i> Map
+				</a>
+			</span>
 		</h2>
 	</div>
 
@@ -67,11 +74,11 @@
 		</div>
 	</div>
 
-	<div class="text-center" ng-data-if="foundUser.count > 12">
+	<div class="text-center" data-ng-if="foundUser.count > 12">
 		<a data-ng-href="#!/insects/user/{{foundUser.info._id}}" class="btn btn-primary" role="button">View all of {{foundUser.info.displayName}} insects ({{foundUser.count}})</a>
 	</div>
 
-	<div class="alert alert-warning text-center" data-ng-if="foundUser.insects.length < 1">
+	<div class="alert alert-warning text-center" data-ng-if="foundUser.count < 1">
 		{{foundUser.info.displayName}} hasn't added any insects yet.
 	</div>
 </section>

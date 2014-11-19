@@ -10,3 +10,6 @@ h3.vspace {margin-bottom: 20px;}
 .viewInsects .dropdown-menu li a {cursor: pointer;}
 
 .thumbnail .caption p {word-wrap: break-word;}
+
+.viewMap .window img {max-height: 250px;}
+.viewMap .window p span, .viewMap .window p em {display: block;}

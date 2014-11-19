@@ -25,3 +25,6 @@ body > footer {margin: 40px 0 30px;}
 body > footer hr {margin: 0 0 40px;}
 
 .thumbnail .caption .p {word-wrap: break-word;}
+
+.angular-google-map .window img {max-height: 250px;}
+.angular-google-map .window p span, .viewMap .window p em {display: block;}

@@ -29,6 +29,10 @@ angular.module('insects').config(['$stateProvider',
 			url: '/insects/map',
 			templateUrl: 'modules/insects/views/view-map.client.view.html'
 		}).
+		state('viewMapOfUser', {
+			url: '/insects/map/user/:userId',
+			templateUrl: 'modules/insects/views/view-map.client.view.html'
+		}).
 		state('viewInsect', {
 			url: '/insects/:insectsId',
 			templateUrl: 'modules/insects/views/view-insect.client.view.html'
