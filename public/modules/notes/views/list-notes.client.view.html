@@ -1,18 +1,38 @@
-<section data-ng-controller="NotesController" data-ng-init="find()">
+<section data-ng-controller="NotesController" data-ng-init="find()" class="listNotes">
 	<div class="page-header">
-		<h1>Notes</h1>
+		<h1>My Field Notes
+			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
+			<span class="pull-right">
+				<a class="btn btn-default" data-ng-href="/#!/notes/create">
+					<i class="glyphicon glyphicon-plus"></i> New Field Note
+				</a>
+			</span>
+		</h1>
 	</div>
-	<div class="list-group">
-		<a data-ng-repeat="gallery in gallerys" data-ng-href="#!/notes/{{gallery}}" class="list-group-item">
-			<h4 class="list-group-item-heading" data-ng-bind="gallery.name"></h4>
-			<div class = "row">
-				<div class ="col col-sm-2" data-ng-repeat="insect in insects | filter: galleryName">
-					<img style="height: 100px;" class="list-group-item-text" ng-src="{{insect.image.small}}" ></img>
+
+	<div class="row note" data-ng-repeat="note in notes">
+		<div class="col-md-2">
+			{{note.created | date:'longDate'}}
+		</div>
+
+		<div class="col-md-10">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title"><a data-ng-href="#!/notes/{{note._id}}">{{note.title}}</a></h2>
+				</div>
+
+				<div class="panel-body">
+					<img data-ng-repeat="insect in insects" data-ng-src="{{insect.image.small}}" style="max-width: 80px;">
 				</div>
 			</div>
-		</a>
+		</div>
 	</div>
+
+	<div data-ng-if="notes.$resolved && notes.length" class="text-center">
+		<p>End of notes.</p>
+	</div>
+
 	<div class="alert alert-warning text-center" data-ng-if="notes.$resolved && !notes.length">
-		No notes yet, why don't you <a href="/#!/notes/create">create one</a>?
+		You haven't created any field notes yet.
 	</div>
 </section>

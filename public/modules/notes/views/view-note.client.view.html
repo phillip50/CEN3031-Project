@@ -1,18 +1,45 @@
 <section data-ng-controller="NotesController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1 data-ng-bind="thesenotes.title"></h1>
+		<h1>{{note.title}}
+			<span class="pull-right">
+				<a class="btn btn-primary" href="/#!/notes/{{note._id}}/edit">
+					<i class="glyphicon glyphicon-edit"></i>
+				</a>
+				<a class="btn btn-primary" data-ng-click="remove();">
+					<i class="glyphicon glyphicon-trash"></i>
+				</a>
+				<a class="btn btn-default" data-ng-click="generatePDF();">
+					<i class="glyphicon glyphicon-print"></i> PDF
+				</a>
+			</span>
+		</h1>
 	</div>
+
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title"><a data-ng-href="#!/notes/{{note._id}}">{{note.created | date:'longDate'}}, {{note.title}}</a></h2>
+		</div>
+
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6">
+					<h3 data-ng-bind="note.title"></h3>
+					<p data-ng-bind-html="note.content"></p>
+				</div>
+
+				<div class="col-md-6">
+					<h3>Relevent Insects</h3>
+					<div>
+						<img data-ng-repeat="insect in insects" data-ng-src="{{insect.image.small}}" style="max-width: 200px;">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div>
-		<a class="btn btn-primary" href="/#!/notes/{{note._id}}/edit">
-			<i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" data-ng-click="remove();">
-			<i class="glyphicon glyphicon-trash"></i>
-		</a>
-		<a class="btn btn-default" data-ng-click="generatePDF();">
-                    <i class="glyphicon glyphicon-print"></i> PDF
-        </a>
-        <br><br>
 		<div class="row" ng-repeat="note in thesenotes">
 			<div class="col">
 				<div class="col col-md-6" ng-repeat="insect in thesenotes.insectsInGal">
@@ -28,6 +55,5 @@
 				<textarea class="ng-pristine ng-valid" rows="6" style="height:3em" data-ng-model="note.content"></textarea>
 			</div>
 		</div>
-
 	</div>
 </section>

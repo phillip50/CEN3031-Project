@@ -17,7 +17,7 @@
 				<div class="form-group" ng-class="{ 'has-error' : submitted && noteForm.content.$invalid}">
 					<label class="control-label" for="content">Content</label>
 					<div class="controls">
-						<textarea name="content" data-ng-model="note.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content" required></textarea>
+						<textarea name="content" data-ng-model="note.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content" required ui-tinymce data-ng-model="tinymceModel"></textarea>
 					</div>
 					<div ng-show="submitted && noteForm.content.$invalid" class="help-block">
 						<p ng-show="noteForm.content.$error.required" class="text-danger">Content is required</p>

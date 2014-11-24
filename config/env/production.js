@@ -9,6 +9,8 @@ module.exports = {
 				'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
 			],
 			js: [
+				'public/lib/pdfmake/build/pdfmake.min.js',
+				'public/lib/pdfmake/build/vfs_fonts.js',
 				'public/lib/ng-file-upload/angular-file-upload-shim.js',
 				'public/lib/angular/angular.min.js',
 				'public/lib/ng-file-upload/angular-file-upload.js',
@@ -19,7 +21,10 @@ module.exports = {
 				'public/lib/angular-sanitize/angular-sanitize.js',
 				'public/lib/angular-ui-router/release/angular-ui-router.min.js',
 				'public/lib/angular-ui-utils/ui-utils.min.js',
-				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js'
+				'public/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
+				'public/lib/lodash/dist/lodash.min.js',
+				'public/lib/bluebird/js/browser/bluebird.js',
+				'public/lib/angular-google-maps/dist/angular-google-maps.min.js'
 			]
 		},
 		css: 'public/dist/application.min.css',

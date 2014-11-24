@@ -1,44 +1,16 @@
 'use strict';
 
 angular.module('notes').controller('NotesController', ['$scope', '$stateParams', 'GoogleMapApi'.ns(), '$location', 'Authentication', 'Notes', 'Insects',
-	function($scope, $stateParams, $location, GoogleMapApi, Authentication, Notes, Insects) {
+	function($scope, $stateParams, GoogleMapApi, $location, Authentication, Notes, Insects) {
 		$scope.authentication = Authentication;
-		// Display insects on map
-		$scope.map = {
-			center: {
-				latitude: 29.6398801,
-				longitude: -82.3551082
-			},
-			zoom: 15,
-			gmap: null,
-			bounds: {},
-			options: {
-				scrollwheel: false,
-				streetViewControl: false
-			}
-		};
-		$scope.markers = [];
-		$scope.docDefinition = {};
-		$scope.generatePDF = function() {
-				// Open PDF
-			pdfMake.createPdf($scope.docDefinition).open();
-		};
 
-		$scope.gallerys = [];
-		$scope.insects = [];
-
-		Insects.query(function(insects) {
-			for (insects.galleryName in insects) {
-				var newG = {name: insects[insects.galleryName].galleryName};
-				var key = insects[insects.galleryName].galleryName;
-				if(newG in $scope.gallerys == false)
-					$scope.gallerys.push({name : key});
-			}
-			for (var i = 0; i < insects.length; i++)
-			{
-				$scope.insects.push({latitude: insects[i].loc.coordinates[1],longitude: insects[i].loc.coordinates[0], image: insects[i].image, title: insects[i].name,location: insects[i].locationTitle});
-			}
-		});
+		$scope.createPage = function() {
+			$scope.tinymceOptions = {
+	        	handle_event_callback: function (e) {
+	        	// put logic here for keypress
+	        	}
+    		};
+		};
 
 		$scope.create = function() {
 			var note = new Notes({
@@ -82,12 +54,22 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 		};
 
 		$scope.find = function() {
+			$scope.loading = true;
 
-			$scope.notes = Notes.query();
+			$scope.insects = [];
+			$scope.insects = Insects.query({limit: 3});
+
+			$scope.notes = Notes.query(function() {
+				$scope.loading = false;
+			});
 		};
 
 		$scope.findOne = function() {
-			console.log("called");
+			$scope.note = Notes.get({
+				noteId: $stateParams.noteId
+			});
+
+			/*console.log("called");
 			var titleThis0 = $stateParams.noteId.split(":")[1];
 			var titleThis = titleThis0.substring(1,titleThis0.length-2);
 			var theseInsects = [];
@@ -163,7 +145,7 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 				insectsInGal: theseInsects,
 				content: "Sample note"
 			};
-			console.log($scope.thesenotes);
+			console.log($scope.thesenotes);*/
 
 
 

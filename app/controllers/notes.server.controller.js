@@ -24,7 +24,6 @@ exports.create = function(req, res) {
 			res.jsonp(note);
 		}
 	});
-
 };
 
 /**
@@ -74,7 +73,7 @@ exports.delete = function(req, res) {
  * List of Notes
  */
 exports.list = function(req, res) {
-	Note.find().sort('-created').populate('user', 'displayName').exec(function(err, notes) {
+	Note.find({user: req.user.id}).sort('-created').populate('user', 'displayName').exec(function(err, notes) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

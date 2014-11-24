@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'theInsectCollection';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'google-maps'.ns(), 'angularFileUpload']
+	var applicationModuleVendorDependencies = ['ngResource', 'ngCookies',  'ngAnimate',  'ngTouch',  'ngSanitize',  'ui.router', 'ui.bootstrap', 'ui.utils', 'google-maps'.ns(), 'angularFileUpload', 'ui.tinymce']
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
 		// Create angular module

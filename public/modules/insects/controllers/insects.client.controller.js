@@ -210,13 +210,14 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					$scope.insects = Insects.query({
 						userId: $stateParams.userId,
 						skip: skip
+					}, function() {
+						$scope.loading = false;
 					});
 
 					// Get total count
 					Insects.get({userId: $stateParams.userId, count: 1}, function(data) {
 						$scope.foundUser = data.user;
 						$scope.pagination.totalItems = data.count;
-						$scope.loading = false;
 					});
 				}
 				// List all insects
@@ -227,13 +228,14 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					$scope.insects = Insects.query({
 						limit: 12,
 						skip: skip
+					}, function() {
+						$scope.loading = false;
 					});
 
 					// Get total count
 					Insects.get({count: 1}, function(data) {
 						$scope.pagination.totalItems = data.count;
 						if (firstRun) $scope.pagination.currentPage = parseInt((skip / data.count) * 12, 10);
-						$scope.loading = false;
 					});
 				}
 			}
@@ -273,6 +275,8 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 
 		// View Insect Page
 		$scope.findOne = function() {
+			$scope.loading = true;
+
 			$scope.insect = Insects.get({
 				insectId: $stateParams.insectsId // issue with insect(s) here, investigate later
 			}, function(insect){
@@ -297,8 +301,11 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					},
 					options: {draggable: false}
 				};
+
+				$scope.loading = false;
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
+				$scope.loading = false;
 			});
 
 			$scope.insectDownload = function(size) {
