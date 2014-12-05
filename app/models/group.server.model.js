@@ -30,6 +30,10 @@ var GroupSchema = new Schema({
 		enum: ['Group', 'Class'],
 		required: 'Group type cannot be blank'
 	},
+	isPrivate: {
+		type: Boolean,
+		default: false
+	},
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'

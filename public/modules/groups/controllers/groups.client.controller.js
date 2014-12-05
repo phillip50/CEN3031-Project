@@ -84,6 +84,30 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 
 		};
 
+		$scope.makePrivate = function() {
+			var group = $scope.group;
+			group.isPrivate = true;
+			group.$update(function() {
+				$location.path('groups/' + group._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+
+
+		};
+
+		$scope.makeNotPrivate = function() {
+			var group = $scope.group;
+			group.isPrivate = false;
+			group.$update(function() {
+				$location.path('groups/' + group._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+
+
+		};
+
 		$scope.leaveGroup = function() {
 			var group = $scope.group;
 
@@ -107,6 +131,7 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 
 
 		$scope.showPath = function(path) {
+			
 			$location.path(path);
 		};
 	}
