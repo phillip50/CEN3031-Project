@@ -1,58 +1,61 @@
 <section data-ng-controller="NotesController" data-ng-init="findOne()">
 	<div class="page-header">
-		<h1>{{note.title}}
+		<h1>Field Note: <a data-ng-href="#!/notes/{{note._id}}">{{note.title}}</a>
+			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 			<span class="pull-right">
-				<a class="btn btn-primary" href="/#!/notes/{{note._id}}/edit">
-					<i class="glyphicon glyphicon-edit"></i>
-				</a>
-				<a class="btn btn-primary" data-ng-click="remove();">
-					<i class="glyphicon glyphicon-trash"></i>
-				</a>
 				<a class="btn btn-default" data-ng-click="generatePDF();">
 					<i class="glyphicon glyphicon-print"></i> PDF
 				</a>
+				<span data-ng-show="authentication.user._id == note.user._id">
+					<a class="btn btn-default" href="/#!/notes/{{note._id}}/edit">
+						<i class="glyphicon glyphicon-pencil"></i> Edit
+					</a>
+					<div class="btn-group" dropdown is-open="deleteButton.isopen">
+						<button type="button" class="btn btn-danger dropdown-toggle">
+							<i class="glyphicon glyphicon-trash"></i> Delete
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="menu">
+							<li class="dropdown-header">You are about to delete this field note.</li>
+							<li><a data-ng-click="remove();">Delete</a></li>
+							<li><a data-ng-click="deleteButton.isopen = false;">Cancel</a></li>
+						</ul>
+					</div>
+				</span>
 			</span>
 		</h1>
 	</div>
 
-
-
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h2 class="panel-title"><a data-ng-href="#!/notes/{{note._id}}">{{note.created | date:'longDate'}}, {{note.title}}</a></h2>
-		</div>
-
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-md-6">
-					<h3 data-ng-bind="note.title"></h3>
-					<p data-ng-bind-html="note.content"></p>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">{{note.created | date:'longDate'}}</h2>
 				</div>
 
-				<div class="col-md-6">
-					<h3>Relevent Insects</h3>
-					<div>
-						<img data-ng-repeat="insect in insects" data-ng-src="{{insect.image.small}}" style="max-width: 200px;">
-					</div>
+				<div class="panel-body">
+					<p data-ng-show="note.content" data-ng-bind-html="note.content"></p> <em data-ng-show="!note.content" class="text-muted">No content.</em>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div>
-		<div class="row" ng-repeat="note in thesenotes">
-			<div class="col">
-				<div class="col col-md-6" ng-repeat="insect in thesenotes.insectsInGal">
-					<div class="row">
-						<div class="col">
-							<img src={{insect.image.small}}></img>
+		<div class="col-md-6">
+			<div class="row">
+				<div data-ng-repeat="insect in note.insects" class="col-sm-4 col-md-6 col-lg-6">
+					<div class="thumbnail">
+						<a data-ng-href="#!/insects/{{insect._id}}">
+							<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+						</a>
+						<div class="caption clearfix">
+							<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
+							<p>
+								<em data-ng-bind="insect.scientificName" style="display: block;"></em>
+								<!--<span data-ng-show="insect.user" style="display: block;">Found by <a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></span>-->
+								<span data-ng-bind="insect.dateFound | date:'longDate'"></span>
+							</p>
+							<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary pull-right" role="button">View</a>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col">
-				<h3>Note: {{note.content}}</h3>
-				<textarea class="ng-pristine ng-valid" rows="6" style="height:3em" data-ng-model="note.content"></textarea>
 			</div>
 		</div>
 	</div>

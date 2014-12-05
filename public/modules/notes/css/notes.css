@@ -1,3 +1,2 @@
-.listNotes {}
 .listNotes .note {border-bottom: 1px solid #fff; margin: 15px 0;}
 .listNotes .note::last-of-type {border-bottom: 0; margin-bottom: 0;}

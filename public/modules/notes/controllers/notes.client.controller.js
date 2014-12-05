@@ -5,23 +5,27 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 		$scope.authentication = Authentication;
 
 		$scope.createPage = function() {
-			$scope.tinymceOptions = {
-	        	handle_event_callback: function (e) {
-	        	// put logic here for keypress
-	        	}
-    		};
+			$scope.insects = [];
+			$scope.insects = Insects.query({limit: 100, userId: Authentication.user._id});
 		};
 
 		$scope.create = function() {
+			var ids = [];
+			for (var i = 0; i < this.selectedInsects.length; i++) {
+				ids.push(this.selectedInsects[i]._id);
+			}
+
 			var note = new Notes({
 				title: this.title,
-				content: this.content
+				content: this.content,
+				insects: ids
 			});
 			note.$save(function(response) {
 				$location.path('notes/' + response._id);
 
 				$scope.title = '';
 				$scope.content = '';
+				$scope.selectedInsects = [];
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
@@ -43,8 +47,23 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 			}
 		};
 
+		$scope.updatePage = function() {
+			$scope.insects = [];
+			$scope.insects = Insects.query({limit: 100, userId: Authentication.user._id});
+		};
+
 		$scope.update = function() {
-			var note = $scope.note;
+			var ids = [];
+			for (var i = 0; i < this.selectedInsects.length; i++) {
+				ids.push(this.selectedInsects[i]._id);
+			}
+
+			var note = new Notes({
+				_id: $scope.note._id,
+				name: $scope.note.title,
+				content: $scope.note.content,
+				insects: ids
+			});
 
 			note.$update(function() {
 				$location.path('notes/' + note._id);
@@ -56,100 +75,19 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 		$scope.find = function() {
 			$scope.loading = true;
 
-			$scope.insects = [];
-			$scope.insects = Insects.query({limit: 3});
-
 			$scope.notes = Notes.query(function() {
 				$scope.loading = false;
 			});
 		};
 
 		$scope.findOne = function() {
+			$scope.loading = true;
+
 			$scope.note = Notes.get({
 				noteId: $stateParams.noteId
+			}, function() {
+				$scope.loading = false;
 			});
-
-			/*console.log("called");
-			var titleThis0 = $stateParams.noteId.split(":")[1];
-			var titleThis = titleThis0.substring(1,titleThis0.length-2);
-			var theseInsects = [];
-			Insects.query(function(insects) {
-				for (var i = 0; i < insects.length; i++)
-				{
-					if(insects[i].galleryName == titleThis)
-					{
-						theseInsects.push({latitude: insects[i].loc.coordinates[1],longitude: insects[i].loc.coordinates[0], image: insects[i].image, title: insects[i].name,location: insects[i].locationTitle});
-						//markersTemp.push(markers(i, insects[i]));
-					}
-							$scope.docDefinition.push( {
-					content: [
-					{text: 'Insect Guide', style: 'header'},
-					{
-						style: 'table',
-						table: {
-							widths: [200, '*'],
-							body: [
-								[
-									{text: 'Photo', style: 'tableHeader'},
-									{text: 'Infomation', style: 'tableHeader'}
-								], [
-									{image: insects[i].image.small, width: 200},
-									{
-										table: {
-											body: [
-												[{text: 'Name', bold: true}, insects[i].name],
-												[{text: 'Scientific Name', bold: true}, insects[i].scientificName],
-												[{text: 'Description', bold: true}, insects[i].description],
-												[{text: 'Date Found', bold: true}, insects[i].dateFound],
-												[{text: 'Location Found', bold: true}, insects[i].locationTitle],
-											],
-										},
-										layout: 'noBorders'
-									}
-									//{text: 'nothing interesting here', italics: true, color: 'gray'}
-								]
-							]
-						},
-						layout: 'lightHorizontalLines',
-						pageBreak: 'before'
-					}],
-					styles: {
-						header: {
-							fontSize: 18,
-							bold: true,
-							margin: [0, 0, 0, 10]
-						},
-						subheader: {
-							fontSize: 16,
-							bold: true,
-							margin: [0, 10, 0, 5]
-						},
-						table: {
-							margin: [0, 5, 0, 15]
-						},
-						tableHeader: {
-							bold: true,
-							fontSize: 13,
-							color: 'black'
-						}
-					}
-				});
-
-
-				}
-			});
-			//$scope.markers = markersTemp;
-
-			$scope.thesenotes = {
-				title: titleThis,
-				insectsInGal: theseInsects,
-				content: "Sample note"
-			};
-			console.log($scope.thesenotes);*/
-
-
-
-
 		};
 	}
 ]);

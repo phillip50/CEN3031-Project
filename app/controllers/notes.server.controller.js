@@ -5,6 +5,7 @@
  */
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
+	Insect = mongoose.model('Insect'),
 	Note = mongoose.model('Note'),
 	_ = require('lodash');
 
@@ -73,7 +74,7 @@ exports.delete = function(req, res) {
  * List of Notes
  */
 exports.list = function(req, res) {
-	Note.find({user: req.user.id}).sort('-created').populate('user', 'displayName').exec(function(err, notes) {
+	Note.find({user: req.user.id}).sort('-created').populate('user', 'displayName').populate({path: 'insects', select: 'image.small', options: { limit: 5}}).exec(function(err, notes) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -88,7 +89,7 @@ exports.list = function(req, res) {
  * Note middleware
  */
 exports.noteByID = function(req, res, next, id) {
-	Note.findById(id).populate('user', 'displayName').exec(function(err, note) {
+	Note.findById(id).populate('user', 'displayName').populate({path: 'insects', select: '+image.small'}).exec(function(err, note) {
 		if (err) return next(err);
 		if (!note) return next(new Error('Failed to load note ' + id));
 		req.note = note;
