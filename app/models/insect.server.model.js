@@ -106,10 +106,10 @@ var InsectSchema = new Schema({
 		type: Schema.ObjectId,
 		ref: 'User'
 	},
-	/*comments: {
+	comments: [{
 		type: Schema.ObjectId,
 		ref: 'Comment'
-	},*/
+	}],
 	commentsEnabled: {
 		type: Boolean,
 		default: true

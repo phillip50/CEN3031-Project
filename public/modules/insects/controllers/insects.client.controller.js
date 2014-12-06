@@ -26,6 +26,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 					}
 				},
 				commentsEnabled: true,
+				validationEnabled: true,
 				dateFound: new Date(),
 				isValid: false,
 				reviewForm: false,
@@ -133,6 +134,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				description: this.form.description,
 				dateFound: this.form.dateFound,
 				commentsEnabled: this.form.commentsEnabled,
+				validationEnabled: this.form.validationEnabled,
 				locationTitle: this.form.locationTitle,
 				loc: {
 					coordinates: [this.form.loc.coordinates.longitude, this.form.loc.coordinates.latitude]
@@ -158,6 +160,7 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				$scope.form.description = '';
 				$scope.form.dateCreated = new Date();
 				$scope.form.commentsEnabled = true;
+				$scope.form.validationEnabled = true;
 				$scope.form.locationTitle = '';
 				$scope.form.loc.coordinates.latitude = '';
 				$scope.form.loc.coordinates.longitude = '';

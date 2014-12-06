@@ -67,6 +67,7 @@ exports.create = function(req, res) {
 		if (fields.description !== 'undefined') insect.description = fields.description;
 		insect.dateFound = JSON.parse(fields.dateFound);
 		insect.commentsEnabled = JSON.parse(fields.commentsEnabled);
+		insect.validationEnabled = JSON.parse(fields.validationEnabled);
 		insect.locationTitle = fields.locationTitle;
 		insect.loc = JSON.parse(fields.loc);
 		insect.loc.type = 'Point';
@@ -88,7 +89,8 @@ exports.create = function(req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				}
-				else if (!image.hasOwnProperty('Profile-EXIF')) {
+
+				if (!image.hasOwnProperty('Profile-EXIF')) {
 					return res.status(400).send({
 						message: 'Could not find EXIF data in photo.'
 					});
@@ -404,7 +406,7 @@ exports.list = function(req, res) {
  * Insect middleware
  */
 exports.insectByIDLargeImage = function(req, res, next, id) {
-	Insect.findById(id).select('+image.large').populate('user', 'displayName').exec(function(err, insect) {
+	Insect.findById(id).select('+image.large').populate('user', 'displayName').populate('comments').exec(function(err, insect) {
 		if (err) return next(err);
 		if (!insect) return next(new Error('Failed to load insect ' + id));
 		req.insect = insect;
