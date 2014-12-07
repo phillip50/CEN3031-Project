@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$scope', '$http', '$upload', '$stateParams', '$location', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
-	function($scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
+angular.module('insects').controller('InsectsController', ['$state', '$scope', '$http', '$upload', '$stateParams', '$location', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
+	function($state, $scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
 		$scope.authentication = Authentication;
 
 		$scope.gallerys = [
@@ -382,6 +382,20 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 				pdfMake.createPdf(docDefinition).download();
 			};
 
+			// comments
+			$scope.comment = {
+				content: '',
+				add: function() {
+					$http.post('/insects/' + $scope.insect._id + '/comment/', {content: $scope.comment.content})
+					.success(function(data, status, headers, config) {
+						$state.go($state.$current, null, { reload: true });
+					})
+					.error(function(data, status, headers, config) {
+						$scope.comment.error = data.message;
+					});
+				}
+			};
+
 			/*comments: [{
 					user: {
 						_id: 1,
@@ -501,9 +515,9 @@ angular.module('insects').controller('InsectsController', ['$scope', '$http', '$
 						Insects.query(boxBounds, function(insects) {
 							for (var i = 0; i < insects.length; i++) {
 								// throw out duplicates already on map
-								if ($scope.markersIds.indexOf(insects[i]['_id']) === -1) {
+								if ($scope.markersIds.indexOf(insects[i]._id) === -1) {
 									markersTemp.push(markers(i, insects[i]));
-									markersIdsTemp.push(insects[i]['_id']);
+									markersIdsTemp.push(insects[i]._id);
 								}
 							}
 

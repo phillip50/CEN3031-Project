@@ -74,6 +74,28 @@ exports.delete = function(req, res) {
  * List of Notes
  */
 exports.list = function(req, res) {
+	/*SomeSchema.aggregate(
+		[
+		{ "$match": {
+			"date": {
+				"$gte": new Date("2014-05-01"), "$lt": new Date("2014-06-01")
+			}
+		}},
+		{ "$group": {
+			"_id": {
+				"year":  { "$year": "$date" },
+				"month": { "$month": "$date" },
+				"day":   { "$dayOfMonth": "$date" }
+			}
+			"count": { "$sum": 1 }
+		}}
+		],
+		function(err,result) {
+			// do something with result
+
+		}
+	);*/
+
 	Note.find({user: req.user.id}).sort('-created').populate('user', 'displayName').populate({path: 'insects', select: 'image.small', options: { limit: 5}}).exec(function(err, notes) {
 		if (err) {
 			return res.status(400).send({

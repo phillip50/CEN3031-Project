@@ -87,47 +87,51 @@
                     <div class="panel-body">
                         <p data-ng-hide="insect.comments">There are no comments for this insect.</p>
 
-                        <ul class="media-list" data-ng-show="insect.comments">
-                            <li class="media" ng-repeat="comment in insect.comments">
-                                <a class="pull-left" data-ng-href="#!/profile/{{comment.user._id}}">
-                                    <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" style="width: 64px; height: 64px;">
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
-                                        <small class="pull-right" data-ng-bind="comment.created | date:'mediumDate'"></small>
-                                    </h4>
-                                    <p data-ng-bind="comment.message"></p>
-                                </div>
-                            </li>
-                        </ul>
+                        <div class="panel panel-info" data-ng-repeat="comment in insect.comments">
+                            <div class="panel-heading">
+                                <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
+                                <span class="pull-right" data-ng-bind="comment.created | date:'MMMM d, y h:mm:ss a'"></span>
+                            </div>
+                            <div class="panel-body">
+                                {{comment.content}}
+                                <em data-ng-show="!comment.content">No content.</em>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="panel panel-default" data-ng-show="authentication.user">
                     <div class="panel-heading">
-                        <h2 class="panel-title">Add a new Comment</h2>
+                        <h2 class="panel-title">Add a new Comment
+                            <span class="pull-right">Commenting as <strong>{{authentication.user.displayName}}</strong></span>
+                        </h2>
                     </div>
 
                     <div class="panel-body">
-                        <form name="insectComment" class="form-horizontal" data-ng-submit="update(insectForm.$valid)" novalidate>
+                        <div data-ng-show="comment.error" class="alert alert-danger" role="alert">
+                            <strong data-ng-bind="comment.error"></strong>
+                        </div>
+
+                        <form name="insectComment" class="form-horizontal" data-ng-submit="comment.add(insectComment.$valid)">
                             <fieldset>
-                                <label style="font-weight: normal;" class="control-label" for="comment">Commenting as <strong>{{authentication.user.displayName}}</strong></label>
-                                <textarea name="comment" id="content" class="form-control" cols="30" rows="10" placeholder="Write a comment." required></textarea>
-                                <input type="submit" value="Submit" class="btn btn-default">
+                                <textarea name="comment" id="content" class="form-control" cols="25" rows="7" placeholder="Write a comment." data-ng-model="comment.content" required></textarea><br>
+                                <input type="submit" value="Submit" class="btn btn-primary pull-right">
                             </fieldset>
                         </form>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-default" data-ng-show="!insect.commentsEnabled && authentication.user._id == insect.user._id">
+            <div class="panel panel-default" data-ng-show="!insect.commentsEnabled">
                 <div class="panel-heading">
                     <h2 class="panel-title">Comments</h2>
                 </div>
 
                 <div class="panel-body">
-                    <p class="alert alert-info" role="alert">
+                    <p data-ng-show="authentication.user._id != insect.user._id">
+                        Commenting for this insect has been disbabled.
+                    </p>
+                    <p data-ng-show="authentication.user._id == insect.user._id">
                         You have disabled commenting for this insect.
                     </p>
                 </div>

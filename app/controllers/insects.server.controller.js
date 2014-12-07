@@ -7,6 +7,7 @@ var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
 	Insect = mongoose.model('Insect'),
 	User = mongoose.model('User'),
+	Comment = mongoose.model('Comment'),
 	_ = require('lodash');
 
 var fs = require('fs'),
@@ -232,6 +233,40 @@ exports.downloadImage = function(req, res) {
 };
 
 /**
+* Comment on a insect
+*/
+exports.comment = function(req, res) {
+	var insect = req.insect;
+
+	if (!insect.commentsEnabled) return res.status(400).send({
+		message: 'Comments for this insect is disabled.'
+	});
+
+	var comment = new Comment();
+	comment.user = req.user;
+	comment.content = req.body.content;
+
+	comment.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}
+		else {
+			Insect.findByIdAndUpdate(insect._id, {$push: {'comments': comment}}, function(err, insect) {
+				if (err) {
+					return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					res.jsonp({success: true});
+				}
+			});
+		}
+	});
+};
+
+/**
  * Update a insect
  */
 exports.update = function(req, res) {
@@ -376,9 +411,9 @@ exports.list = function(req, res) {
 
 	// If user query
 	else if (query.hasOwnProperty('userId')) {
-		var userId = query.userId;
+		var userId2 = query.userId;
 
-		Insect.find({user: userId}).select('+image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
+		Insect.find({user: userId2}).select('+image.small').sort('-created').skip(skip).limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)
@@ -409,8 +444,20 @@ exports.insectByIDLargeImage = function(req, res, next, id) {
 	Insect.findById(id).select('+image.large').populate('user', 'displayName').populate('comments').exec(function(err, insect) {
 		if (err) return next(err);
 		if (!insect) return next(new Error('Failed to load insect ' + id));
-		req.insect = insect;
-		next();
+
+		var options = {
+			path: 'comments.user',
+			select: 'displayName',
+			model: 'User'
+		};
+
+		Insect.populate(insect, options, function (err, insect2) {
+			if (err) return next(err);
+			if (!insect) return next(new Error('Failed to load insect ' + id));
+
+			req.insect = insect2;
+			next();
+		});
 	});
 };
 

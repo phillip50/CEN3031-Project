@@ -20,6 +20,9 @@ module.exports = function(app) {
 	app.route('/insects/:insectId/download/:size')
 		.get(users.requiresLogin, insects.downloadImage);
 
+	app.route('/insects/:insectId/comment')
+		.post(users.requiresLogin, insects.comment);
+
 	// Finish by binding the insect middleware
 	app.param('insectId', insects.insectByID);
 	app.param('insectIdLargeImage', insects.insectByIDLargeImage);

@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('notes').controller('NotesController', ['$scope', '$stateParams', 'GoogleMapApi'.ns(), '$location', 'Authentication', 'Notes', 'Insects',
-	function($scope, $stateParams, GoogleMapApi, $location, Authentication, Notes, Insects) {
+angular.module('notes').controller('NotesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Notes', 'Insects',
+	function($scope, $stateParams, $location, Authentication, Notes, Insects) {
 		$scope.authentication = Authentication;
 
 		$scope.createPage = function() {
