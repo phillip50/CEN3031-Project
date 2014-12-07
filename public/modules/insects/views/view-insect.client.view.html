@@ -1,4 +1,11 @@
 <section data-ng-controller="InsectsController" data-ng-init="findOne()" class="viewInsects">
+    <div data-ng-show="insect404">
+        <h1>We couldn't find that insect.</h1>
+        <p>You might have followed an incorrect URL, or that insect may have been deleted.</p>
+    </div>
+
+    <div data-ng-hide="insect404">
+
     <div class="photo text-center">
         <div class="photo-container">
             <img data-ng-src="{{insect.image.large}}">
@@ -153,5 +160,5 @@
         </div>
     </div>
 
-
+    </div>
 </section>

@@ -307,7 +307,8 @@ angular.module('insects').controller('InsectsController', ['$state', '$scope', '
 
 				$scope.loading = false;
 			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
+				//$scope.error = errorResponse.data.message;
+				$scope.insect404 = true;
 				$scope.loading = false;
 			});
 
@@ -395,29 +396,6 @@ angular.module('insects').controller('InsectsController', ['$state', '$scope', '
 					});
 				}
 			};
-
-			/*comments: [{
-					user: {
-						_id: 1,
-						displayName: 'Student 1'
-					},
-					created: '2014-09-29T18:46:39.936Z',
-					message: 'I call it "frying butter".'
-				}, {
-					user: {
-						_id: 2,
-						displayName: 'Student 2'
-					},
-					created: '2014-10-01T18:46:39.936Z',
-					message: 'I already took that'
-				}, {
-					user: {
-						_id: 3,
-						displayName: 'Prof'
-					},
-					created: '2014-10-02T18:46:39.936Z',
-					message: 'Wow, it\'s so small! I think Butterfree is better overall. It learns a couple of useful status-hindering attacks and learns a few Psychic-type attacks like Psybeam and Confusion. Butterfree has a better move pool the Beedrill. However Beedrill has overall better stats then Butterfree.'
-				}]*/
 		};
 
 		// Edit Insect Page
