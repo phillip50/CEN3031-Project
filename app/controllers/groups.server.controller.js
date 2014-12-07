@@ -32,29 +32,15 @@ exports.create = function(req, res) {
 exports.joinGroup = function(req, res) {
 	var group = req.group;
 	group = _.extend(group, req.body);
-	Group.findOne({members: req.user}, function(error, user){
-  		if(user)
-  		{
-  			console.log("user exists");
-  			return res.status(400).send({
-				message: 'User is already in group'
+	group.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
 			});
-  		}
-  		else
-  		{
-  			Group.findByIdAndUpdate(group._id, {$push: {'members': req.user}}, function(err, group) {
-				if (err) {
-						return res.status(400).send({
-						message: errorHandler.getErrorMessage(err)
-				});
-		}
-		else {
+		} else {
 			res.jsonp(group);
 		}
-		});
-
-  		}
-	})
+	});
 
 	
 

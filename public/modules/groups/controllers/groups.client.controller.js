@@ -57,9 +57,28 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 			});
 		};
 
+		$scope.addMember = function() {
+			var group = $scope.group;
+			group.members.push(this.member)
+			group.$update(function() {
+				$location.path('groups/' + group._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
 		$scope.joinGroup = function() {
 			var group = $scope.group;
-
+			var isMember = false		
+			for(var i = 0; i < group.members.length; i++)
+			{
+				 if(group.members[i]._id == $scope.authentication.user._id)
+				 	isMember = true;
+			}	
+			
+			if(!isMember)
+				group.members.push($scope.authentication.user);	
+			
 			group.$joinGroup(function() {
 				//$location.path('groups/' + group._id);
 				// Add user to members
@@ -109,29 +128,23 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 		};
 
 		$scope.leaveGroup = function() {
-			var group = $scope.group;
-
-			group.$leaveGroup(function() {
-				//$location.path('groups/' + group._id);
-				// Add user to members
-				//$location.path('groups/' + group._id);
-				//$scope.group.members.push(Authentication.user);
+			var group = $scope.group;			
+			for(var i = 0; i < group.members.length; i++)
+			{
+				 if(group.members[i]._id == $scope.authentication.user._id)
+				 	group.members.splice(i, 1);
+				 
+			}			
+			
+			group.$joinGroup(function() {
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
-
-			/*$http.post('groups/' + group._id, {action: 'joinGroup', id: Authentication.user._id}).success(function(data, status, headers, config) {
-				// this callback will be called asynchronously
-				// when the response is available
-			}).error(function(data, status, headers, config) {
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
-			});*/
 		};
 
 
 		$scope.showPath = function(path) {
-			
+
 			$location.path(path);
 		};
 	}

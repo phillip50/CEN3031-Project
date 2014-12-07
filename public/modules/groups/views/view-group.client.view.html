@@ -25,20 +25,31 @@
 		Members <span class="badge">{{group.members.length}}</span>
 		<span class="pull-right" data-ng-show="authentication.user">
 			
-			<a class="btn btn-primary" data-ng-hide="group.members.has(authentication.user._id)" data-ng-click="joinGroup();"><i class="glyphicon glyphicon-plus"></i> Join this {{group.type}}</a>
+			<a class="btn btn-primary" data-ng-hide="" data-ng-click="joinGroup();"><i class="glyphicon glyphicon-plus"></i> Join this {{group.type}}</a>
 			
-			<a class="btn btn-primary" data-ng-hide="group.members.has(authentication.user._id)" data-ng-click="leaveGroup();"><i class="glyphicon glyphicon-plus"></i> Leave this {{group.type}}</a>
+			<a class="btn btn-primary" data-ng-hide="group.members[0]._id == authentication.user._id" data-ng-click="leaveGroup();"><i class="glyphicon glyphicon-plus"></i> Leave this {{group.type}}</a>
 			
 			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id"><i class="glyphicon glyphicon-user"></i> Add Members</a>
 			
+			<form  data-ng-show="authentication.user._id == group.user._id" data-ng-submit="update()">
+				<div class="controls">
+						<input name="member" type="text" id="member" class="form-control" placeholder="Member" required>
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Add Member" class="btn btn-primary">
+				</div>
+			</form>
+
 			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id && group.isPrivate == false" data-ng-click="makePrivate();"><i class="glyphicon glyphicon-plus"></i> Private {{group.type}} </a>
 
 			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id && group.isPrivate == true" data-ng-click="makeNotPrivate();"><i class="glyphicon glyphicon-plus"></i> Not Private {{group.type}} </a>
+
 		</span>
 	</h2>
 	<div>
 		<p data-ng-hide="group.members">No members currently.</p>
 		<div data-ng-repeat="member in group.members">
+			<a class="btn btn-primary">
 			<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
 		</div>
 	</div>
