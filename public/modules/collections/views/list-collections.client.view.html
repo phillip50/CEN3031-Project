@@ -12,6 +12,13 @@
 			</small>
 			<h4 class="list-group-item-heading" data-ng-bind="collection.title"></h4>
 			<p class="list-group-item-text" data-ng-bind="collection.content"></p>
+			<div class="row">
+				<div data-ng-repeat="insect in collection.caught" class="col-sm-6 col-md-4 col-lg-3">
+					{{insect}}
+					
+				</div>
+			</div>
+
 		</a>
 	</div>
 	<div class="alert alert-warning text-center" data-ng-if="collections.$resolved && !collections.length">

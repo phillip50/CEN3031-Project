@@ -20,6 +20,10 @@ var CollectionSchema = new Schema({
 		trim: true,
 		required: 'Title cannot be blank'
 	},
+	caught: [{
+		type : Schema.ObjectId,
+		ref: 'Insect'
+	}],
 	content: {
 		type: String,
 		default: '',

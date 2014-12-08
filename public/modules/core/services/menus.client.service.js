@@ -79,7 +79,7 @@ angular.module('core').service('Menus', [
 		};
 
 		// Add menu item object
-		this.addMenuItem = function(menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position) {
+		this.addMenuItem = function(menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position, hilit) {
 			// Validate that the menu exists
 			this.validateMenuExistance(menuId);
 
@@ -94,15 +94,16 @@ angular.module('core').service('Menus', [
 				roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].roles : roles),
 				position: position || 0,
 				items: [],
-				shouldRender: shouldRender
+				shouldRender: shouldRender,
+				hilight: hilit
 			});
-
+			console.log(this.menus[menuId].items);
 			// Return the menu object
 			return this.menus[menuId];
 		};
 
 		// Add submenu item object
-		this.addSubMenuItem = function(menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position) {
+		this.addSubMenuItem = function(menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position, hilit) {
 			// Validate that the menu exists
 			this.validateMenuExistance(menuId);
 
@@ -117,11 +118,11 @@ angular.module('core').service('Menus', [
 						isPublic: ((isPublic === null || typeof isPublic === 'undefined') ? this.menus[menuId].items[itemIndex].isPublic : isPublic),
 						roles: ((roles === null || typeof roles === 'undefined') ? this.menus[menuId].items[itemIndex].roles : roles),
 						position: position || 0,
-						shouldRender: shouldRender
+						shouldRender: shouldRender,
+						hilight: hilit
 					});
 				}
 			}
-
 			// Return the menu object
 			return this.menus[menuId];
 		};

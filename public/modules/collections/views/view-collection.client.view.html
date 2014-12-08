@@ -19,4 +19,31 @@
 		</em>
 	</small>
 	<p class="lead" data-ng-bind="collection.content"></p>
+	<div class = "controls">
+		<table class = "table">
+			
+			<div class="row">
+				<div data-ng-repeat="insect in collection.caught" class="col-sm-6 col-md-4 col-lg-3">
+					<div class="thumbnail">
+						<a data-ng-href="#!/insects/{{insect._id}}">
+							<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+						</a>
+						<div class="caption clearfix">
+							<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
+							<p>
+								<em data-ng-bind="insect.scientificName" style="display: block;"></em>
+								<!--<span data-ng-show="insect.user" style="display: block;">Found by <a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></span>-->
+								<span data-ng-bind="insect.dateFound | date:'longDate'"></span>
+							</p>
+							<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary pull-right" role="button">View</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="alert alert-warning text-center" data-ng-if="!collection.caught.length">
+					No insects in this collection.
+				</div>
+			</div>
+		</table>
+	</div>
 </section>

@@ -25,7 +25,7 @@
 								<div class ="col col-sm-2 addImage" data-ng-repeat="insect in insects" >
 		        						<input type="checkbox" name="imgCheck" value="thisImg" id="{{insect._id}}" >
 		        						</input>
-		        						<label for="{{insect._id}}">
+		        						<label for="{{insect._id}}" ng-click="addInsect({{insect}})">
 		        							<img src="{{insect.image.small}}" style="height: 100px;" class="list-group-item-text" >
 		        						</label>
 		        						<span class="glyphicon glyphicon-ok glypher"></span>
@@ -33,8 +33,6 @@
 							</div>
 						</table>
 					</div>
-				</div>
-			</div>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-default">
