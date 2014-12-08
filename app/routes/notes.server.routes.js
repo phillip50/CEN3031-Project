@@ -13,7 +13,7 @@ module.exports = function(app) {
 		.post(users.requiresLogin, notes.create);
 
 	app.route('/notes/:noteId')
-		.get(notes.read)
+		.get(users.requiresLogin, notes.hasAuthorization, notes.read)
 		.put(users.requiresLogin, notes.hasAuthorization, notes.update)
 		.delete(users.requiresLogin, notes.hasAuthorization, notes.delete);
 

@@ -87,6 +87,9 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 				noteId: $stateParams.noteId
 			}, function() {
 				$scope.loading = false;
+			}, function(err) {
+				$scope.error = err.data.message;
+				$scope.loading = false;
 			});
 		};
 	}

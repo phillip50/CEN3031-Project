@@ -97,7 +97,7 @@
                         <div class="panel panel-info" data-ng-repeat="comment in insect.comments">
                             <div class="panel-heading">
                                 <a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
-                                <span class="pull-right" data-ng-bind="comment.created | date:'MMMM d, y h:mm:ss a'"></span>
+                                <span class="pull-right" data-ng-bind="comment.created | date:'MMMM d, y h:mm a'"></span>
                             </div>
                             <div class="panel-body">
                                 {{comment.content}}
