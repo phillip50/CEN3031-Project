@@ -1,9 +1,9 @@
 <section data-ng-controller="InsectsController" data-ng-init="map()" class="viewMap">
     <div class="page-header">
         <h1>
-            <span data-ng-hide="foundUser">All Insects ({{markers.length}} shown)</span>
-            <span data-ng-show="foundUser">
-                <a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a>'s Insects ({{markers.length}} shown)
+            <span data-ng-hide="foundUser">All Insects <small>{{markers.length}} loaded</small></span>
+            <span data-ng-show="foundUser">Insects: 
+                <a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a> <small>{{markers.length}} loaded</small>
             </span>
             <small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
             <span class="pull-right">

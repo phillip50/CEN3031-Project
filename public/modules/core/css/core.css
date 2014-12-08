@@ -15,11 +15,15 @@
 }
 .angular-google-map-container { height: 400px; }
 
-section.home .map {height: 500px;}
-section.home .map ui-gmap-google-map {position: absolute; top: 50px; left: 0; right: 0;}
-section.home .map .angular-google-map-container {height: 500px;}
-section.home .info .glyphicon {font-size: 100px; margin-bottom: 25px;}
-section.home hr {margin: 50px 0;}
+
+section.home .map .col-md-3 {padding-top: 15px;}
+@media (min-width: 992px) {
+	section.home {height: calc(100vh - 50px); min-height: 500px;}
+	section.home .map .col-md-3 {margin: 0; padding: 15px 15px 0; height: calc(100vh - 50px); overflow: auto;}
+	section.home .map {height: calc(100vh - 50px); min-height: 500px; position: absolute; top: 50px; left: 0; right: 0; margin: 0;}
+	section.home .map .col-md-9 {padding: 0;}
+}
+section.home .map .angular-google-map-container {height: calc(100vh - 50px);}
 
 body > footer {margin: 40px 0 30px;}
 body > footer hr {margin: 0 0 40px;}

@@ -5,7 +5,7 @@ angular.module('users').controller('ProfileController', ['$scope', '$http', '$st
 		$scope.user = Authentication.user;
 
 		// If user is not signed in then redirect back home
-		if (!$scope.user) $location.path('/');
+		//if (!$scope.user) $location.path('/');
 
 		$scope.showPath = function(path) {
 			$location.path(path);

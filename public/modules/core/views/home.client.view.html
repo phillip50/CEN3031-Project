@@ -1,63 +1,70 @@
 <!-- FINDME -->
 <section data-ng-controller="HomeController" class="home">
 	<div class="row map">
-		<ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.gmap" draggable="true" options="map.options" bounds="map.bounds">
-			<ui-gmap-markers models="markers" fit="true" coords="'self'" options="'options'">
-				<ui-gmap-windows show="show">
-          			<div class="window" ng-non-bindable>
-						<img src="{{options.icon.url}}">
-						<h3>
-							<a href="#!/insects/{{id}}">{{name}}</a>
-						</h3>
-						<p class="clearfix">
-							<em>{{scientificName}}</em>
-							<span>Found by <a href="#!/profile/{{user._id}}">{{user.displayName}}</a></span>
-							<span>{{dateFound | date:'longDate'}}</span>
-							<span>Location found: {{locationTitle}}</span>
-							<br>
-							<a href="#!/insects/{{id}}" class="btn btn-primary pull-right" role="button">View</a>
+		<div class="col-md-3">
+			<div class="panel panel-default text-center">
+				<ul class="list-group">
+					<li class="list-group-item">
+						<h2 class="text-uppercase">The Insect Collection</h2>
+					</li>
+					<li class="list-group-item">
+						<div data-ng-hide="authentication.user">
+							<a id="signin" class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
+							<a id="signup" class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
+						</div>
+						<p data-ng-show="authentication.user">
+							Hi {{authentication.user.displayName}}!
 						</p>
-					</div>
-      			</ui-gmap-windows>
-			</ui-gmap-markers>
-		</ui-gmap-google-map>
-	</div>
+					</li>
+				</ul>
+			</div>
 
-	<div class="jumbotron text-center">
-		<h1 class="text-uppercase">The Insect Collection</h1>
-        <div data-ng-hide="authentication.user">
-            <a id="signin" class="btn btn-primary btn-lg btn-block" ui-route="/signin" ng-class="{active: $uiRoute}" href="/#!/signin">Sign In</a>
-            <a id="signup" class="btn btn-default btn-lg btn-block" ui-route="/signup" ng-class="{active: $uiRoute}" href="/#!/signup">Sign Up</a>
-        </div>
-        <p data-ng-show="authentication.user">
-            Hi <strong data-ng-bind="authentication.user.displayName"></strong>!
-        </p>
-	</div>
+			<div class="panel panel-default text-center">
+				<ul class="list-group">
+				    <li class="list-group-item">
+						<h2><span class="glyphicon glyphicon-camera"></span></h2>
+						<p><strong>Capture.</strong> Take photos.</p>
+					</li>
+				    <li class="list-group-item">
+						<h2><span class="glyphicon glyphicon-cloud-upload"></span></h2>
+						<p><strong>Upload.</strong> Organize your collections.</p>
+					</li>
+				    <li class="list-group-item">
+						<h2><span class="glyphicon glyphicon-picture"></span></h2>
+						<p><strong>Explore.</strong> View everyones' insects.</p>
+					</li>
+				</ul>
+			</div>
 
-	<div class="row text-center info">
-		<div class="col-md-4">
-			<span class="glyphicon glyphicon-camera"></span>
-			<h2>Capture</h2>
-			<p>Take photos.</p>
+			<div class="panel panel-default text-center">
+				<div class="panel-body">
+					<h2>{{totalInsects || 0}}</h2>
+					<p>insects and counting.</p>
+				</div>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<span class="glyphicon glyphicon-cloud-upload"></span>
-			<h2>Upload</h2>
-			<p>Organize your collections.</p>
-		</div>
-		<div class="col-md-4">
-			<span class="glyphicon glyphicon-picture"></span>
-			<h2>Explore</h2>
-			<p>View everyones' insects.</p>
+
+		<div class="col-md-9">
+			<ui-gmap-google-map center="map.center" zoom="map.zoom" control="map.gmap" draggable="true" options="map.options" bounds="map.bounds">
+				<ui-gmap-markers models="markers" fit="true" coords="'self'" options="'options'">
+					<ui-gmap-windows show="show">
+	          			<div class="window" ng-non-bindable>
+							<img src="{{options.icon.url}}">
+							<h3>
+								<a href="#!/insects/{{id}}">{{name}}</a>
+							</h3>
+							<p class="clearfix">
+								<em>{{scientificName}}</em>
+								<span>Found by <a href="#!/profile/{{user._id}}">{{user.displayName}}</a></span>
+								<span>{{dateFound | date:'longDate'}}</span>
+								<span>Location found: {{locationTitle}}</span>
+								<br>
+								<a href="#!/insects/{{id}}" class="btn btn-primary pull-right" role="button">View</a>
+							</p>
+						</div>
+	      			</ui-gmap-windows>
+				</ui-gmap-markers>
+			</ui-gmap-google-map>
 		</div>
 	</div>
-
-	<hr>
-
-	<div class="row text-center">
-		<div class="col-md-12">
-			<h1>{{totalInsects || 0}} insects and counting.</h1>
-		</div>
-	</div>
-
 </section>

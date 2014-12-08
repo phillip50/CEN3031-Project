@@ -484,6 +484,7 @@ angular.module('insects').controller('InsectsController', ['$state', '$scope', '
 								southwest: [$scope.map.bounds.southwest.longitude, $scope.map.bounds.southwest.latitude],
 								northeast: [$scope.map.bounds.northeast.longitude, $scope.map.bounds.northeast.latitude]
 							},
+							fetched: JSON.stringify($scope.markersIds),
 							limit: 50
 						};
 

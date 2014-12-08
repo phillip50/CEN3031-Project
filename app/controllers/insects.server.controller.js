@@ -385,6 +385,8 @@ exports.list = function(req, res) {
 	// Map query
 	else if (query.hasOwnProperty('bounds')) {
 		var bounds = JSON.parse(query.bounds);
+		if (query.fetched) var fetched = JSON.parse(query.fetched);
+		else fetched = [];
 
 		var findQuery = {
 			loc: {
@@ -398,7 +400,7 @@ exports.list = function(req, res) {
 			findQuery.user = query.userId;
 		}
 
-		Insect.find(findQuery).select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).exec(function(err, insects) {
+		Insect.find(findQuery).where('_id').nin(fetched).select('+image.small').sort('-created').populate('user', 'displayName').limit(limit).exec(function(err, insects) {
 			if (err) {
 				return res.status(400).send({
 					message: errorHandler.getErrorMessage(err)

@@ -4,6 +4,9 @@ angular.module('notes').controller('NotesController', ['$scope', '$stateParams',
 	function($scope, $stateParams, $location, Authentication, Notes, Insects) {
 		$scope.authentication = Authentication;
 
+		// If user is not signed in then redirect back home
+		if (!$scope.user) $location.path('/');
+
 		$scope.createPage = function() {
 			$scope.insects = [];
 			$scope.insects = Insects.query({limit: 100, userId: Authentication.user._id});
