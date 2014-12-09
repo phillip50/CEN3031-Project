@@ -11,19 +11,32 @@ describe('bugs homepage', function() {
 	browser.driver.sleep(2000);
 	element(by.id('signin')).click();
 	browser.driver.sleep(2000);
-	browser.get('http://localhost:3000/#!/insects');
-	element(by.id('addGal')).sendKeys('testtest');
-	element(by.id('submitGal')).click();
-	element(by.id('dropGal')).sendKeys('BKN01');
-	element(by.id('dropGal')).sendKeys('\ue015');
-	element(by.id('dropGal')).sendKeys('BKN01');
-	element(by.id('dropGal')).sendKeys('\ue015');
-	element(by.id('dropGal')).sendKeys('BKN01');
-	element(by.id('dropGal')).sendKeys('\ue015');
-	element(by.id('dropGal')).sendKeys('BKN01');
+	browser.get('http://localhost:3000/#!/notes/create');
+	element(by.name('title')).sendKeys('testtest');
+	//element(by.id('mce_87').sendKeys('test');
+
 	browser.driver.sleep(2000);
 
-    element(by.css('.col-md-4:nth-of-type(1) .thumbnail a.btn')).click();
+    element(by.id('submit')).click();
+	browser.driver.sleep(2000);
+
+	browser.get('http://localhost:3000/#!/notes/');
+	browser.driver.sleep(2000);
+	browser.get('http://localhost:3000/#!/groups/create');
+	browser.driver.sleep(2000);
+
+	element(by.id('name')).sendKeys('cop4600');
+	element(by.id('description')).sendKeys('This is really operating systems, but for the sake of the test, roll with it.');
+    element(by.id('dropDown')).click();
+    element(by.id('op1')).click();
+
+	//element(by.id('selectoor')).sendKeys('BKN01');
+	browser.driver.sleep(2000);
+
+	element(by.id('submitButton')).click();
+	browser.driver.sleep(2000);
+	browser.get('http://localhost:3000/#!/groups/');
+	browser.driver.sleep(2000);
 
     //element(by.css('ul[value=0]')).click();
 
