@@ -24,19 +24,12 @@ describe('bugs homepage', function() {
 	element(by.id('content')).sendKeys('cool');
 	browser.driver.sleep(2000);
 	element(by.id('gogo')).click();
-	element(by.id('content')).click();
 	element(by.id('pdfClik')).click();
 
-	browser.driver.sleep(2000);
-
-	browser.get('http://localhost:3000/#!/groups/create');
-	element(by.id('name')).sendKeys('cop4600');
-	element(by.id('description')).sendKeys('This is really operating systems, but for the sake of the test, roll with it.');
-    browser.driver.sleep(2000);	
-	browser.get('http://localhost:3000/#!/notes/create');
-	element(by.name('title')).sendKeys('testtest');
-	element(by.id('selectedInsects')).click();
 	browser.driver.sleep(4000);
+
+	
+	//element(by.id('selectedInsects')).click();
 
   });
 });
