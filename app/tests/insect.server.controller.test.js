@@ -1,3 +1,4 @@
+/*
 'use strict';
 
 var should = require('should'),
@@ -202,7 +203,7 @@ describe('Insect Controller Tests', function() {
      })
     */
 
-
+/*
   afterEach(function(done) {
     Insect.remove(function() {
       User.remove(function() {
@@ -211,3 +212,4 @@ describe('Insect Controller Tests', function() {
     });
   });
 });
+*/

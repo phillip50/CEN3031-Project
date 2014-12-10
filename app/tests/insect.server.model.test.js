@@ -26,9 +26,8 @@ describe('Insect Model Unit Tests:', function() {
 			email: 'test@test.com',
 			username: 'username',
 			password: 'password',
-			ufid: '11110000',
-			classCode: '123',
-			school:'University of Florida'
+			school: 'school',
+			classCode: 'classCode'
 		});
 
 		user.save(function() {
@@ -39,9 +38,11 @@ describe('Insect Model Unit Tests:', function() {
 					large: 'data:image/jpeg;base64,...etc',
 					original: 'data:image/jpeg;base64,...etc',
 					contentType: 'image/jpeg',
-					coordinates: [0, 0]
+					coordinates: [0, 0],
+					dateTaken: new Date()
 				},
 				name: 'Insect Title',
+				galleryName: 'gallery',
 				scientificName: 'Insect Content',
 				description: 'Insect Description',
 				dateFound: new Date(),

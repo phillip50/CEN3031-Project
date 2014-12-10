@@ -11,7 +11,7 @@ var user, insect;
 
 describe('Insect Server Test', function() {
   beforeEach(function(done) {
-    user = new User({
+  user = new User({
       firstName: 'Full',
       lastName: 'Name',
       displayName: 'Full Name',
@@ -31,10 +31,10 @@ describe('Insect Server Test', function() {
           original: 'data:image/jpeg;base64,...etc',
           contentType: 'image/jpeg',
           coordinates: [0, 0],
-          dateTaken: new Date()
+          dateTaken:  new Date(),
         },
         name: 'Insect Title',
-        galleryName:'gallery',
+        galleryName: 'Gallery',
         scientificName: 'Insect Content',
         description: 'Insect Description',
         dateFound: new Date(),
