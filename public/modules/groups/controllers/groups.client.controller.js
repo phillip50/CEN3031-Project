@@ -76,10 +76,14 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 		$scope.findOne = function() {
 			$scope.loading = true;
 
-			$scope.group = Groups.get({
+			Groups.get({
 				groupId: $stateParams.groupId
-			}, function() {
+			}, function(data) {
 				$scope.loading = false;
+				$scope.group = data.data;
+				$scope.membersList = data.membersList;
+				$scope.insects = data.insects;
+				$scope.collections = data.collections;
 			}, function(err) {
 				$scope.loading = false;
 				$scope.error = err.data.message;

@@ -81,15 +81,31 @@
 				</div>
 
 				<div class="panel-body">
-					<carousel interval="myInterval">
-						<slide ng-repeat="insect in insects" active="slide.active">
-							<img ng-src="{{insect.image.small}}" style="margin:auto;">
-						</slide>
-					</carousel>
+					<p data-ng-hide="collections">No collections currently.</p>
 
-					<p data-ng-hide="group.collections">No collections currently.</p>
-					<div data-ng-repeat="collections in group.collections">
-						<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
+					<div class="row">
+						<div data-ng-repeat="collection in collections" class="col-sm-4 col-md-6 col-lg-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h2 class="panel-title">
+										<a data-ng-href="#!/collections/{{collection._id}}" data-ng-bind="collection.name"></a>
+									</h2>
+								</div>
+
+								<div class="panel-body">
+									<div>
+										<img data-ng-repeat="insect in collection.caught" style="height: 50px; width: 50px;" ng-src="{{insect.image.small}}">
+									</div>
+									<div class="clearfix" style="margin-top: 15px;">
+										<span class="pull-left">
+											<span data-ng-show="collection.user.displayName" style="display: block;">Created by <a data-ng-href="#!/profile/{{collection.user._id}}">{{collection.user.displayName}}</a></span>
+											<span data-ng-bind="collection.created | date:'longDate'"></span>
+										</span>
+										<a data-ng-href="#!/collections/{{collection._id}}" class="btn btn-primary pull-right" role="button">View</a>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -100,9 +116,24 @@
 				</div>
 
 				<div class="panel-body">
-					<p data-ng-hide="group.insects">No insects currently.</p>
-					<div data-ng-repeat="insects in group.insects">
-						<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
+					<p data-ng-hide="insects">No insects currently.</p>
+					<div class="row">
+						<div data-ng-repeat="insect in insects" class="col-sm-4 col-md-6 col-lg-4">
+							<div class="thumbnail">
+								<a data-ng-href="#!/insects/{{insect._id}}">
+									<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">
+								</a>
+								<div class="caption clearfix">
+									<h3><a data-ng-href="#!/insects/{{insect._id}}" data-ng-bind="insect.name"></a></h3>
+									<p>
+										<em data-ng-bind="insect.scientificName" style="display: block;"></em>
+										<span data-ng-show="insect.user.displayName" style="display: block;">Found by <a data-ng-href="#!/profile/{{insect.user._id}}">{{insect.user.displayName}}</a></span>
+										<span data-ng-bind="insect.dateFound | date:'longDate'"></span>
+									</p>
+								<a data-ng-href="#!/insects/{{insect._id}}" class="btn btn-primary pull-right" role="button">View</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

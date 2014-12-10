@@ -4,16 +4,6 @@ angular.module('insects').controller('InsectsController', ['$state', '$scope', '
 	function($state, $scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
 		$scope.authentication = Authentication;
 
-		$scope.gallerys = [
-			{name: 'Poison Type'},
-			{name: 'Bug Type'},
-			{name: 'Flying Type'}
-		];
-		$scope.addGallery = function(gallery) {
-			var newG = {name: gallery};
-			$scope.gallerys.push(newG);
-		};
-
 		$scope.createPage = function() {
 			// If user is not signed in then redirect back
 			if (!$scope.authentication.user) $location.path('/insects');
@@ -237,6 +227,7 @@ angular.module('insects').controller('InsectsController', ['$state', '$scope', '
 
 					// Get total count
 					Insects.get({count: 1}, function(data) {
+						$scope.count = data;
 						$scope.pagination.totalItems = data.count;
 						if (firstRun) $scope.pagination.currentPage = parseInt((skip / data.count) * 12, 10);
 					});

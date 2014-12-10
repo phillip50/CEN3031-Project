@@ -50,7 +50,7 @@
 			});
 		}));
 
-		it('$scope.find() should create an array with at least one group object fetched from XHR', inject(function(Groups) {
+		it('$scope.findGroup() should create an array with at least one group object fetched from XHR', inject(function(Groups) {
 			// Create sample group using the Groups service
 			var sampleGroup = new Groups({
 				name: 'Group name',
@@ -62,10 +62,32 @@
 			var sampleGroups = [sampleGroup];
 
 			// Set GET response
-			$httpBackend.expectGET('groups').respond(sampleGroups);
+			$httpBackend.expectGET('groups?type=Group').respond(sampleGroups);
 
 			// Run controller functionality
-			scope.find();
+			scope.findGroup();
+			$httpBackend.flush();
+
+			// Test scope value
+			expect(scope.groups).toEqualData(sampleGroups);
+		}));
+
+		it('$scope.findClass() should create an array with at least one group object fetched from XHR', inject(function(Groups) {
+			// Create sample group using the Groups service
+			var sampleGroup = new Groups({
+				name: 'Class name',
+				description: 'Class description',
+				type: 'Class'
+			});
+
+			// Create a sample groups array that includes the new group
+			var sampleGroups = [sampleGroup];
+
+			// Set GET response
+			$httpBackend.expectGET('groups?type=Class').respond(sampleGroups);
+
+			// Run controller functionality
+			scope.findClass();
 			$httpBackend.flush();
 
 			// Test scope value

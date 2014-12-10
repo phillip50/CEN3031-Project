@@ -73,11 +73,16 @@
 				commentsEnabled: true
 			});
 
+			var sampleCount = {
+				count: 1
+			};
+
 			// Create a sample insects array that includes the new insect
 			var sampleInsects = [sampleInsect];
 
 			// Set GET response
-			$httpBackend.expectGET('insects').respond(sampleInsects);
+			$httpBackend.expectGET('insects?limit=12&skip=0').respond(sampleInsects);
+			$httpBackend.expectGET('insects?count=1').respond(sampleCount);
 
 			// Run controller functionality
 			scope.find();
@@ -85,18 +90,15 @@
 
 			// Test scope value
 			expect(scope.insects).toEqualData(sampleInsects);
+			expect(scope.count).toEqualData(sampleCount);
 		}));
 
 		it('$scope.findOne() should create an array with one insect object fetched from XHR using a insectId URL parameter', inject(function(Insects) {
 			// Define a sample insect object
 			var sampleInsect = new Insects({
 				image: {
-					small: 'data:image/jpeg;base64,...etc',
-					medium: 'data:image/jpeg;base64,...etc',
 					large: 'data:image/jpeg;base64,...etc',
-					original: 'data:image/jpeg;base64,...etc',
-					contentType: 'image/jpeg',
-					coordinates: [0, 0]
+					contentType: 'image/jpeg'
 				},
 				name: 'Insect from test',
 				scientificName: 'Insect scientific name',
@@ -107,6 +109,7 @@
 					type: 'Point',
 					coordinates: [0,0]
 				},
+				comments: [],
 				commentsEnabled: true
 			});
 
