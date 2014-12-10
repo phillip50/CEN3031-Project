@@ -46,7 +46,7 @@
 					<div class="row">
 						<div class="col-md-2" data-ng-repeat="insect in insects">
 							<input type="checkbox" id="{{insect._id}}">
-							<label for="{{insect._id}}" data-ng-click="addInsect(insect)" tooltip="{{insect.name}}">
+							<label for="{{insect._id}}" data-ng-click="addInsect(insect)" tooltip="{{insect.name}}" id="{{insect.name}}">
 								<span class="glyphicon glyphicon-ok glypher"></span>
 								<img data-ng-src="{{insect.image.small}}">
 							</label>
@@ -56,7 +56,7 @@
 			</div>
 
 			<div class="form-group">
-				<input type="submit" class="btn btn-primary pull-right">
+				<input type="submit" class="btn btn-primary pull-right" id="goButton">
 			</div>
 		</fieldset>
 	</form>

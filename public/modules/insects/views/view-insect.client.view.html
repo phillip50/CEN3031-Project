@@ -33,7 +33,7 @@
             {{insect.name}} <small>{{insect.scientificName}}</small>
             <small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
             <span class="pull-right">
-                <a class="btn btn-default" data-ng-click="generatePDF();">
+                <a class="btn btn-default" data-ng-click="generatePDF();" id="pdfClik">
                     <i class="glyphicon glyphicon-print"></i> PDF
                 </a>
                 <span data-ng-show="authentication.user._id == insect.user._id">
@@ -122,7 +122,7 @@
                         <form name="insectComment" class="form-horizontal" data-ng-submit="comment.add(insectComment.$valid)">
                             <fieldset>
                                 <textarea name="comment" id="content" class="form-control" cols="25" rows="7" placeholder="Write a comment." data-ng-model="comment.content" required></textarea><br>
-                                <input type="submit" value="Submit" class="btn btn-primary pull-right">
+                                <input type="submit" value="Submit" id="gogo" class="btn btn-primary pull-right">
                             </fieldset>
                         </form>
                     </div>
