@@ -17,6 +17,9 @@ module.exports = function(app) {
 		.put(users.requiresLogin, collections.hasAuthorization, collections.update)
 		.delete(users.requiresLogin, collections.hasAuthorization, collections.delete);
 
+	app.route('/collections/:collectionId/comment')
+		.post(users.requiresLogin, collections.comment);
+
 	// Finish by binding the collection middleware
 	app.param('collectionId', collections.collectionByID);
 };

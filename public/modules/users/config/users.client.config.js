@@ -5,8 +5,8 @@ angular.module('users').run(['Menus',
 	function(Menus) {
 		// Set top bar menu items
 		Menus.addMenuItem('topbar', 'Users', 'users', 'dropdown', '/users(/list)?', false, null, 10);
-		Menus.addSubMenuItem('topbar', 'users', 'All Users', 'users/list',null, true, null, null,"See all bug collectors");
-		Menus.addSubMenuItem('topbar', 'users', 'My Profile', 'profile/',null, true, null, null,"About you");
+		Menus.addSubMenuItem('topbar', 'users', 'All Users', 'users/list',null, true, null, null,'See all bug collectors');
+		Menus.addSubMenuItem('topbar', 'users', 'My Profile', 'profile/',null, true, null, null,'About you');
 	}
 ]);
 

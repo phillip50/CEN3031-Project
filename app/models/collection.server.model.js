@@ -32,7 +32,15 @@ var CollectionSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
-	}
+	},
+    comments: [{
+        type: Schema.ObjectId,
+        ref: 'Comment'
+    }],
+    commentsEnabled: {
+        type: Boolean,
+        default: true
+    }
 });
 
 mongoose.model('Collection', CollectionSchema);

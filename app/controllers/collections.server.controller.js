@@ -6,6 +6,8 @@
 var mongoose = require('mongoose'),
 	errorHandler = require('./errors'),
 	Collection = mongoose.model('Collection'),
+	User = mongoose.model('User'),
+	Comment = mongoose.model('Comment'),
 	_ = require('lodash');
 
 /**
@@ -32,6 +34,40 @@ exports.create = function(req, res) {
  */
 exports.read = function(req, res) {
 	res.jsonp(req.collection);
+};
+
+/**
+* Comment on a insect
+*/
+exports.comment = function(req, res) {
+	var collection = req.collection;
+
+	if (!collection.commentsEnabled) return res.status(400).send({
+		message: 'Comments for this collection is disabled.'
+	});
+
+	var comment = new Comment();
+	comment.user = req.user;
+	comment.content = req.body.content;
+
+	comment.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		}
+		else {
+			Collection.findByIdAndUpdate(collection._id, {$push: {'comments': comment}}, function(err, collection) {
+				if (err) {
+					return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					res.jsonp({success: true});
+				}
+			});
+		}
+	});
 };
 
 /**
@@ -94,11 +130,23 @@ exports.list = function(req, res) {
  * Collection middleware
  */
 exports.collectionByID = function(req, res, next, id) {
-	Collection.findById(id).populate('user', 'displayName').populate({path: 'caught', select: '+image.small'}).exec(function(err, collection) {
+	Collection.findById(id).populate('user', 'displayName').populate({path: 'caught', select: '+image.small'}).populate('comments').exec(function(err, collection) {
 		if (err) return next(err);
 		if (!collection) return next(new Error('Failed to load collection ' + id));
-		req.collection = collection;
-		next();
+
+		var options = {
+			path: 'comments.user',
+			select: 'displayName',
+			model: 'User'
+		};
+
+		Collection.populate(collection, options, function (err, collection2) {
+			if (err) return next(err);
+			if (!collection2) return next(new Error('Failed to load insect ' + id));
+
+			req.collection = collection2;
+			next();
+		});
 	});
 };
 

@@ -56,7 +56,7 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 				$scope.loading = false;
 			}, function(err) {
 				$scope.loading = false;
-				$scope.error = errorResponse.data.message;
+				$scope.error = err.data.message;
 			});
 		};
 
@@ -69,7 +69,7 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 				$scope.loading = false;
 			}, function(err) {
 				$scope.loading = false;
-				$scope.error = errorResponse.data.message;
+				$scope.error = err.data.message;
 			});
 		};
 
@@ -82,13 +82,13 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 				$scope.loading = false;
 			}, function(err) {
 				$scope.loading = false;
-				$scope.error = errorResponse.data.message;
+				$scope.error = err.data.message;
 			});
 		};
 
 		$scope.addMember = function() {
 			var group = $scope.group;
-			group.members.push(this.member)
+			group.members.push(this.member);
 			group.$update(function() {
 				$location.path('groups/' + group._id);
 			}, function(errorResponse) {
@@ -98,11 +98,9 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 
 		$scope.joinGroup = function() {
 			var group = $scope.group;
-			var isMember = false
-			for(var i = 0; i < group.members.length; i++)
-			{
-				 if(group.members[i]._id == $scope.authentication.user._id)
-				 	isMember = true;
+			var isMember = false;
+			for(var i = 0; i < group.members.length; i++) {
+				 if (group.members[i]._id === $scope.authentication.user._id) isMember = true;
 			}
 
 			if(!isMember)
@@ -124,7 +122,7 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 			var group = $scope.group;
 			for(var i = 0; i < group.members.length; i++)
 			{
-				 if(group.members[i]._id == $scope.authentication.user._id)
+				 if(group.members[i]._id === $scope.authentication.user._id)
 				 	group.members.splice(i, 1);
 
 			}

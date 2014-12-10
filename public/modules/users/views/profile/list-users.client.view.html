@@ -16,7 +16,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr data-ng-repeat="user in users" data-ng-click="showPath('/profile/{{user._id}}')">
+					<tr data-ng-repeat="user in users" data-ng-click="showPath('/profile/' + user._id)">
 						<td>
 							<a data-ng-bind="user.displayName" data-ng-href="/#!/profile/{{user._id}}"></a>
 						</td>

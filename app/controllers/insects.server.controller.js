@@ -383,9 +383,9 @@ exports.list = function(req, res) {
 
 	// Map query
 	else if (query.hasOwnProperty('bounds')) {
+		var fetched = [];
 		var bounds = JSON.parse(query.bounds);
-		if (query.fetched) var fetched = JSON.parse(query.fetched);
-		else fetched = [];
+		if (query.fetched) fetched = JSON.parse(query.fetched);
 
 		var findQuery = {
 			loc: {
@@ -454,7 +454,7 @@ exports.insectByIDLargeImage = function(req, res, next, id) {
 
 		Insect.populate(insect, options, function (err, insect2) {
 			if (err) return next(err);
-			if (!insect) return next(new Error('Failed to load insect ' + id));
+			if (!insect2) return next(new Error('Failed to load insect ' + id));
 
 			req.insect = insect2;
 			next();

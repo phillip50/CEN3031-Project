@@ -1,31 +1,44 @@
 'use strict';
 
-angular.module('collections').controller('CollectionsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Collections','Insects',
-	function($scope, $stateParams, $location, Authentication, Collections, Insects) {
+angular.module('collections').controller('CollectionsController', ['$state', '$scope', '$http', '$stateParams', '$location', 'Authentication', 'Collections','Insects',
+	function($state, $scope, $http, $stateParams, $location, Authentication, Collections, Insects) {
 		$scope.authentication = Authentication;
 
 		$scope.createPage = function() {
 			// If user is not signed in then redirect back
 			if (!$scope.authentication.user) $location.path('/collections');
 
-			$scope.selectedBugs = [];
+			$scope.loading = true;
+			$scope.commentsEnabled = true;
+			$scope.insects = [];
+			$scope.selectedInsects = [];
+			$scope.insects = Insects.query({limit: 100}, function() {
+				$scope.loading = false;
+			});
+
+			$scope.addInsect = function() {
+				var insectId = this.insect._id;
+				var index = $scope.selectedInsects.indexOf(insectId);
+				if (index === -1) $scope.selectedInsects.push(insectId);
+				else $scope.selectedInsects.splice(index, 1);
+			};
 		};
 
 		$scope.create = function() {
 			var collection = new Collections({
 				name: this.name,
 				description: this.description,
-				caught: $scope.selectedBugs
+				caught: $scope.selectedInsects
 			});
+
 			collection.$save(function(response){
 				$location.path('collections/' + response._id);
 				$scope.name = '';
 				$scope.description = '';
-				$scope.caught = [];
+				$scope.selectedInsects = [];
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
-			$scope.selectedBugs = [];
 		};
 
 		$scope.remove = function(collection) {
@@ -44,8 +57,40 @@ angular.module('collections').controller('CollectionsController', ['$scope', '$s
 			}
 		};
 
+		$scope.updatePage = function() {
+			// If user is not signed in then redirect back
+			if (!$scope.authentication.user) $location.path('/collections');
+			$scope.loading = true;
+			$scope.insectModel = {};
+			$scope.insects = [];
+			$scope.selectedInsects = [];
+			$scope.addInsect = function(insect) {
+				var index = $scope.selectedInsects.indexOf(insect._id);
+				if (index === -1) $scope.selectedInsects.push(insect._id);
+				else $scope.selectedInsects.splice(index, 1);
+			};
+
+			$scope.collection = Collections.get({
+				collectionId: $stateParams.collectionId
+			}, function() {
+				for (var i = 0; i < $scope.collection.caught.length; i++) {
+					$scope.selectedInsects.push($scope.collection.caught[i]._id);
+					$scope.insectModel[$scope.collection.caught[i]._id] = true;
+				}
+				$scope.insects = Insects.query({limit: 100}, function() {
+					$scope.loading = false;
+				});
+			});
+		};
+
 		$scope.update = function() {
-			var collection = $scope.collection;
+			var collection = new Collections({
+				_id: $scope.collection._id,
+				name: $scope.collection.name,
+				description: $scope.collection.description,
+				commentsEnabled: $scope.collection.commentsEnabled,
+				caught: $scope.selectedInsects
+			});
 
 			collection.$update(function() {
 				$location.path('collections/' + collection._id);
@@ -68,17 +113,20 @@ angular.module('collections').controller('CollectionsController', ['$scope', '$s
 			}, function() {
 				$scope.loading = false;
 			});
-		};
 
-		$scope.addInsect = function() {
-			var insectId = this.insect._id;
-			var index = $scope.selectedBugs.indexOf(insectId);
-			if(index === -1) {
-				$scope.selectedBugs.push(insectId);
-			}
-			else {
-				$scope.selectedBugs.splice(index, 1);
-			}
+			// comments
+			$scope.comment = {
+				content: '',
+				add: function() {
+					$http.post('/collections/' + $scope.collection._id + '/comment/', {content: $scope.comment.content})
+					.success(function(data, status, headers, config) {
+						$state.go($state.$current, null, { reload: true });
+					})
+					.error(function(data, status, headers, config) {
+						$scope.comment.error = data.message;
+					});
+				}
+			};
 		};
 	}
 ]);

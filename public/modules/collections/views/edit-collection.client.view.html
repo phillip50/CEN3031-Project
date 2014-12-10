@@ -1,35 +1,72 @@
-<section data-ng-controller="CollectionsController" data-ng-init="findOne()">
+<section data-ng-controller="CollectionsController" data-ng-init="updatePage()" class="collection">
 	<div class="page-header">
 		<h1>Edit Collection</h1>
 	</div>
-	<div class="col-md-12">
-		<form name="collectionForm" class="form-horizontal" data-ng-submit="update(collectionForm.$valid)" novalidate>
-			<fieldset>
-				<div class="form-group" ng-class="{ 'has-error' : submitted && collectionForm.name.$invalid}">
-					<label class="control-label" for="name">Name</label>
-					<div class="controls">
-						<input name="name" type="text" data-ng-model="collection.name" id="name" class="form-control" placeholder="Name" required>
-					</div>
-					<div ng-show="submitted && collectionForm.name.$invalid" class="help-block">
-						<p ng-show="collectionForm.name.$error.required" class="text-danger">Name is required</p>
+
+	<form name="collectionForm" class="form-horizontal" data-ng-submit="update(collectionForm.$valid)" novalidate>
+		<fieldset>
+			<div data-ng-show="error" class="alert alert-danger" role="alert">
+				<strong data-ng-bind="error"></strong>
+			</div>
+
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h2 class="panel-title">Info</h2>
+						</div>
+
+						<div class="panel-body">
+							<div ng-class="{ 'has-error' : submitted && collectionForm.name.$invalid}">
+								<label class="control-label" for="name">Name</label>
+								<div class="controls">
+									<input name="name" type="text" data-ng-model="collection.name" id="name" class="form-control" placeholder="Name" required>
+								</div>
+								<div ng-show="submitted && collectionForm.name.$invalid" class="help-block">
+									<p ng-show="collectionForm.name.$error.required" class="text-danger">Name is required</p>
+								</div>
+							</div>
+							<div ng-class="{ 'has-error' : submitted && collectionForm.description.$invalid}">
+								<label class="control-label" for="description">Description</label>
+								<div class="controls">
+									<textarea name="description" data-ng-model="collection.description" id="description" class="form-control" cols="30" rows="10" placeholder="Description" required></textarea>
+								</div>
+								<div ng-show="submitted && collectionForm.description.$invalid" class="help-block">
+									<p ng-show="collectionForm.description.$error.required" class="text-danger">Description is required</p>
+								</div>
+							</div>
+							<div ng-class="{ 'has-error' : submitted && collectionForm.commentsEnabled.$invalid}">
+								<label class="control-label" for="commentsEnabled">
+									<input name="commentsEnabled" data-ng-model="collection.commentsEnabled" id="commentsEnabled" type="checkbox"> Enable comments
+								</label>
+								<div ng-show="submitted && collectionForm.commentsEnabled.$invalid" class="help-block">
+									<p ng-show="collectionForm.commentsEnabled.$error.required" class="text-danger">commentsEnabled is required</p>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="form-group" ng-class="{ 'has-error' : submitted && collectionForm.description.$invalid}">
-					<label class="control-label" for="description">Description</label>
-					<div class="controls">
-						<textarea name="description" data-ng-model="collection.description" id="description" class="form-control" cols="30" rows="10" placeholder="Description" required></textarea>
+
+				<div class="col-md-6 addImage">
+					<label class="control-label" for="description">Insects in collection</label>
+					<h2>
+						<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
+					</h2>
+					<div class="row">
+						<div class="col-md-2" data-ng-repeat="insect in insects">
+							<input type="checkbox" id="id{{insect._id}}" data-ng-model="insectModel[insect._id]">
+							<label for="id{{insect._id}}" data-ng-click="addInsect(insect)" tooltip="{{insect.name}}">
+								<span class="glyphicon glyphicon-ok glypher"></span>
+								<img data-ng-src="{{insect.image.small}}">
+							</label>
+						</div>
 					</div>
-					<div ng-show="submitted && collectionForm.description.$invalid" class="help-block">
-						<p ng-show="collectionForm.description.$error.required" class="text-danger">Description is required</p>
-					</div>
 				</div>
-				<div class="form-group">
-					<input type="submit" value="Update" class="btn btn-default">
-				</div>
-				<div data-ng-show="error" class="text-danger">
-					<strong data-ng-bind="error"></strong>
-				</div>
-			</fieldset>
-		</form>
-	</div>
+			</div>
+
+			<div class="form-group">
+				<input type="submit" value="Update" class="btn btn-primary pull-right">
+			</div>
+		</fieldset>
+	</form>
 </section>

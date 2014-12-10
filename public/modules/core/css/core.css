@@ -65,7 +65,7 @@ body > footer hr {margin: 0 0 40px;}
 	transform: rotate(360deg);
   }
 }
-.page-header small .glyphicon-refresh {
+h1 small .glyphicon-refresh, h2 small .glyphicon-refresh {
 	margin-left: 10px;
 	background: #678621;
 	padding: 7px;

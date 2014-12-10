@@ -58,4 +58,63 @@
 			</div>
 		</div>
 	</div>
+
+	<div data-ng-show="collection.commentsEnabled">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h2 class="panel-title">Comments</h2>
+			</div>
+
+			<div class="panel-body">
+				<p data-ng-hide="collection.comments">There are no comments for this collection.</p>
+
+				<div class="panel panel-info" data-ng-repeat="comment in collection.comments">
+					<div class="panel-heading">
+						<a data-ng-href="#!/profile/{{comment.user._id}}" data-ng-bind="comment.user.displayName"></a>
+						<span class="pull-right" data-ng-bind="comment.created | date:'MMMM d, y h:mm a'"></span>
+					</div>
+					<div class="panel-body">
+						{{comment.content}}
+						<em data-ng-show="!comment.content">No content.</em>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default" data-ng-show="authentication.user">
+			<div class="panel-heading">
+				<h2 class="panel-title">Add a new Comment
+					<span class="pull-right">Commenting as <strong>{{authentication.user.displayName}}</strong></span>
+				</h2>
+			</div>
+
+			<div class="panel-body">
+				<div data-ng-show="comment.error" class="alert alert-danger" role="alert">
+					<strong data-ng-bind="comment.error"></strong>
+				</div>
+
+				<form name="collectionComment" class="form-horizontal" data-ng-submit="comment.add(collectionComment.$valid)">
+					<fieldset>
+						<textarea name="comment" id="content" class="form-control" cols="25" rows="7" placeholder="Write a comment." data-ng-model="comment.content" required></textarea><br>
+						<input type="submit" value="Submit" class="btn btn-primary pull-right">
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel panel-default" data-ng-show="!collection.commentsEnabled">
+		<div class="panel-heading">
+			<h2 class="panel-title">Comments</h2>
+		</div>
+
+		<div class="panel-body">
+			<p data-ng-show="authentication.user._id != collection.user._id">
+				Commenting for this collection has been disbabled.
+			</p>
+			<p data-ng-show="authentication.user._id == collection.user._id">
+				You have disabled commenting for this collection.
+			</p>
+		</div>
+	</div>
 </section>

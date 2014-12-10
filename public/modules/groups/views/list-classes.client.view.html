@@ -4,7 +4,7 @@
 			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 		</h1>
 		<p>
-			Create a class for easy tracking of your students progress, or just join a group to collaborate with fellow insect hunters.
+			Join a class for easy tracking of students progress.
 		</p>
 	</div>
 
@@ -15,7 +15,7 @@
 		        	<tr>
 						<th width="40%">Name</th>
 						<th width="10%">Members</th>
-						<th width="10%">Insects</th>
+						<!--<th width="10%">Insects</th>-->
 						<th width="15%">Owner</th>
 						<th width="15%">Created</th>
 					</tr>
@@ -23,12 +23,12 @@
 				<tbody>
 					<tr data-ng-repeat="group in groups" data-ng-hide="group.isPrivate == true && group.members.indexOf(authentication.user._id) == -1">
 						<!-- data-popover="{{group.description}}" data-popover-placement="top" data-popover-trigger="mouseenter" -->
-						<td data-ng-click="showPath('/groups/{{group._id}}')">
+						<td data-ng-click="showPath('/groups/' + group._id)">
 							<a data-ng-href="#!/groups/{{group._id}}" data-ng-bind="group.name"></a>
 							<p>{{group.description | limitTo: 100}}{{group.description.length > 100? '...':''}}</p>
 						</td>
 						<td data-ng-bind="group.members.length"></td>
-						<td data-ng-bind="group.insects.length"></td>
+						<!--<td data-ng-bind="group.insects.length"></td>-->
 						<td>
 							<a data-ng-bind="group.user.displayName" data-ng-href="/#!/profile/{{group.user._id}}"></a>
 						</td>

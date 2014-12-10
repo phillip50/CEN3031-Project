@@ -14,7 +14,7 @@ h3.vspace {margin-bottom: 20px;}
 .viewMap .window img {max-height: 250px;}
 .viewMap .window p span, .viewMap .window p em {display: block;}
 
-.viewMap .page-header {position: relative; z-index: 1; background: rgba(255,255,255,0.95); padding: 10px 15px 15px; margin: 30px -15px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); border-radius: 4px;}
+.viewMap .page-header {position: relative; z-index: 1; background: #fff; background: rgba(255,255,255,0.95); padding: 10px 15px 15px; margin: 30px -15px; -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); -moz-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175); border-radius: 4px;}
 .viewMap .page-header h1 {margin: 0; }
 .viewMap ui-gmap-google-map {position: absolute; top: 50px; left: 0; right: 0; z-index: 0;}
 .viewMap .angular-google-map-container {height: calc(100vh - 50px);}
