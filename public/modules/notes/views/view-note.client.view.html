@@ -4,7 +4,7 @@
 			<strong data-ng-bind="error"></strong>
 		</div>
 
-		<h1>Field Note: <a data-ng-href="#!/notes/{{note._id}}">{{note.title}}</a>
+		<h1>{{note.title}} <small>Field Note</small>
 			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 			<span class="pull-right">
 				<span data-ng-show="authentication.user._id == note.user._id">

@@ -47,13 +47,42 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 			});
 		};
 
-		$scope.find = function() {
-			$scope.groups = Groups.query();
+		$scope.findGroup = function() {
+			$scope.loading = true;
+
+			$scope.groups = Groups.query({
+				type: 'Group'
+			}, function() {
+				$scope.loading = false;
+			}, function(err) {
+				$scope.loading = false;
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		$scope.findClass = function() {
+			$scope.loading = true;
+
+			$scope.groups = Groups.query({
+				type: 'Class'
+			}, function() {
+				$scope.loading = false;
+			}, function(err) {
+				$scope.loading = false;
+				$scope.error = errorResponse.data.message;
+			});
 		};
 
 		$scope.findOne = function() {
+			$scope.loading = true;
+
 			$scope.group = Groups.get({
 				groupId: $stateParams.groupId
+			}, function() {
+				$scope.loading = false;
+			}, function(err) {
+				$scope.loading = false;
+				$scope.error = errorResponse.data.message;
 			});
 		};
 
@@ -69,32 +98,20 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 
 		$scope.joinGroup = function() {
 			var group = $scope.group;
-			var isMember = false		
+			var isMember = false
 			for(var i = 0; i < group.members.length; i++)
 			{
 				 if(group.members[i]._id == $scope.authentication.user._id)
 				 	isMember = true;
-			}	
-			
+			}
+
 			if(!isMember)
-				group.members.push($scope.authentication.user);	
-			
+				group.members.push($scope.authentication.user);
+
 			group.$joinGroup(function() {
-				//$location.path('groups/' + group._id);
-				// Add user to members
-				//$location.path('groups/' + group._id);
-				//$scope.group.members.push(Authentication.user);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
-
-			/*$http.post('groups/' + group._id, {action: 'joinGroup', id: Authentication.user._id}).success(function(data, status, headers, config) {
-				// this callback will be called asynchronously
-				// when the response is available
-			}).error(function(data, status, headers, config) {
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
-			});*/
 		};
 
 		$scope.find2 = function() {
@@ -103,39 +120,15 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 
 		};
 
-		$scope.makePrivate = function() {
-			var group = $scope.group;
-			group.isPrivate = true;
-			group.$update(function() {
-				$location.path('groups/' + group._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-
-
-		};
-
-		$scope.makeNotPrivate = function() {
-			var group = $scope.group;
-			group.isPrivate = false;
-			group.$update(function() {
-				$location.path('groups/' + group._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-
-
-		};
-
 		$scope.leaveGroup = function() {
-			var group = $scope.group;			
+			var group = $scope.group;
 			for(var i = 0; i < group.members.length; i++)
 			{
 				 if(group.members[i]._id == $scope.authentication.user._id)
 				 	group.members.splice(i, 1);
-				 
-			}			
-			
+
+			}
+
 			group.$joinGroup(function() {
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
@@ -144,7 +137,6 @@ angular.module('groups').controller('GroupsController', ['$scope', '$http', '$st
 
 
 		$scope.showPath = function(path) {
-
 			$location.path(path);
 		};
 	}

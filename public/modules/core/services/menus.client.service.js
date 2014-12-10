@@ -97,7 +97,7 @@ angular.module('core').service('Menus', [
 				shouldRender: shouldRender,
 				hilight: hilit
 			});
-			console.log(this.menus[menuId].items);
+
 			// Return the menu object
 			return this.menus[menuId];
 		};

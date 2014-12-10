@@ -2,8 +2,8 @@
 	<div class="page-header">
 		<h1>
 			<span data-ng-hide="foundUser">All Insects <small>{{pagination.totalItems}} total</small></span>
-			<span data-ng-show="foundUser">Insects: 
-				<a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a> <small>{{pagination.totalItems}} total</small>
+			<span data-ng-show="foundUser">
+				<a data-ng-href="#!/profile/{{foundUser._id}}">{{foundUser.displayName}}</a> <small>Insects, {{pagination.totalItems}} total </small>
 			</span>
 			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 
@@ -36,7 +36,7 @@
 	</div>
 
 	<div class="row">
-		<div data-ng-repeat="insect in insects | filter:insect.galleryName" class="col-sm-6 col-md-4 col-lg-3">
+		<div data-ng-repeat="insect in insects" class="col-sm-6 col-md-4 col-lg-3">
 			<div class="thumbnail">
 				<a data-ng-href="#!/insects/{{insect._id}}">
 					<img style="max-height: 350px;" class="center-block" ng-src="{{insect.image.small}}">

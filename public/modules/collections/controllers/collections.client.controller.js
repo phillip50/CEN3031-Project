@@ -5,49 +5,16 @@ angular.module('collections').controller('CollectionsController', ['$scope', '$s
 		$scope.authentication = Authentication;
 		$scope.selectedBugs = [];
 
-		$scope.getInsects = function() {
-			var skip = 0;
-
-			$scope.insects = Insects.query({
-				limit: 12,
-				skip: skip
-			});
-
-			// Get total count
-			Insects.get({count: 1}, function(data) {
-				$scope.pagination.totalItems = data.count;
-			});
-	        $scope.changeClass = function(){
-	          if ($scope.src === 'btn-default')
-	            $scope.src = 'btn-success';
-	          else
-	            $scope.src = 'btn-default';
-	        };
-			$scope.pagination = {
-				totalItems: 0,
-				currentPage: 0,
-				itemsPerPage: 12,
-				pageChanged: function(page) {
-					$scope.insects = Insects.query({
-						limit: 12,
-						skip: ($scope.pagination.currentPage - 1) * 12
-					});
-					$location.search({
-						skip: ($scope.pagination.currentPage - 1) * 12
-					});
-				}
-			};
-		};
 		$scope.create = function() {
 			var collection = new Collections({
-				title: this.title,
-				content: this.content,
+				name: this.name,
+				description: this.description,
 				caught: $scope.selectedBugs
 			});
 			collection.$save(function(response){
 				$location.path('collections/' + response._id);
-				$scope.title = '';
-				$scope.content = '';
+				$scope.name = '';
+				$scope.description = '';
 				$scope.caught = [];
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
@@ -82,14 +49,21 @@ angular.module('collections').controller('CollectionsController', ['$scope', '$s
 		};
 
 		$scope.find = function() {
-			$scope.collections = Collections.query();
+			$scope.loading = true;
+			$scope.collections = Collections.query(function() {
+				$scope.loading = false;
+			});
 		};
 
 		$scope.findOne = function() {
+			$scope.loading = true;
 			$scope.collection = Collections.get({
 				collectionId: $stateParams.collectionId
+			}, function() {
+				$scope.loading = false;
 			});
 		};
+
 		$scope.addInsect = function() {
 			var insectId = this.insect._id;
 			var index = $scope.selectedBugs.indexOf(insectId);

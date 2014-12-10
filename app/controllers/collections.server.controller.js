@@ -77,7 +77,7 @@ exports.delete = function(req, res) {
  * List of Collections
  */
 exports.list = function(req, res) {
-	Collection.find().sort('-created').populate('user', 'displayName').populate({path: 'caught', select: '+image.small'}).exec(function(err, collections) {
+	Collection.find().sort('-created').populate('user', 'displayName').populate({path: 'caught', select: 'image.small', options: { limit: 8}}).exec(function(err, collections) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

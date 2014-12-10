@@ -253,27 +253,6 @@ angular.module('insects').controller('InsectsController', ['$state', '$scope', '
 					fetch(($scope.pagination.currentPage - 1) * 12);
 				}
 			};
-
-			/*$scope.updateGallery = function() {
-				console.log($scope.insects[this.$index]);
-				$scope.insect = $scope.insects[this.$index];
-				console.log(this.insect.galleryName.name);
-				var insect = new Insects({
-					_id: $scope.insect._id,
-					name: $scope.insect.galleryName.name,
-					scientificName: $scope.insect.scientificName,
-					description: $scope.insect.description,
-					commentsEnabled: $scope.insect.commentsEnabled,
-					locationTitle: $scope.insect.locationTitle,
-					galleryName: $scope.insect.galleryName.name
-				});
-				console.log($scope.insect.galleryName.name);
-				insect.$update(function() {
-					$location.path('insects');
-				}, function(errorResponse) {
-					$scope.error = errorResponse.data.message;
-				});
-			};*/
 		};
 
 		// View Insect Page

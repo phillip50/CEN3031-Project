@@ -42,7 +42,7 @@ exports.joinGroup = function(req, res) {
 		}
 	});
 
-	
+
 
 	/*Group.update({'_id': group._id}, {$push: {'members': req.user}}, function(err) {
 		if (err) {
@@ -60,8 +60,8 @@ exports.leaveGroup = function(req, res) {
 	var group = req.group;
 	console.log("");
 	group = _.extend(group, req.body);
-	
-  		
+
+
   	Group.findByIdAndUpdate(group._id, {$pull: {'members': req.user}}, function(err, group) {
 				if (err) {
 						return res.status(400).send({
@@ -121,7 +121,15 @@ exports.delete = function(req, res) {
  * List of Groups
  */
 exports.list = function(req, res) {
-	Group.find().sort('-created').populate('user', 'displayName').exec(function(err, groups) {
+	var query = req.query,
+		find = {};
+
+	if (query.hasOwnProperty('type')) {
+		if (query.type === 'Group') find.type = 'Group';
+		else if (query.type === 'Class') find.type = 'Class';
+	}
+
+	Group.find(find).sort('-created').populate('user', 'displayName').exec(function(err, groups) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)

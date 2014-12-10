@@ -14,17 +14,17 @@ var CollectionSchema = new Schema({
 		type: Date,
 		default: Date.now
 	},
-	title: {
+	name: {
 		type: String,
 		default: '',
 		trim: true,
-		required: 'Title cannot be blank'
+		required: 'Name cannot be blank'
 	},
 	caught: [{
 		type : Schema.ObjectId,
 		ref: 'Insect'
 	}],
-	content: {
+	description: {
 		type: String,
 		default: '',
 		trim: true

@@ -1,81 +1,111 @@
 <section data-ng-controller="GroupsController" data-ng-init="findOne();find2()">
 	<div class="page-header">
 		<h1>
-			{{group.name}} <small><a data-ng-href="/#!/user/{{group.user._id}}">{{group.user.displayName}}</a>'s {{group.type}}</small>
-			<span class="pull-right" data-ng-show="authentication.user._id == group.user._id">
-				<a class="btn btn-primary" data-ng-href="/#!/groups/{{group._id}}/edit">
-					<i class="glyphicon glyphicon-edit"></i>
-				</a>
-				<a class="btn btn-primary" data-ng-click="remove();">
-					<i class="glyphicon glyphicon-trash"></i>
-				</a>
+			{{group.name}} <small>{{group.type}}</small>
+			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
+			<span class="pull-right">
+				<span data-ng-show="authentication.user._id && authentication.user._id != group.user._id">
+					<a class="btn btn-success" data-ng-hide="group.members[0]._id != authentication.user._id" data-ng-click="joinGroup();">
+						<i class="glyphicon glyphicon-plus"></i> Join {{group.type}}
+					</a>
+					<a class="btn btn-success" data-ng-hide="group.members[0]._id == authentication.user._id" data-ng-click="leaveGroup();">
+						<i class="glyphicon glyphicon-minus"></i> Leave {{group.type}}
+					</a>
+				</span>
+
+				<span data-ng-show="authentication.user._id == group.user._id">
+					<a class="btn btn-default" data-ng-href="/#!/groups/{{group._id}}/edit">
+						<i class="glyphicon glyphicon-pencil"></i> Edit
+					</a>
+					<div class="btn-group" dropdown is-open="deleteButton.isopen">
+						<button type="button" class="btn btn-danger dropdown-toggle">
+							<i class="glyphicon glyphicon-trash"></i> Delete
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" role="menu">
+							<li class="dropdown-header">You are about to delete this insect.</li>
+							<li><a data-ng-click="remove();">Delete</a></li>
+							<li><a data-ng-click="deleteButton.isopen = false;">Cancel</a></li>
+						</ul>
+					</div>
+				</span>
 			</span>
 		</h1>
-
-		<dl class="dl-horizontal">
-			<dt>{{group.type}} Created</dt>
-			<dd>{{group.created | date:'longDate'}}</dd>
-
-			<dt>Description</dt>
-			<dd>{{group.description}}</dd>
-		</dl>
 	</div>
 
-	<h2>
-		Members <span class="badge">{{group.members.length}}</span>
-		<span class="pull-right" data-ng-show="authentication.user">
-			
-			<a class="btn btn-primary" data-ng-hide="" data-ng-click="joinGroup();"><i class="glyphicon glyphicon-plus"></i> Join this {{group.type}}</a>
-			
-			<a class="btn btn-primary" data-ng-hide="group.members[0]._id == authentication.user._id" data-ng-click="leaveGroup();"><i class="glyphicon glyphicon-plus"></i> Leave this {{group.type}}</a>
-			
-			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id"><i class="glyphicon glyphicon-user"></i> Add Members</a>
-			
-			<form  data-ng-show="authentication.user._id == group.user._id" data-ng-submit="update()">
-				<div class="controls">
-						<input name="member" type="text" id="member" class="form-control" placeholder="Member" required>
-				</div>
-				<div class="form-group">
-					<input type="submit" value="Add Member" class="btn btn-primary">
-				</div>
-			</form>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<dl class="dl-horizontal">
+				<dt>Owner</dt>
+				<dd><a data-ng-href="/#!/profile/{{group.user._id}}">{{group.user.displayName}}</a></dd>
 
-			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id && group.isPrivate == false" data-ng-click="makePrivate();"><i class="glyphicon glyphicon-plus"></i> Private {{group.type}} </a>
+				<dt>Created</dt>
+				<dd>{{group.created | date:'longDate'}}</dd>
 
-			<a class="btn btn-primary" data-ng-show="authentication.user._id == group.user._id && group.isPrivate == true" data-ng-click="makeNotPrivate();"><i class="glyphicon glyphicon-plus"></i> Not Private {{group.type}} </a>
-
-		</span>
-	</h2>
-	<div>
-		<p data-ng-hide="group.members">No members currently.</p>
-		<div data-ng-repeat="member in group.members">
-			<a class="btn btn-primary">
-			<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
+				<dt>Description</dt>
+				<dd>{{group.description}}</dd>
+			</dl>
 		</div>
 	</div>
 
-	<h2>
-		Galleries
-		<span class="pull-right" data-ng-show="authentication.user">
-			<a class="btn btn-primary" data-ng-show="group.members.indexOf(authentication.user._id) != -1"><i class="glyphicon glyphicon-plus"></i> Add a Gallery</a>
-		</span>
-	</h2>
-	<p data-ng-hide="group.insects">No galleries currently.</p>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Members <span class="badge">{{group.members.length}}</span></h2>
+				</div>
 
-	<h2>
-		Insects
-		<span class="pull-right" data-ng-show="authentication.user">
-			<a class="btn btn-primary" data-ng-show="group.members.indexOf(authentication.user._id) != -1"><i class="glyphicon glyphicon-plus"></i> Add an Insect</a>
-		</span>
-	</h2>
-	<p data-ng-hide="group.insects">No insects currently.</p>
+				<div class="panel-body">
+					<p data-ng-hide="group.members">No members currently.</p>
+					<div data-ng-repeat="member in group.members">
+						<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
+					</div>
 
-	<div style="height: 305px">
-    <carousel interval="myInterval">
-      <slide ng-repeat="insect in insects" active="slide.active">
-        <img ng-src="{{insect.image.small}}" style="margin:auto;">
-      </slide>
-    </carousel>
-  </div>
+					<div data-ng-show="authentication.user">
+						<form data-ng-show="authentication.user._id == group.user._id" data-ng-submit="update()">
+							<div class="controls">
+								<input name="member" type="text" id="member" class="form-control" placeholder="Member" required>
+							</div>
+							<div class="form-group">
+								<input type="submit" value="Add Member" class="btn btn-primary">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<div class="col-md-8">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Collections</h2>
+				</div>
+
+				<div class="panel-body">
+					<carousel interval="myInterval">
+						<slide ng-repeat="insect in insects" active="slide.active">
+							<img ng-src="{{insect.image.small}}" style="margin:auto;">
+						</slide>
+					</carousel>
+
+					<p data-ng-hide="group.collections">No collections currently.</p>
+					<div data-ng-repeat="collections in group.collections">
+						<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">Insects</h2>
+				</div>
+
+				<div class="panel-body">
+					<p data-ng-hide="group.insects">No insects currently.</p>
+					<div data-ng-repeat="insects in group.insects">
+						<a data-ng-href="/#!/profile/{{group.user._id}}">{{member.displayName}}</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </section>
