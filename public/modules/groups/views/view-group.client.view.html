@@ -5,7 +5,7 @@
 			<small data-ng-show="loading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
 			<span class="pull-right">
 				<span data-ng-show="authentication.user._id && authentication.user._id != group.user._id">
-					<a class="btn btn-success" data-ng-hide="group.members[0]._id != authentication.user._id" data-ng-click="joinGroup();">
+					<a class="btn btn-success" data-ng-hide="group.members[0]._id == authentication.user._id" data-ng-click="joinGroup();">
 						<i class="glyphicon glyphicon-plus"></i> Join {{group.type}}
 					</a>
 					<a class="btn btn-success" data-ng-hide="group.members[0]._id == authentication.user._id" data-ng-click="leaveGroup();">
