@@ -156,6 +156,15 @@ describe('Insect Model Unit Tests:', function() {
 				done();
 			});
 		});
+		
+		it('should be able to delete an insect', function(done) {
+			insect.loc.coordinates = [0,0];
+			insect.save();
+			return insect.save(function(err) {
+				should.not.exist(err);
+				done();
+			});
+		});
 	});
 
 	afterEach(function(done) {
