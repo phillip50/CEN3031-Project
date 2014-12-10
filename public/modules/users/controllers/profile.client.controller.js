@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('users').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Users', 'Authentication',
-	function($scope, $http, $stateParams, $location, Users, Authentication) {
+angular.module('users').controller('ProfileController', ['$scope', '$http', '$stateParams', '$location', 'Users', 'Collections', 'Authentication',
+	function($scope, $http, $stateParams, $location, Users, Collections, Authentication) {
 		$scope.user = Authentication.user;
 
 		// If user is not signed in then redirect back home
@@ -23,6 +23,7 @@ angular.module('users').controller('ProfileController', ['$scope', '$http', '$st
 
 		$scope.findUser = function() {
 			$scope.loading = true;
+			$scope.collectionsloading = true;
 
 			// If bare URL with no userid, find logged in profile
 			var userId = $stateParams.userId;
@@ -32,6 +33,12 @@ angular.module('users').controller('ProfileController', ['$scope', '$http', '$st
 				userId: userId
 			}, function() {
 				$scope.loading = false;
+			});
+
+			$scope.collections = Collections.query({
+				userId: userId
+			}, function() {
+				$scope.collectionsloading = false;
 			});
 		};
 	}

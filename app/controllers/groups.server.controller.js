@@ -58,7 +58,6 @@ exports.joinGroup = function(req, res) {
 
 exports.leaveGroup = function(req, res) {
 	var group = req.group;
-	console.log("");
 	group = _.extend(group, req.body);
 
 

@@ -16,14 +16,11 @@ exports.create = function(req, res) {
 	collection.user = req.user;
 
 	collection.save(function(err) {
-		console.log("called");
 		if (err) {
-			console.log('error: ' + err);
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			console.log('success: ' + collection);
 			res.jsonp(collection);
 		}
 	});
@@ -77,7 +74,12 @@ exports.delete = function(req, res) {
  * List of Collections
  */
 exports.list = function(req, res) {
-	Collection.find().sort('-created').populate('user', 'displayName').populate({path: 'caught', select: 'image.small', options: { limit: 8}}).exec(function(err, collections) {
+	var query = req.query,
+		find = {};
+
+	if (query.hasOwnProperty('userId')) find.user = query.userId;
+
+	Collection.find(find).sort('-created').populate('user', 'displayName').populate({path: 'caught', select: 'image.small', options: { limit: 8}}).exec(function(err, collections) {
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
@@ -92,13 +94,10 @@ exports.list = function(req, res) {
  * Collection middleware
  */
 exports.collectionByID = function(req, res, next, id) {
-	console.log("callllled");
 	Collection.findById(id).populate('user', 'displayName').populate({path: 'caught', select: '+image.small'}).exec(function(err, collection) {
 		if (err) return next(err);
 		if (!collection) return next(new Error('Failed to load collection ' + id));
 		req.collection = collection;
-		console.log("collect: " + req.collection);
-
 		next();
 	});
 };

@@ -78,4 +78,45 @@
 	<div class="alert alert-warning text-center" data-ng-if="foundUser.count < 1">
 		{{foundUser.info.displayName}} hasn't added any insects yet.
 	</div>
+
+	<div class="page-header">
+		<h2>
+			Collections <small>{{collections.length}} total</small>
+			<small data-ng-show="collectionsloading"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></small>
+			<span class="pull-right">
+				<a class="btn btn-default" data-ng-href="/#!/collection/create" data-ng-show="user._id == foundUser.info._id">
+					<i class="glyphicon glyphicon-plus"></i> New Collection
+				</a>
+			</span>
+		</h2>
+	</div>
+
+	<div class="row">
+		<div data-ng-repeat="collection in collections" class="col-sm-6 col-md-4 col-lg-3">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h2 class="panel-title">
+						<a data-ng-href="#!/collections/{{collection._id}}" data-ng-bind="collection.name"></a>
+					</h2>
+				</div>
+
+				<div class="panel-body">
+					<div>
+						<img data-ng-repeat="insect in collection.caught" style="height: 50px; width: 50px;" ng-src="{{insect.image.small}}">
+					</div>
+					<div class="clearfix" style="margin-top: 15px;">
+						<span class="pull-left">
+							<span data-ng-show="collection.user.displayName" style="display: block;">Created by <a data-ng-href="#!/profile/{{collection.user._id}}">{{collection.user.displayName}}</a></span>
+							<span data-ng-bind="collection.created | date:'longDate'"></span>
+						</span>
+						<a data-ng-href="#!/collections/{{collection._id}}" class="btn btn-primary pull-right" role="button">View</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="alert alert-warning text-center" data-ng-if="collections.length < 1">
+		{{foundUser.info.displayName}} hasn't made any collections yet.
+	</div>
 </section>

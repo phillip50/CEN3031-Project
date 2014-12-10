@@ -271,7 +271,6 @@ exports.comment = function(req, res) {
  */
 exports.update = function(req, res) {
 	var insect = req.insect;
-	//console.log(req);
 
 	insect = _.extend(insect, req.body);
 

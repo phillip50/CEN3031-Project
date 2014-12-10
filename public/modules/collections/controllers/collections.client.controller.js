@@ -3,7 +3,13 @@
 angular.module('collections').controller('CollectionsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Collections','Insects',
 	function($scope, $stateParams, $location, Authentication, Collections, Insects) {
 		$scope.authentication = Authentication;
-		$scope.selectedBugs = [];
+
+		$scope.createPage = function() {
+			// If user is not signed in then redirect back
+			if (!$scope.authentication.user) $location.path('/collections');
+
+			$scope.selectedBugs = [];
+		};
 
 		$scope.create = function() {
 			var collection = new Collections({
