@@ -2,7 +2,7 @@
 
 module.exports = {
 	//db: 'mongodb://localhost/bugs-dev',
-	db: 'mongodb://test:testtest2@ds051630.mongolab.com:51630/theinsectcollection',
+	db: 'mongodb://nodejitsu:ed621fdd5a13277e7ed66782bc3399f7@troup.mongohq.com:10016/nodejitsudb4379934801',
 	app: {
 		title: 'The Insect Collection - Development Environment'
 	},
