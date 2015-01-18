@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/bugs',
+	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://test:testtest2@ds051630.mongolab.com:51630/theinsectcollection',
 	assets: {
 		lib: {
 			css: [

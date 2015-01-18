@@ -1,13 +1,13 @@
 {
   "name": "theInsectCollection",
   "description": "Full scale insect tracking built with the MEAN stack.",
-  "version": "0.0.1",
+  "version": "0.0.1-7",
   "engines": {
     "node": "0.10.x",
     "npm": "1.4.x"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "grunt",
     "test": "grunt test",
     "postinstall": "bower install --config.interactive=false"
   },
