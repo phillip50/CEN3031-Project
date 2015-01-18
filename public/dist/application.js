@@ -13,7 +13,8 @@ var ApplicationConfiguration = function () {
         'ui.bootstrap',
         'ui.utils',
         'google-maps'.ns(),
-        'angularFileUpload'
+        'angularFileUpload',
+        'ui.tinymce'
       ];
     // Add a new vertical module
     var registerModule = function (moduleName, dependencies) {
@@ -56,8 +57,6 @@ angular.element(document).ready(function () {
   angular.bootstrap(document, [ApplicationConfiguration.applicationModuleName]);
 });'use strict';
 // Use Applicaion configuration module to register a new module
-ApplicationConfiguration.registerModule('articles');'use strict';
-// Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('collections');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');'use strict';
@@ -69,98 +68,14 @@ ApplicationConfiguration.registerModule('insects');'use strict';
 ApplicationConfiguration.registerModule('notes');'use strict';
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');'use strict';
-// Configuring the Articles module
-angular.module('articles').run([
-  'Menus',
-  function (Menus) {
-  }
-]);'use strict';
-// Setting up route
-angular.module('articles').config([
-  '$stateProvider',
-  function ($stateProvider) {
-    // Articles state routing
-    $stateProvider.state('listArticles', {
-      url: '/articles',
-      templateUrl: 'modules/articles/views/list-articles.client.view.html'
-    }).state('createArticle', {
-      url: '/articles/create',
-      templateUrl: 'modules/articles/views/create-article.client.view.html'
-    }).state('viewArticle', {
-      url: '/articles/:articleId',
-      templateUrl: 'modules/articles/views/view-article.client.view.html'
-    }).state('editArticle', {
-      url: '/articles/:articleId/edit',
-      templateUrl: 'modules/articles/views/edit-article.client.view.html'
-    });
-  }
-]);'use strict';
-angular.module('articles').controller('ArticlesController', [
-  '$scope',
-  '$stateParams',
-  '$location',
-  'Authentication',
-  'Articles',
-  function ($scope, $stateParams, $location, Authentication, Articles) {
-    $scope.authentication = Authentication;
-    $scope.create = function () {
-      var article = new Articles({
-          title: this.title,
-          content: this.content
-        });
-      article.$save(function (response) {
-        $location.path('articles/' + response._id);
-        $scope.title = '';
-        $scope.content = '';
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
-    $scope.remove = function (article) {
-      if (article) {
-        article.$remove();
-        for (var i in $scope.articles) {
-          if ($scope.articles[i] === article) {
-            $scope.articles.splice(i, 1);
-          }
-        }
-      } else {
-        $scope.article.$remove(function () {
-          $location.path('articles');
-        });
-      }
-    };
-    $scope.update = function () {
-      var article = $scope.article;
-      article.$update(function () {
-        $location.path('articles/' + article._id);
-      }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
-      });
-    };
-    $scope.find = function () {
-      $scope.articles = Articles.query();
-    };
-    $scope.findOne = function () {
-      $scope.article = Articles.get({ articleId: $stateParams.articleId });
-    };
-  }
-]);'use strict';
-//Articles service used for communicating with the articles REST endpoints
-angular.module('articles').factory('Articles', [
-  '$resource',
-  function ($resource) {
-    return $resource('articles/:articleId', { articleId: '@_id' }, { update: { method: 'PUT' } });
-  }
-]);'use strict';
 // Configuring the Collections module
 angular.module('collections').run([
   'Menus',
   function (Menus) {
-    // Set top bar menu items (Hidden for presentation)
+    // Set top bar menu items
     Menus.addMenuItem('topbar', 'Collections', 'collections', 'dropdown', '/collections(/create)?');
-    Menus.addSubMenuItem('topbar', 'collections', 'List Collections', 'collections');
-    Menus.addSubMenuItem('topbar', 'collections', 'New Collection', 'collections/create');
+    Menus.addSubMenuItem('topbar', 'collections', 'List Collections', 'collections', null, true, null, null, 'See everyone\'s collections');
+    Menus.addSubMenuItem('topbar', 'collections', 'New Collection', 'collections/create', null, false, null, null, 'Create a virtual insect collection.');
   }
 ]);'use strict';
 // Setting up route
@@ -184,53 +99,47 @@ angular.module('collections').config([
   }
 ]);'use strict';
 angular.module('collections').controller('CollectionsController', [
+  '$state',
   '$scope',
+  '$http',
   '$stateParams',
   '$location',
   'Authentication',
   'Collections',
   'Insects',
-  function ($scope, $stateParams, $location, Authentication, Collections, Insects) {
+  function ($state, $scope, $http, $stateParams, $location, Authentication, Collections, Insects) {
     $scope.authentication = Authentication;
-    $scope.getInsects = function () {
-      var skip = 0;
-      $scope.insects = Insects.query({
-        limit: 12,
-        skip: skip
+    $scope.createPage = function () {
+      // If user is not signed in then redirect back
+      if (!$scope.authentication.user)
+        $location.path('/collections');
+      $scope.loading = true;
+      $scope.commentsEnabled = true;
+      $scope.insects = [];
+      $scope.selectedInsects = [];
+      $scope.insects = Insects.query({ limit: 100 }, function () {
+        $scope.loading = false;
       });
-      // Get total count
-      Insects.get({ count: 1 }, function (data) {
-        $scope.pagination.totalItems = data.count;
-      });
-      $scope.changeClass = function () {
-        console.log('scope: ' + this.class);
-        if ($scope.src === 'btn-default')
-          $scope.src = 'btn-success';
+      $scope.addInsect = function () {
+        var insectId = this.insect._id;
+        var index = $scope.selectedInsects.indexOf(insectId);
+        if (index === -1)
+          $scope.selectedInsects.push(insectId);
         else
-          $scope.src = 'btn-default';
-      };
-      $scope.pagination = {
-        totalItems: 0,
-        currentPage: 0,
-        itemsPerPage: 12,
-        pageChanged: function (page) {
-          $scope.insects = Insects.query({
-            limit: 12,
-            skip: ($scope.pagination.currentPage - 1) * 12
-          });
-          $location.search({ skip: ($scope.pagination.currentPage - 1) * 12 });
-        }
+          $scope.selectedInsects.splice(index, 1);
       };
     };
     $scope.create = function () {
       var collection = new Collections({
-          title: this.title,
-          content: this.content
+          name: this.name,
+          description: this.description,
+          caught: $scope.selectedInsects
         });
       collection.$save(function (response) {
         $location.path('collections/' + response._id);
-        $scope.title = '';
-        $scope.content = '';
+        $scope.name = '';
+        $scope.description = '';
+        $scope.selectedInsects = [];
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -249,8 +158,39 @@ angular.module('collections').controller('CollectionsController', [
         });
       }
     };
+    $scope.updatePage = function () {
+      // If user is not signed in then redirect back
+      if (!$scope.authentication.user)
+        $location.path('/collections');
+      $scope.loading = true;
+      $scope.insectModel = {};
+      $scope.insects = [];
+      $scope.selectedInsects = [];
+      $scope.addInsect = function (insect) {
+        var index = $scope.selectedInsects.indexOf(insect._id);
+        if (index === -1)
+          $scope.selectedInsects.push(insect._id);
+        else
+          $scope.selectedInsects.splice(index, 1);
+      };
+      $scope.collection = Collections.get({ collectionId: $stateParams.collectionId }, function () {
+        for (var i = 0; i < $scope.collection.caught.length; i++) {
+          $scope.selectedInsects.push($scope.collection.caught[i]._id);
+          $scope.insectModel[$scope.collection.caught[i]._id] = true;
+        }
+        $scope.insects = Insects.query({ limit: 100 }, function () {
+          $scope.loading = false;
+        });
+      });
+    };
     $scope.update = function () {
-      var collection = $scope.collection;
+      var collection = new Collections({
+          _id: $scope.collection._id,
+          name: $scope.collection.name,
+          description: $scope.collection.description,
+          commentsEnabled: $scope.collection.commentsEnabled,
+          caught: $scope.selectedInsects
+        });
       collection.$update(function () {
         $location.path('collections/' + collection._id);
       }, function (errorResponse) {
@@ -258,10 +198,27 @@ angular.module('collections').controller('CollectionsController', [
       });
     };
     $scope.find = function () {
-      $scope.collections = Collections.query();
+      $scope.loading = true;
+      $scope.collections = Collections.query(function () {
+        $scope.loading = false;
+      });
     };
     $scope.findOne = function () {
-      $scope.collection = Collections.get({ collectionId: $stateParams.collectionId });
+      $scope.loading = true;
+      $scope.collection = Collections.get({ collectionId: $stateParams.collectionId }, function () {
+        $scope.loading = false;
+      });
+      // comments
+      $scope.comment = {
+        content: '',
+        add: function () {
+          $http.post('/collections/' + $scope.collection._id + '/comment/', { content: $scope.comment.content }).success(function (data, status, headers, config) {
+            $state.go($state.$current, null, { reload: true });
+          }).error(function (data, status, headers, config) {
+            $scope.comment.error = data.message;
+          });
+        }
+      };
     };
   }
 ]);'use strict';
@@ -427,7 +384,7 @@ angular.module('core').service('Menus', [function () {
       delete this.menus[menuId];
     };
     // Add menu item object
-    this.addMenuItem = function (menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position) {
+    this.addMenuItem = function (menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position, hilit) {
       // Validate that the menu exists
       this.validateMenuExistance(menuId);
       // Push new menu item
@@ -441,13 +398,14 @@ angular.module('core').service('Menus', [function () {
         roles: roles === null || typeof roles === 'undefined' ? this.menus[menuId].roles : roles,
         position: position || 0,
         items: [],
-        shouldRender: shouldRender
+        shouldRender: shouldRender,
+        hilight: hilit
       });
       // Return the menu object
       return this.menus[menuId];
     };
     // Add submenu item object
-    this.addSubMenuItem = function (menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position) {
+    this.addSubMenuItem = function (menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position, hilit) {
       // Validate that the menu exists
       this.validateMenuExistance(menuId);
       // Search for menu item
@@ -461,7 +419,8 @@ angular.module('core').service('Menus', [function () {
             isPublic: isPublic === null || typeof isPublic === 'undefined' ? this.menus[menuId].items[itemIndex].isPublic : isPublic,
             roles: roles === null || typeof roles === 'undefined' ? this.menus[menuId].items[itemIndex].roles : roles,
             position: position || 0,
-            shouldRender: shouldRender
+            shouldRender: shouldRender,
+            hilight: hilit
           });
         }
       }
@@ -504,9 +463,10 @@ angular.module('groups').run([
   'Menus',
   function (Menus) {
     // Set top bar menu items
-    Menus.addMenuItem('topbar', 'Groups', 'groups', 'dropdown', '/groups(/create)?', false, null, 9);
-    Menus.addSubMenuItem('topbar', 'groups', 'List Groups', 'groups');
-    Menus.addSubMenuItem('topbar', 'groups', 'New Group', 'groups/create', null, true);
+    Menus.addMenuItem('topbar', 'Groups & Classes', 'groups', 'dropdown', '(/groups(/classes)?||/groups(/create)?)', false, null, 9, 'test');
+    Menus.addSubMenuItem('topbar', 'groups', 'List Groups', 'groups', null, true, null, null, 'View all groups.');
+    Menus.addSubMenuItem('topbar', 'groups', 'List Classes', 'groups/classes', null, true, null, null, 'View all classes.');
+    Menus.addSubMenuItem('topbar', 'groups', 'New Group', 'groups/create', null, true, null, null, 'Create a group for collabration.');
   }
 ]);'use strict';
 // Setting up route
@@ -517,6 +477,9 @@ angular.module('groups').config([
     $stateProvider.state('listGroups', {
       url: '/groups',
       templateUrl: 'modules/groups/views/list-groups.client.view.html'
+    }).state('listClasses', {
+      url: '/groups/classes',
+      templateUrl: 'modules/groups/views/list-classes.client.view.html'
     }).state('createGroup', {
       url: '/groups/create',
       templateUrl: 'modules/groups/views/create-group.client.view.html'
@@ -576,24 +539,59 @@ angular.module('groups').controller('GroupsController', [
         $scope.error = errorResponse.data.message;
       });
     };
-    $scope.find = function () {
-      $scope.groups = Groups.query();
+    $scope.findGroup = function () {
+      $scope.loading = true;
+      $scope.groups = Groups.query({ type: 'Group' }, function () {
+        $scope.loading = false;
+      }, function (err) {
+        $scope.loading = false;
+        $scope.error = err.data.message;
+      });
+    };
+    $scope.findClass = function () {
+      $scope.loading = true;
+      $scope.groups = Groups.query({ type: 'Class' }, function () {
+        $scope.loading = false;
+      }, function (err) {
+        $scope.loading = false;
+        $scope.error = err.data.message;
+      });
     };
     $scope.findOne = function () {
-      $scope.group = Groups.get({ groupId: $stateParams.groupId });
+      $scope.loading = true;
+      Groups.get({ groupId: $stateParams.groupId }, function (data) {
+        $scope.loading = false;
+        $scope.group = data.data;
+        $scope.membersList = data.membersList;
+        $scope.insects = data.insects;
+        $scope.collections = data.collections;
+      }, function (err) {
+        $scope.loading = false;
+        $scope.error = err.data.message;
+      });
+    };
+    $scope.addMember = function () {
+      var group = $scope.group;
+      group.members.push(this.member);
+      group.$update(function () {
+        $location.path('groups/' + group._id);
+      }, function (errorResponse) {
+        $scope.error = errorResponse.data.message;
+      });
     };
     $scope.joinGroup = function () {
       var group = $scope.group;
+      var isMember = false;
+      for (var i = 0; i < group.members.length; i++) {
+        if (group.members[i]._id === $scope.authentication.user._id)
+          isMember = true;
+      }
+      if (!isMember)
+        group.members.push($scope.authentication.user);
       group.$joinGroup(function () {
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
-      });  /*$http.post('groups/' + group._id, {action: 'joinGroup', id: Authentication.user._id}).success(function(data, status, headers, config) {
-				// this callback will be called asynchronously
-				// when the response is available
-			}).error(function(data, status, headers, config) {
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
-			});*/
+      });
     };
     $scope.find2 = function () {
       var slides = $scope.slides = [10];
@@ -601,16 +599,14 @@ angular.module('groups').controller('GroupsController', [
     };
     $scope.leaveGroup = function () {
       var group = $scope.group;
-      group.$leaveGroup(function () {
+      for (var i = 0; i < group.members.length; i++) {
+        if (group.members[i]._id === $scope.authentication.user._id)
+          group.members.splice(i, 1);
+      }
+      group.$joinGroup(function () {
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
-      });  /*$http.post('groups/' + group._id, {action: 'joinGroup', id: Authentication.user._id}).success(function(data, status, headers, config) {
-				// this callback will be called asynchronously
-				// when the response is available
-			}).error(function(data, status, headers, config) {
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
-			});*/
+      });
     };
     $scope.showPath = function (path) {
       $location.path(path);
@@ -634,10 +630,10 @@ angular.module('insects').run([
     // Set top bar menu items
     // menuId, menuItemTitle, menuItemURL, menuItemType, menuItemUIRoute, isPublic, roles, position
     Menus.addMenuItem('topbar', 'Insects', 'insects', 'dropdown', '/insects(/create)?', true, null, -1);
-    Menus.addSubMenuItem('topbar', 'insects', 'All Insects', 'insects');
-    Menus.addSubMenuItem('topbar', 'insects', 'View Map', 'insects/map');
+    Menus.addSubMenuItem('topbar', 'insects', 'All Insects', 'insects', null, true, null, null, 'See everyone\'s insects.');
+    Menus.addSubMenuItem('topbar', 'insects', 'View Map', 'insects/map', null, true, null, null, 'Look around to see where insects were caught.');
     // menuId, rootMenuItemURL, menuItemTitle, menuItemURL, menuItemUIRoute, isPublic, roles, position
-    Menus.addSubMenuItem('topbar', 'insects', 'New Insect', 'insects/create', null, false, null, null);
+    Menus.addSubMenuItem('topbar', 'insects', 'New Insect', 'insects/create', null, false, null, null, 'Create your insect.');
   }
 ]);'use strict';
 // Setting up route
@@ -676,6 +672,7 @@ angular.module('insects').config([
   }
 ]);'use strict';
 angular.module('insects').controller('InsectsController', [
+  '$state',
   '$scope',
   '$http',
   '$upload',
@@ -684,17 +681,8 @@ angular.module('insects').controller('InsectsController', [
   'Authentication',
   'Insects',
   'GoogleMapApi'.ns(),
-  function ($scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
+  function ($state, $scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
     $scope.authentication = Authentication;
-    $scope.gallerys = [
-      { name: 'Poison Type' },
-      { name: 'Bug Type' },
-      { name: 'Flying Type' }
-    ];
-    $scope.addGallery = function (gallery) {
-      var newG = { name: gallery };
-      $scope.gallerys.push(newG);
-    };
     $scope.createPage = function () {
       // If user is not signed in then redirect back
       if (!$scope.authentication.user)
@@ -707,6 +695,7 @@ angular.module('insects').controller('InsectsController', [
           }
         },
         commentsEnabled: true,
+        validationEnabled: true,
         dateFound: new Date(),
         isValid: false,
         reviewForm: false,
@@ -793,6 +782,7 @@ angular.module('insects').controller('InsectsController', [
           description: this.form.description,
           dateFound: this.form.dateFound,
           commentsEnabled: this.form.commentsEnabled,
+          validationEnabled: this.form.validationEnabled,
           locationTitle: this.form.locationTitle,
           loc: {
             coordinates: [
@@ -820,6 +810,7 @@ angular.module('insects').controller('InsectsController', [
         $scope.form.description = '';
         $scope.form.dateCreated = new Date();
         $scope.form.commentsEnabled = true;
+        $scope.form.validationEnabled = true;
         $scope.form.locationTitle = '';
         $scope.form.loc.coordinates.latitude = '';
         $scope.form.loc.coordinates.longitude = '';
@@ -889,6 +880,7 @@ angular.module('insects').controller('InsectsController', [
           });
           // Get total count
           Insects.get({ count: 1 }, function (data) {
+            $scope.count = data;
             $scope.pagination.totalItems = data.count;
             if (firstRun)
               $scope.pagination.currentPage = parseInt(skip / data.count * 12, 10);
@@ -903,29 +895,11 @@ angular.module('insects').controller('InsectsController', [
         pageChanged: function (page) {
           fetch(($scope.pagination.currentPage - 1) * 12);
         }
-      };  /*$scope.updateGallery = function() {
-				console.log($scope.insects[this.$index]);
-				$scope.insect = $scope.insects[this.$index];
-				console.log(this.insect.galleryName.name);
-				var insect = new Insects({
-					_id: $scope.insect._id,
-					name: $scope.insect.galleryName.name,
-					scientificName: $scope.insect.scientificName,
-					description: $scope.insect.description,
-					commentsEnabled: $scope.insect.commentsEnabled,
-					locationTitle: $scope.insect.locationTitle,
-					galleryName: $scope.insect.galleryName.name
-				});
-				console.log($scope.insect.galleryName.name);
-				insect.$update(function() {
-					$location.path('insects');
-				}, function(errorResponse) {
-					$scope.error = errorResponse.data.message;
-				});
-			};*/
+      };
     };
     // View Insect Page
     $scope.findOne = function () {
+      $scope.loading = true;
       $scope.insect = Insects.get({ insectId: $stateParams.insectsId }, function (insect) {
         $scope.insectMap = {
           center: {
@@ -947,8 +921,11 @@ angular.module('insects').controller('InsectsController', [
           },
           options: { draggable: false }
         };
+        $scope.loading = false;
       }, function (errorResponse) {
-        $scope.error = errorResponse.data.message;
+        //$scope.error = errorResponse.data.message;
+        $scope.insect404 = true;
+        $scope.loading = false;
       });
       $scope.insectDownload = function (size) {
         $http.get('/insects/' + $scope.insect._id + '/download/' + size).success(function (data, status, headers, config) {
@@ -1087,28 +1064,18 @@ angular.module('insects').controller('InsectsController', [
           };
         // Open PDF
         pdfMake.createPdf(docDefinition).download();
-      };  /*comments: [{
-					user: {
-						_id: 1,
-						displayName: 'Student 1'
-					},
-					created: '2014-09-29T18:46:39.936Z',
-					message: 'I call it "frying butter".'
-				}, {
-					user: {
-						_id: 2,
-						displayName: 'Student 2'
-					},
-					created: '2014-10-01T18:46:39.936Z',
-					message: 'I already took that'
-				}, {
-					user: {
-						_id: 3,
-						displayName: 'Prof'
-					},
-					created: '2014-10-02T18:46:39.936Z',
-					message: 'Wow, it\'s so small! I think Butterfree is better overall. It learns a couple of useful status-hindering attacks and learns a few Psychic-type attacks like Psybeam and Confusion. Butterfree has a better move pool the Beedrill. However Beedrill has overall better stats then Butterfree.'
-				}]*/
+      };
+      // comments
+      $scope.comment = {
+        content: '',
+        add: function () {
+          $http.post('/insects/' + $scope.insect._id + '/comment/', { content: $scope.comment.content }).success(function (data, status, headers, config) {
+            $state.go($state.$current, null, { reload: true });
+          }).error(function (data, status, headers, config) {
+            $scope.comment.error = data.message;
+          });
+        }
+      };
     };
     // Edit Insect Page
     $scope.findOneEdit = function () {
@@ -1196,6 +1163,7 @@ angular.module('insects').controller('InsectsController', [
                     $scope.map.bounds.northeast.latitude
                   ]
                 },
+                fetched: JSON.stringify($scope.markersIds),
                 limit: 50
               };
             // If finding a user's insects
@@ -1204,9 +1172,9 @@ angular.module('insects').controller('InsectsController', [
             Insects.query(boxBounds, function (insects) {
               for (var i = 0; i < insects.length; i++) {
                 // throw out duplicates already on map
-                if ($scope.markersIds.indexOf(insects[i]['_id']) === -1) {
+                if ($scope.markersIds.indexOf(insects[i]._id) === -1) {
                   markersTemp.push(markers(i, insects[i]));
-                  markersIdsTemp.push(insects[i]['_id']);
+                  markersIdsTemp.push(insects[i]._id);
                 }
               }
               $scope.markers = $scope.markers.concat(markersTemp);
@@ -1243,10 +1211,10 @@ angular.module('insects').factory('Insects', [
 angular.module('notes').run([
   'Menus',
   function (Menus) {
-    // Set top bar menu items (Hidden for presentation)
-    Menus.addMenuItem('topbar', 'Fieldnotes', 'notes', 'dropdown', '/notes(/create)?');
-    Menus.addSubMenuItem('topbar', 'notes', 'List Fieldnotes', 'notes');
-    Menus.addSubMenuItem('topbar', 'notes', 'New Fieldnote', 'notes/create');
+    // Set top bar menu items
+    Menus.addMenuItem('topbar', 'Field Notes', 'notes', 'dropdown', '/notes(/create)?', false, null, 2);
+    Menus.addSubMenuItem('topbar', 'notes', 'List Field Notes', 'notes', null, true, null, null, 'See your assignments');
+    Menus.addSubMenuItem('topbar', 'notes', 'New Field Note', 'notes/create', null, true, null, null, 'Log your insect collecting');
   }
 ]);'use strict';
 // Setting up route
@@ -1272,60 +1240,36 @@ angular.module('notes').config([
 angular.module('notes').controller('NotesController', [
   '$scope',
   '$stateParams',
-  'GoogleMapApi'.ns(),
   '$location',
   'Authentication',
   'Notes',
   'Insects',
-  function ($scope, $stateParams, $location, GoogleMapApi, Authentication, Notes, Insects) {
+  function ($scope, $stateParams, $location, Authentication, Notes, Insects) {
     $scope.authentication = Authentication;
-    /* Display insects on map
-		$scope.map = {
-			center: {
-				latitude: 29.6398801,
-				longitude: -82.3551082
-			},
-			zoom: 15,
-			gmap: null,
-			bounds: {},
-			options: {
-				scrollwheel: false,
-				streetViewControl: false
-			}
-		};
-		$scope.markers = [];
-		$scope.docDefinition = {};
-		$scope.generatePDF = function() {
-				// Open PDF
-			pdfMake.createPdf($scope.docDefinition).open();
-		};
-
-		$scope.gallerys = [];
-		$scope.insects = [];
-
-		Insects.query(function(insects) {
-			for (insects.galleryName in insects) {
-				var newG = {name: insects[insects.galleryName].galleryName};
-				var key = insects[insects.galleryName].galleryName;
-				if(newG in $scope.gallerys == false)
-					$scope.gallerys.push({name : key});
-			}
-			for (var i = 0; i < insects.length; i++)
-			{
-				$scope.insects.push({latitude: insects[i].loc.coordinates[1],longitude: insects[i].loc.coordinates[0], image: insects[i].image, title: insects[i].name,location: insects[i].locationTitle});
-			}
-		});*/
-    $scope.insects = [];
-    $scope.insects = Insects.query({ limit: 3 });
+    // If user is not signed in then redirect back home
+    //if (!$scope.user) $location.path('/');
+    $scope.createPage = function () {
+      $scope.insects = [];
+      $scope.insects = Insects.query({
+        limit: 100,
+        userId: Authentication.user._id
+      });
+    };
     $scope.create = function () {
+      var ids = [];
+      for (var i = 0; i < this.selectedInsects.length; i++) {
+        ids.push(this.selectedInsects[i]._id);
+      }
       var note = new Notes({
           title: this.title,
-          content: this.content
+          content: this.content,
+          insects: ids
         });
       note.$save(function (response) {
         $location.path('notes/' + response._id);
         $scope.title = '';
         $scope.content = '';
+        $scope.selectedInsects = [];
       }, function (errorResponse) {
         $scope.error = errorResponse.data.message;
       });
@@ -1344,8 +1288,24 @@ angular.module('notes').controller('NotesController', [
         });
       }
     };
+    $scope.updatePage = function () {
+      $scope.insects = [];
+      $scope.insects = Insects.query({
+        limit: 100,
+        userId: Authentication.user._id
+      });
+    };
     $scope.update = function () {
-      var note = $scope.note;
+      var ids = [];
+      for (var i = 0; i < this.selectedInsects.length; i++) {
+        ids.push(this.selectedInsects[i]._id);
+      }
+      var note = new Notes({
+          _id: $scope.note._id,
+          name: $scope.note.title,
+          content: $scope.note.content,
+          insects: ids
+        });
       note.$update(function () {
         $location.path('notes/' + note._id);
       }, function (errorResponse) {
@@ -1353,86 +1313,19 @@ angular.module('notes').controller('NotesController', [
       });
     };
     $scope.find = function () {
-      $scope.notes = Notes.query();
+      $scope.loading = true;
+      $scope.notes = Notes.query(function () {
+        $scope.loading = false;
+      });
     };
     $scope.findOne = function () {
-      $scope.note = Notes.get({ noteId: $stateParams.noteId });  /*console.log("called");
-			var titleThis0 = $stateParams.noteId.split(":")[1];
-			var titleThis = titleThis0.substring(1,titleThis0.length-2);
-			var theseInsects = [];
-			Insects.query(function(insects) {
-				for (var i = 0; i < insects.length; i++)
-				{
-					if(insects[i].galleryName == titleThis)
-					{
-						theseInsects.push({latitude: insects[i].loc.coordinates[1],longitude: insects[i].loc.coordinates[0], image: insects[i].image, title: insects[i].name,location: insects[i].locationTitle});
-						//markersTemp.push(markers(i, insects[i]));
-					}
-							$scope.docDefinition.push( {
-					content: [
-					{text: 'Insect Guide', style: 'header'},
-					{
-						style: 'table',
-						table: {
-							widths: [200, '*'],
-							body: [
-								[
-									{text: 'Photo', style: 'tableHeader'},
-									{text: 'Infomation', style: 'tableHeader'}
-								], [
-									{image: insects[i].image.small, width: 200},
-									{
-										table: {
-											body: [
-												[{text: 'Name', bold: true}, insects[i].name],
-												[{text: 'Scientific Name', bold: true}, insects[i].scientificName],
-												[{text: 'Description', bold: true}, insects[i].description],
-												[{text: 'Date Found', bold: true}, insects[i].dateFound],
-												[{text: 'Location Found', bold: true}, insects[i].locationTitle],
-											],
-										},
-										layout: 'noBorders'
-									}
-									//{text: 'nothing interesting here', italics: true, color: 'gray'}
-								]
-							]
-						},
-						layout: 'lightHorizontalLines',
-						pageBreak: 'before'
-					}],
-					styles: {
-						header: {
-							fontSize: 18,
-							bold: true,
-							margin: [0, 0, 0, 10]
-						},
-						subheader: {
-							fontSize: 16,
-							bold: true,
-							margin: [0, 10, 0, 5]
-						},
-						table: {
-							margin: [0, 5, 0, 15]
-						},
-						tableHeader: {
-							bold: true,
-							fontSize: 13,
-							color: 'black'
-						}
-					}
-				});
-
-
-				}
-			});
-			//$scope.markers = markersTemp;
-
-			$scope.thesenotes = {
-				title: titleThis,
-				insectsInGal: theseInsects,
-				content: "Sample note"
-			};
-			console.log($scope.thesenotes);*/
+      $scope.loading = true;
+      $scope.note = Notes.get({ noteId: $stateParams.noteId }, function () {
+        $scope.loading = false;
+      }, function (err) {
+        $scope.error = err.data.message;
+        $scope.loading = false;
+      });
     };
   }
 ]);'use strict';
@@ -1449,8 +1342,8 @@ angular.module('users').run([
   function (Menus) {
     // Set top bar menu items
     Menus.addMenuItem('topbar', 'Users', 'users', 'dropdown', '/users(/list)?', false, null, 10);
-    Menus.addSubMenuItem('topbar', 'users', 'All Users', 'users/list');
-    Menus.addSubMenuItem('topbar', 'users', 'My Profile', 'profile/');
+    Menus.addSubMenuItem('topbar', 'users', 'All Users', 'users/list', null, true, null, null, 'See all bug collectors');
+    Menus.addSubMenuItem('topbar', 'users', 'My Profile', 'profile/', null, true, null, null, 'About you');
   }
 ]);
 // Config HTTP Error Handling
@@ -1602,12 +1495,12 @@ angular.module('users').controller('ProfileController', [
   '$stateParams',
   '$location',
   'Users',
+  'Collections',
   'Authentication',
-  function ($scope, $http, $stateParams, $location, Users, Authentication) {
+  function ($scope, $http, $stateParams, $location, Users, Collections, Authentication) {
     $scope.user = Authentication.user;
     // If user is not signed in then redirect back home
-    if (!$scope.user)
-      $location.path('/');
+    //if (!$scope.user) $location.path('/');
     $scope.showPath = function (path) {
       $location.path(path);
     };
@@ -1620,12 +1513,16 @@ angular.module('users').controller('ProfileController', [
     };
     $scope.findUser = function () {
       $scope.loading = true;
+      $scope.collectionsloading = true;
       // If bare URL with no userid, find logged in profile
       var userId = $stateParams.userId;
       if ($stateParams.userId === '')
         userId = Authentication.user._id;
       $scope.foundUser = Users.get({ userId: userId }, function () {
         $scope.loading = false;
+      });
+      $scope.collections = Collections.query({ userId: userId }, function () {
+        $scope.collectionsloading = false;
       });
     };
   }
