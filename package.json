@@ -1,7 +1,7 @@
 {
   "name": "theInsectCollection",
   "description": "Full scale insect tracking built with the MEAN stack.",
-  "version": "0.0.1",
+  "version": "0.0.1-7",
   "engines": {
     "node": "0.10.x",
     "npm": "1.4.x"
@@ -66,5 +66,6 @@
     "load-grunt-tasks": "~0.6.0",
     "should": "~4.0.4",
     "supertest": "~0.13.0"
-  }
+  },
+  "subdomain": "theInsectCollection"
 }
