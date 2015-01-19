@@ -11,7 +11,7 @@ angular.module(ApplicationConfiguration.applicationModuleName).config(['$locatio
 ]);
 
 // Setting Google Maps Dependencies
-angular.module(ApplicationConfiguration.applicationModuleName).config(['GoogleMapApiProvider'.ns(),
+angular.module(ApplicationConfiguration.applicationModuleName).config(['uiGmapGoogleMapApiProvider',
 	function(GoogleMapApi) {
         GoogleMapApi.configure({
             // key: 'your api key',

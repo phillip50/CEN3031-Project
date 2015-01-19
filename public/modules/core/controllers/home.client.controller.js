@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('core').controller('HomeController', ['$scope', '$location', 'Insects', 'GoogleMapApi'.ns(), 'Authentication',
+angular.module('core').controller('HomeController', ['$scope', '$location', 'Insects', 'uiGmapGoogleMapApi', 'Authentication',
 	function($scope, $location, Insects, GoogleMapApi, Authentication) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;

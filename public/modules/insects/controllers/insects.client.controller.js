@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('insects').controller('InsectsController', ['$state', '$scope', '$http', '$upload', '$stateParams', '$location', 'Authentication', 'Insects', 'GoogleMapApi'.ns(),
+angular.module('insects').controller('InsectsController', ['$state', '$scope', '$http', '$upload', '$stateParams', '$location', 'Authentication', 'Insects', 'uiGmapGoogleMapApi',
 	function($state, $scope, $http, $upload, $stateParams, $location, Authentication, Insects, GoogleMapApi) {
 		$scope.authentication = Authentication;
 
