@@ -2,6 +2,8 @@ The Insect Collection
 =====================
 A Fall 2014 CEN 3031 Project.
 
+insectcolletction.jit.su
+
 About
 -----
 Full scale insect tracking site built with the MEAN stack for the University of Florida [Entomology Department](http://entomology.ifas.ufl.edu/).
