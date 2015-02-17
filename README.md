@@ -2,7 +2,7 @@ The Insect Collection
 =====================
 A Fall 2014 CEN 3031 Project.
 
-http://insectcolletction.jit.su
+theinsectcollection.azurewebsites.net
 
 About
 -----
